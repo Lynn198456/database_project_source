@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const featuredMovie = {
   title: "The Last Adventure",
   desc:
@@ -11,6 +13,8 @@ const featuredMovie = {
 };
 
 export default function Hero() {
+  const navigate = useNavigate(); // ✅ ADD THIS
+
   return (
     <section className="cf-hero">
       <div className="cf-hero__left">
@@ -40,17 +44,26 @@ export default function Hero() {
 
           <span className="cf-heroMetaItem">
             <span className="cf-heroMetaIcon">⭐</span>
-            {featuredMovie.rating} <span className="cf-heroMetaMuted">/ 5</span>
+            {featuredMovie.rating}{" "}
+            <span className="cf-heroMetaMuted">/ 5</span>
           </span>
         </div>
 
         <div className="cf-heroActions">
-          <button className="cf-heroBtn cf-heroBtn--primary" type="button">
+          {/* ✅ CONNECTED TO BookTicketsPage */}
+          <button
+            className="cf-heroBtn cf-heroBtn--primary"
+            type="button"
+            onClick={() => navigate("/customer/book")}
+          >
             <span className="cf-heroBtnIcon">▶</span>
             Book Tickets Now
           </button>
 
-          <button className="cf-heroBtn cf-heroBtn--secondary" type="button">
+          <button
+            className="cf-heroBtn cf-heroBtn--secondary"
+            type="button"
+          >
             <span className="cf-heroBtnIcon">ⓘ</span>
             More Info
           </button>
@@ -60,7 +73,11 @@ export default function Hero() {
       <div className="cf-hero__right">
         <div className="cf-heroGlow" />
         <div className="cf-heroPosterWrap">
-          <img className="cf-heroPoster" src={featuredMovie.image} alt={featuredMovie.title} />
+          <img
+            className="cf-heroPoster"
+            src={featuredMovie.image}
+            alt={featuredMovie.title}
+          />
         </div>
       </div>
     </section>

@@ -20,6 +20,8 @@ export default function CustomerHome() {
         <PremiumExperience />
         <OurTheaters />
       </main>
+      navigate("/customer/book");
+
       <Footer />
     </div>
   );

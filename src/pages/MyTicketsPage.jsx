@@ -1,4 +1,6 @@
 import "../styles/customer.css";
+import { useNavigate } from "react-router-dom";
+
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
 import TicketsSummary from "../components/customer/TicketsSummary";
@@ -6,6 +8,8 @@ import UpcomingTickets from "../components/customer/UpcomingTickets";
 import PastTicketsTable from "../components/customer/PastTicketsTable";
 
 export default function MyTicketsPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="cf-page">
       <Navbar />
@@ -24,7 +28,11 @@ export default function MyTicketsPage() {
                 </div>
               </div>
 
-              <button className="cf-orangeBtn" type="button">
+              <button
+                className="cf-orangeBtn"
+                type="button"
+                onClick={() => navigate("/customer/book")}
+              >
                 Book New Tickets
               </button>
             </div>

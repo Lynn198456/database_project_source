@@ -1670,4 +1670,174 @@ body {
     padding-right: 16px;
   }
 }
+.cf-bookTop{
+  height: 76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(10,18,35,0.65);
+  backdrop-filter: blur(10px);
+}
+.cf-bookBack{
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  font-size: 16px;
+  cursor:pointer;
+}
+.cf-bookTitle{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+}
+.cf-bookIcon{
+  width: 40px;
+  height: 40px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  background: rgba(255,165,0,0.16);
+}
+
+.cf-bookSteps{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.cf-step{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  color: rgba(255,255,255,0.6);
+}
+.cf-step.active{ color: #ffb13b; }
+.cf-stepDot{
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display:grid;
+  place-items:center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+.cf-step.active .cf-stepDot{
+  background: rgba(255,165,0,0.18);
+  border-color: rgba(255,165,0,0.35);
+}
+
+.cf-bookGrid{
+  display:grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 18px;
+}
+.cf-h3{
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: 18px;
+}
+.cf-bookMovieGrid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.cf-bookMovieCard{
+  position: relative;
+  border-radius: 16px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+}
+.cf-bookMovieCard.selected{
+  border-color: rgba(255,165,0,0.55);
+  box-shadow: 0 0 0 1px rgba(255,165,0,0.25) inset;
+}
+.cf-bookPoster{
+  height: 260px;
+  background: linear-gradient(135deg, rgba(255,165,0,0.25), rgba(0,120,255,0.15));
+}
+.cf-bookPoster.alt{
+  background: linear-gradient(135deg, rgba(190,0,255,0.18), rgba(255,0,80,0.12));
+}
+.cf-bookMovieMeta{
+  padding: 14px;
+}
+.cf-bookMovieName{
+  color:#fff;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.cf-bookMovieRow{
+  display:flex;
+  justify-content:space-between;
+  margin-top: 10px;
+  color: rgba(255,255,255,0.75);
+}
+.cf-selectedTick{
+  position:absolute;
+  left: 14px;
+  top: 130px;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display:grid;
+  place-items:center;
+  background: rgba(255,165,0,0.9);
+  color:#111;
+  font-weight: 900;
+}
+
+.cf-bookSummaryPoster{
+  height: 220px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(0,120,255,0.15), rgba(255,165,0,0.25));
+  border: 1px solid rgba(255,255,255,0.10);
+  margin-bottom: 14px;
+}
+.cf-bookSummaryName{
+  color:#fff;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: 6px;
+}
+.cf-bookInfo{
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.cf-bookInfoRow{
+  display:flex;
+  justify-content:space-between;
+  padding: 10px 0;
+  color: rgba(255,255,255,0.80);
+}
+.cf-bookBill{
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.cf-bookBillRow{
+  display:flex;
+  justify-content:space-between;
+  padding: 8px 0;
+  color: rgba(255,255,255,0.80);
+}
+.cf-bookTotal{
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#fff;
+  font-size: 20px;
+  font-weight: 800;
+}
+.cf-price{ color: #ffb13b; }
 
