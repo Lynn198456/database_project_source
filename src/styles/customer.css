@@ -1080,3 +1080,371 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* ================================
+   MY TICKETS PAGE
+   ================================ */
+
+.cf-miniIcon--purple{
+  background: rgba(168,85,247,.18);
+  border: 1px solid rgba(168,85,247,.25);
+}
+.cf-miniIcon--gray{
+  background: rgba(148,163,184,.14);
+  border: 1px solid rgba(148,163,184,.22);
+}
+
+.cf-ticketTop{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.cf-orangeBtn{
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: none;
+  cursor:pointer;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--orange), #fb7185);
+  color: #1b1206;
+  box-shadow: 0 18px 55px rgba(0,0,0,.25);
+}
+
+.cf-ticketStats{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 16px;
+}
+
+.cf-statCard{
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 18px 55px rgba(0,0,0,.25);
+}
+
+.cf-statTitle{
+  color: rgba(255,255,255,.90);
+  font-weight: 900;
+  opacity:.95;
+}
+
+.cf-statValue{
+  margin-top: 10px;
+  font-size: 38px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.cf-statMoney{
+  margin-top: 10px;
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.cf-greenBox{
+  background: linear-gradient(180deg, rgba(34,197,94,.85), rgba(34,197,94,.55));
+}
+.cf-orangeBox2{
+  background: linear-gradient(180deg, rgba(245,158,11,.85), rgba(245,158,11,.55));
+}
+
+/* Ticket Cards */
+.cf-ticketList{
+  margin-top: 14px;
+  display:flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cf-ticketCard{
+  display:grid;
+  grid-template-columns: 220px 1fr 280px;
+  gap: 18px;
+  border-radius: 22px;
+  padding: 18px;
+  border: 1px solid rgba(168,85,247,.25);
+  background: rgba(15,26,47,.40);
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+}
+
+.cf-ticketPosterWrap{
+  border-radius: 18px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  height: 240px;
+}
+
+.cf-ticketPoster{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+  filter: brightness(.85);
+}
+
+.cf-ticketInfo{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cf-ticketTitleRow{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cf-ticketTitle{
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.cf-ticketRows{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cf-ticketRow{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: 14px;
+  background: rgba(7,11,20,.35);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(232,238,252,.88);
+}
+
+.cf-ticketIco{
+  opacity:.9;
+}
+
+/* seats box */
+.cf-seatBox{
+  margin-top: 4px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(7,11,20,.28);
+}
+
+.cf-seatLabel{
+  color: rgba(232,238,252,.70);
+  font-weight: 900;
+}
+
+.cf-seatChips{
+  margin-top: 10px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cf-seatChip{
+  padding: 10px 16px;
+  border-radius: 14px;
+  font-weight: 900;
+  background: linear-gradient(135deg, rgba(168,85,247,.95), rgba(99,102,241,.85));
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+/* meta bottom */
+.cf-ticketMeta{
+  margin-top: 4px;
+  display:flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(232,238,252,.60);
+  font-weight: 700;
+}
+
+.cf-linkish{
+  color: rgba(168,85,247,.95);
+  font-weight: 900;
+}
+
+.cf-muted{
+  color: rgba(232,238,252,.65);
+}
+
+.cf-strong{
+  font-weight: 900;
+}
+
+/* pills */
+.cf-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.cf-pillDot{
+  width:10px;
+  height:10px;
+  border-radius: 999px;
+  background: #22c55e;
+}
+
+.cf-pill--green{
+  background: rgba(34,197,94,.22);
+  color: #bbf7d0;
+  border-color: rgba(34,197,94,.25);
+}
+.cf-pill--red{
+  background: rgba(239,68,68,.18);
+  color: #fecaca;
+  border-color: rgba(239,68,68,.25);
+}
+.cf-pill--gray{
+  background: rgba(148,163,184,.14);
+  color: rgba(232,238,252,.75);
+  border-color: rgba(148,163,184,.22);
+}
+
+/* QR + actions */
+.cf-ticketQR{
+  display:flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.cf-qrBox{
+  border-radius: 18px;
+  background: #f8fafc;
+  padding: 16px;
+  height: 180px;
+  display:grid;
+  place-items:center;
+}
+
+.cf-qrFake{
+  width: 140px;
+  height: 140px;
+  border-radius: 14px;
+  background: #fff;
+  padding: 8px;
+  box-shadow: inset 0 0 0 2px rgba(2,6,23,.12);
+}
+
+.cf-qrGrid{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+}
+
+.cf-qrCell{
+  background: rgba(15,23,42,.08);
+  border-radius: 3px;
+}
+.cf-qrCell:nth-child(3n){
+  background: rgba(15,23,42,.85);
+}
+.cf-qrCell:nth-child(5n){
+  background: rgba(15,23,42,.65);
+}
+
+.cf-ticketPrice{
+  text-align:center;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.cf-blueBtn{
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: none;
+  cursor:pointer;
+  font-weight: 900;
+  background: linear-gradient(180deg, rgba(37,99,235,.92), rgba(37,99,235,.65));
+  color: #fff;
+}
+
+.cf-grayBtn{
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  font-weight: 900;
+  background: rgba(148,163,184,.14);
+  color: rgba(255,255,255,.92);
+}
+
+.cf-redBtn{
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: none;
+  cursor:pointer;
+  font-weight: 900;
+  background: linear-gradient(180deg, rgba(239,68,68,.95), rgba(239,68,68,.65));
+  color: #fff;
+}
+
+/* Past table */
+.cf-tableWrap{
+  margin-top: 14px;
+  border-radius: 22px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(15,26,47,.40);
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+}
+
+.cf-table{
+  width:100%;
+  border-collapse: collapse;
+}
+
+.cf-table thead th{
+  text-align:left;
+  padding: 16px 18px;
+  font-weight: 900;
+  color: rgba(255,255,255,.92);
+  background: rgba(7,11,20,.25);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.cf-table tbody td{
+  padding: 18px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  color: rgba(232,238,252,.90);
+}
+
+.cf-right{
+  text-align:right;
+}
+
+.cf-iconBtn{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(148,163,184,.14);
+  color: rgba(255,255,255,.92);
+  cursor:pointer;
+  font-weight: 900;
+}
+
+@media (max-width: 1100px){
+  .cf-ticketStats{
+    grid-template-columns: 1fr 1fr;
+  }
+  .cf-ticketCard{
+    grid-template-columns: 1fr;
+  }
+  .cf-ticketPosterWrap{
+    height: 220px;
+  }
+}

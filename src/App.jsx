@@ -8,7 +8,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import StaffDashboard from "./pages/StaffDashboard";
 import ShowtimesPage from "./pages/ShowtimesPage";
 import TheatersPage from "./pages/TheatersPage";
-
+import MyTicketsPage from "./pages/MyTicketsPage";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -100,6 +100,18 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+<Route
+  path="/customer/tickets"
+  element={
+    <ProtectedRoute>
+      <RoleRoute allowRole="CUSTOMER">
+        <MyTicketsPage />
+      </RoleRoute>
+    </ProtectedRoute>
+  }
+/>
+
+        
 
         {/* ADMIN */}
         <Route
