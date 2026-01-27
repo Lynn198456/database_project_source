@@ -11,7 +11,7 @@ export default function MyTicketsPage() {
       <Navbar />
 
       <main className="cf-mainFull">
-        <div className="cf-container">
+        <div className="cf-containerWide">
           <section className="cf-section">
             <div className="cf-ticketTop">
               <div>

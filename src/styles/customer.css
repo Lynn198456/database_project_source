@@ -1622,3 +1622,52 @@ body {
   border:none;
   font-weight:800;
 }
+
+/* ✅ FORCE FULL SCREEN for customer pages */
+.cf-page,
+.cf-main,
+.cf-mainFull,
+.cf-content,
+.cf-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* If you have a "center layout" wrapper, kill it */
+.cf-wrapper,
+.cf-shell,
+.customer-shell,
+.customer-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Global padding (optional) */
+.cf-container {
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media (max-width: 768px) {
+  .cf-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+/* ✅ Full width container (use only on pages you want wide) */
+.cf-containerWide {
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media (max-width: 768px) {
+  .cf-containerWide {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
