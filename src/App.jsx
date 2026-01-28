@@ -14,7 +14,9 @@ import BookTicketsPage from "./pages/BookTicketsPage";
 import BookTime from "./pages/BookTime";
 import BookSeats from "./pages/BookSeats";
 import BookPaymentPage from "./pages/BookPayment";
-import BookingConfirmed from "./pages/BookingConfirmed"; 
+import BookingConfirmed from "./pages/BookingConfirmed";
+import MovieDetailPage from "./pages/MovieDetailPage";
+
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -83,18 +85,40 @@ export default function App() {
           }
         />
 
-        {/* (Later you will create these pages) */}
+        {/* ✅ Movie Detail Page (View Detail) */}
         <Route
-  path="/customer/showtimes"
-  element={
-    <ProtectedRoute>
-      <RoleRoute allowRole="CUSTOMER">
-        <ShowtimesPage />
-      </RoleRoute>
-    </ProtectedRoute>
-  }
-/>
+          path="/customer/movies/:id"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <MovieDetailPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
 
+        {/* (Optional alias) */}
+        <Route
+          path="/customer/movie/:id"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <MovieDetailPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/customer/showtimes"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <ShowtimesPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/customer/theaters"
@@ -106,6 +130,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/tickets"
           element={
@@ -116,6 +141,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/profile"
           element={
@@ -126,6 +152,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Booking Flow */}
         <Route
           path="/customer/book"
           element={
@@ -136,6 +164,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/book/time"
           element={
@@ -146,6 +175,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/book/seats"
           element={
@@ -156,6 +186,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/book/payment"
           element={
@@ -166,6 +197,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/customer/book/confirmed"
           element={
@@ -176,7 +208,6 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-
 
         {/* ADMIN */}
         <Route

@@ -2,6 +2,7 @@ import "../styles/customer.css";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
+
 const MOVIES = [
   {
     id: "m1",
@@ -55,7 +56,7 @@ export default function MoviesPage() {
   const genres = useMemo(() => {
     const all = new Set(["All"]);
     MOVIES.forEach((m) => {
-      m.genre.split(",").map((g) => all.add(g.trim()));
+      m.genre.split(",").forEach((g) => all.add(g.trim()));
     });
     return Array.from(all);
   }, []);
@@ -73,16 +74,18 @@ export default function MoviesPage() {
     }
 
     if (genre !== "All") {
-      list = list.filter((m) => m.genre.toLowerCase().includes(genre.toLowerCase()));
+      list = list.filter((m) =>
+        m.genre.toLowerCase().includes(genre.toLowerCase())
+      );
     }
 
     if (sort === "Rating") {
       list.sort((a, b) => b.rating - a.rating);
     } else if (sort === "Duration") {
-      // basic sort by hours+minutes (demo)
       const toMin = (d) => {
         const h = parseInt(d.split("h")[0], 10) || 0;
-        const m = parseInt(d.split("h")[1]?.replace("m", "").trim(), 10) || 0;
+        const m =
+          parseInt(d.split("h")[1]?.replace("m", "").trim(), 10) || 0;
         return h * 60 + m;
       };
       list.sort((a, b) => toMin(b.duration) - toMin(a.duration));
@@ -92,20 +95,32 @@ export default function MoviesPage() {
   }, [q, genre, sort]);
 
   function onBook(movie) {
-    // optional: save selected movie to booking draft
+    // Save selected movie to booking draft (your existing flow)
     const draft = {
+      movieId: movie.id,
       movieTitle: movie.title,
       genre: movie.genre,
       poster: movie.poster,
+      rating: movie.rating,
+      duration: movie.duration,
+      age: movie.age,
     };
     localStorage.setItem("cinemaFlow_booking", JSON.stringify(draft));
     navigate("/customer/book");
   }
 
+  function onDetails(movie) {
+    // Save selected movie for detail page to read
+    localStorage.setItem("cinemaFlow_selectedMovie", JSON.stringify(movie));
+
+    // Go to detail route you added in App.jsx
+    navigate(`/customer/movies/${movie.id}`);
+  }
+
   return (
     <div className="cf-page">
-      {/* ✅ Navbar added */}
       <Navbar />
+
       <main className="cf-mainFull">
         <div className="cf-containerWide">
           {/* Header */}
@@ -115,7 +130,9 @@ export default function MoviesPage() {
                 <span className="cf-miniIcon cf-miniIcon--gold">🎬</span>
                 All Movies
               </div>
-              <div className="cf-moviesSub">Browse our collection and book instantly</div>
+              <div className="cf-moviesSub">
+                Browse our collection and book instantly
+              </div>
             </div>
 
             <div className="cf-moviesControls">
@@ -185,7 +202,7 @@ export default function MoviesPage() {
                     <button
                       className="cf-grayBtn"
                       type="button"
-                      onClick={() => alert("More info page later")}
+                      onClick={() => onDetails(m)}
                     >
                       Details
                     </button>
