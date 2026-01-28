@@ -18,14 +18,12 @@ export default function MyTicketsPage() {
         <div className="cf-containerWide">
           <section className="cf-section">
             <div className="cf-ticketTop">
-              <div>
-                <div className="cf-section__head">
-                  <div className="cf-section__title">
-                    <span className="cf-miniIcon cf-miniIcon--purple">🎟️</span>
-                    My Tickets
-                  </div>
-                  <div className="cf-section__subtitle">Manage your bookings</div>
+              <div className="cf-section__head">
+                <div className="cf-section__title">
+                  <span className="cf-miniIcon cf-miniIcon--purple">🎟️</span>
+                  My Tickets
                 </div>
+                <div className="cf-section__subtitle">Manage your bookings</div>
               </div>
 
               <button

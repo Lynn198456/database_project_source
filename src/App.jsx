@@ -11,6 +11,7 @@ import TheatersPage from "./pages/TheatersPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
 import ProfilePage from "./pages/Profile";
 import BookTicketsPage from "./pages/BookTicketsPage";
+import BookTime from "./pages/BookTime";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -122,16 +123,27 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-<Route
-  path="/customer/book"
-  element={
-    <ProtectedRoute>
-      <RoleRoute allowRole="CUSTOMER">
-        <BookTicketsPage />
-      </RoleRoute>
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/customer/book"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <BookTicketsPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/book/time"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <BookTime />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+
 
         {/* ADMIN */}
         <Route

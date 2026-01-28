@@ -1,14 +1,60 @@
 import "../styles/customer.css";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function BookTicketsPage() {
   const navigate = useNavigate();
 
+  const movies = useMemo(
+    () => [
+      {
+        id: "last-adventure",
+        title: "The Last Adventure",
+        genre: "Action, Sci-Fi",
+        rating: 4.5,
+        duration: "2h 15m",
+        posterClass: "cf-bookPoster",
+      },
+      {
+        id: "hearts-entwined",
+        title: "Hearts Entwined",
+        genre: "Drama, Romance",
+        rating: 4.2,
+        duration: "1h 58m",
+        posterClass: "cf-bookPoster alt",
+      },
+    ],
+    []
+  );
+
+  const [selectedMovieId, setSelectedMovieId] = useState(movies[0].id);
+
+  const selectedMovie = useMemo(
+    () => movies.find((m) => m.id === selectedMovieId) || movies[0],
+    [movies, selectedMovieId]
+  );
+
+  function handleContinue() {
+    // (optional) store selection so BookTime can read it
+    localStorage.setItem(
+      "cinemaFlow_booking",
+      JSON.stringify({
+        movie: selectedMovie,
+      })
+    );
+
+    navigate("/customer/book/time");
+  }
+
   return (
     <div className="cf-page">
       {/* Top booking header */}
       <div className="cf-bookTop">
-        <button className="cf-bookBack" onClick={() => navigate("/customer/movies")}>
+        <button
+          className="cf-bookBack"
+          type="button"
+          onClick={() => navigate("/customer/movies")}
+        >
           ← Back to Movies
         </button>
 
@@ -47,30 +93,34 @@ export default function BookTicketsPage() {
               <h3 className="cf-h3">Select a Movie</h3>
 
               <div className="cf-bookMovieGrid">
-                <div className="cf-bookMovieCard selected">
-                  <div className="cf-bookPoster" />
-                  <div className="cf-bookMovieMeta">
-                    <div className="cf-bookMovieName">The Last Adventure</div>
-                    <div className="cf-muted">Action, Sci-Fi</div>
-                    <div className="cf-bookMovieRow">
-                      <span>⭐ 4.5</span>
-                      <span>2h 15m</span>
-                    </div>
-                  </div>
-                  <div className="cf-selectedTick">✓</div>
-                </div>
+                {movies.map((m) => {
+                  const isSelected = m.id === selectedMovieId;
+                  return (
+                    <div
+                      key={m.id}
+                      className={`cf-bookMovieCard ${isSelected ? "selected" : ""}`}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setSelectedMovieId(m.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") setSelectedMovieId(m.id);
+                      }}
+                    >
+                      <div className={m.posterClass} />
 
-                <div className="cf-bookMovieCard">
-                  <div className="cf-bookPoster alt" />
-                  <div className="cf-bookMovieMeta">
-                    <div className="cf-bookMovieName">Hearts Entwined</div>
-                    <div className="cf-muted">Drama, Romance</div>
-                    <div className="cf-bookMovieRow">
-                      <span>⭐ 4.2</span>
-                      <span>1h 58m</span>
+                      <div className="cf-bookMovieMeta">
+                        <div className="cf-bookMovieName">{m.title}</div>
+                        <div className="cf-muted">{m.genre}</div>
+                        <div className="cf-bookMovieRow">
+                          <span>⭐ {m.rating}</span>
+                          <span>{m.duration}</span>
+                        </div>
+                      </div>
+
+                      {isSelected && <div className="cf-selectedTick">✓</div>}
                     </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -80,8 +130,8 @@ export default function BookTicketsPage() {
 
               <div className="cf-bookSummaryPoster" />
 
-              <div className="cf-bookSummaryName">The Last Adventure</div>
-              <div className="cf-muted">Action, Sci-Fi</div>
+              <div className="cf-bookSummaryName">{selectedMovie.title}</div>
+              <div className="cf-muted">{selectedMovie.genre}</div>
 
               <div className="cf-bookInfo">
                 <div className="cf-bookInfoRow">
@@ -118,7 +168,11 @@ export default function BookTicketsPage() {
                 <span className="cf-price">$32.40</span>
               </div>
 
-              <button className="cf-orangeBtn" type="button">
+              <button
+                className="cf-orangeBtn"
+                type="button"
+                onClick={handleContinue}
+              >
                 Continue →
               </button>
             </div>
