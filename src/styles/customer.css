@@ -2161,4 +2161,98 @@ body {
   font-weight: 800;
   cursor: pointer;
 }
+/* ---------- SEATS PAGE ---------- */
+.cf-bookLeftStack { display: grid; gap: 18px; }
+
+.cf-seatCard { padding: 22px; }
+.cf-ticketRow{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px; border-radius:14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-top: 14px;
+}
+.cf-ticketName{ font-weight:700; }
+.cf-counter{
+  display:flex; align-items:center; gap:12px;
+}
+.cf-counter button{
+  width:44px; height:44px; border-radius:12px;
+  border:1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  color:#fff; font-size:18px; cursor:pointer;
+}
+.cf-counter span{ width:18px; text-align:center; font-weight:700; }
+
+.cf-seatHint{
+  margin-top: 14px;
+  color: rgba(255,255,255,0.75);
+}
+
+.cf-seatMapCard { padding: 22px; }
+.cf-screenWrap{ margin-top: 10px; margin-bottom: 18px; }
+.cf-screenBar{
+  height: 6px; border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+}
+.cf-screenText{
+  text-align:center;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 2px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.cf-seatGridWrap{ padding: 6px 2px; }
+.cf-seatRow{
+  display:grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  align-items:center;
+  margin: 10px 0;
+}
+.cf-seatRowLabel{
+  color: rgba(255,255,255,0.55);
+  font-weight:700;
+  font-size: 12px;
+}
+.cf-seatRowSeats{
+  display:grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 10px;
+}
+.cf-seat{
+  height: 22px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+}
+.cf-seat:hover{ transform: translateY(-1px); }
+.cf-seat.sel{
+  background: rgba(255,153,0,0.9);
+  border-color: rgba(255,153,0,0.9);
+}
+.cf-seat.occ{
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.12);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cf-seatLegend{
+  display:flex; gap: 18px;
+  justify-content:center;
+  margin-top: 18px;
+  color: rgba(255,255,255,0.70);
+}
+.cf-legItem{ display:flex; align-items:center; gap: 10px; font-size: 13px; }
+.cf-legBox{
+  width: 18px; height: 14px; border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  display:inline-block;
+}
+.cf-legBox.sel{ background: rgba(255,153,0,0.9); border-color: rgba(255,153,0,0.9); }
+.cf-legBox.occ{ background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.12); opacity: 0.6; }
 

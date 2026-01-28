@@ -245,7 +245,11 @@ export default function BookTime() {
               </div>
             </div>
 
-            <button className="cf-continueBtn" type="button" onClick={goNext}>
+            <button
+              className="cf-orangeBtn"
+              type="button"
+              onClick={goNext}
+            >
               Continue →
             </button>
             <button className="cf-backBtn" type="button" onClick={() => navigate("/customer/book")}>
