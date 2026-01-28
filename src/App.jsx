@@ -13,6 +13,7 @@ import ProfilePage from "./pages/Profile";
 import BookTicketsPage from "./pages/BookTicketsPage";
 import BookTime from "./pages/BookTime";
 import BookSeats from "./pages/BookSeats";
+import BookPaymentPage from "./pages/BookPayment";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -150,6 +151,16 @@ export default function App() {
             <ProtectedRoute>
               <RoleRoute allowRole="CUSTOMER">
                 <BookSeats />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/book/payment"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <BookPaymentPage />
               </RoleRoute>
             </ProtectedRoute>
           }
