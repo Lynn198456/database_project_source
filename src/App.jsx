@@ -14,6 +14,7 @@ import BookTicketsPage from "./pages/BookTicketsPage";
 import BookTime from "./pages/BookTime";
 import BookSeats from "./pages/BookSeats";
 import BookPaymentPage from "./pages/BookPayment";
+import BookingConfirmed from "./pages/BookingConfirmed"; 
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -161,6 +162,16 @@ export default function App() {
             <ProtectedRoute>
               <RoleRoute allowRole="CUSTOMER">
                 <BookPaymentPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/book/confirmed"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <BookingConfirmed />
               </RoleRoute>
             </ProtectedRoute>
           }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function BookPaymentPage() {
   const navigate = useNavigate();
 
-  // (Optional) Load booking info from localStorage (set this from BookTickets/BookTime/Seats pages later)
+  // Load booking info from localStorage (set this from BookTickets/BookTime/Seats pages later)
   const booking = useMemo(() => {
     try {
       const raw = localStorage.getItem("cinemaFlow_booking");
@@ -39,38 +39,53 @@ export default function BookPaymentPage() {
   const paymentId = "PMT-67398888";
 
   function completeBooking() {
-    // Save ticket into localStorage (simple demo)
+    if (!booking) return;
+
     const newTicket = {
-      id: `T-${Date.now()}`,
-      movieTitle: booking?.movieTitle,
-      date: booking?.date,
-      time: booking?.time,
-      theater: booking?.theater,
-      screen: booking?.screen,
-      seats: booking?.seats || [],
-      total: booking?.total,
+      id: `TKT-${Date.now()}`,
+      movieTitle: booking.movieTitle,
+      genre: booking.genre,
+      date: booking.date,
+      time: booking.time,
+      theater: booking.theater,
+      screen: booking.screen,
+      seats: booking.seats || [],
+      qty: booking.qty,
+      subtotal: booking.price,
+      tax: booking.tax,
+      total: booking.total,
+      poster: booking.poster,
       email,
       phone,
-      method,
+      method, // qr or bank
+      status: "upcoming",
       createdAt: new Date().toISOString(),
     };
 
+    // ✅ Save into tickets list used by MyTicketsPage
     const raw = localStorage.getItem("cinemaFlow_tickets");
     const tickets = raw ? JSON.parse(raw) : [];
     tickets.unshift(newTicket);
     localStorage.setItem("cinemaFlow_tickets", JSON.stringify(tickets));
 
-    // Clear booking draft (optional)
+    // ✅ Save the last confirmed ticket (so confirmed page can show it)
+    localStorage.setItem("cinemaFlow_lastTicket", JSON.stringify(newTicket));
+
+    // (optional) clear draft booking
     // localStorage.removeItem("cinemaFlow_booking");
 
-    navigate("/customer/tickets");
+    // ✅ go to confirmed page
+    navigate("/customer/book/confirmed");
   }
 
   return (
     <div className="cf-page">
       {/* Top header */}
       <div className="cf-bookTop">
-        <button className="cf-bookBack" onClick={() => navigate("/customer/movies")}>
+        <button
+          className="cf-bookBack"
+          onClick={() => navigate("/customer/movies")}
+        >
           ← Back to Movies
         </button>
 
@@ -103,7 +118,7 @@ export default function BookPaymentPage() {
       <main className="cf-mainFull">
         <div className="cf-containerWide">
           <div className="cf-bookGrid">
-            {/* LEFT: Payment methods + form */}
+            {/* LEFT */}
             <div className="cf-card cf-payLeft">
               <h3 className="cf-h3">Select Payment Method</h3>
 
@@ -117,7 +132,9 @@ export default function BookPaymentPage() {
                   <div className="cf-payIcon">⌁</div>
                   <div>
                     <div className="cf-payTitle">QR Code Payment</div>
-                    <div className="cf-muted">Scan to pay via mobile banking app</div>
+                    <div className="cf-muted">
+                      Scan to pay via mobile banking app
+                    </div>
                   </div>
                 </div>
 
@@ -125,15 +142,19 @@ export default function BookPaymentPage() {
                   <div className="cf-payBody">
                     <div className="cf-qrBox">
                       <div className="cf-qrFake">
-                        {/* simple fake QR */}
                         <div className="cf-qrGrid">
                           {Array.from({ length: 81 }).map((_, i) => (
-                            <span key={i} className={i % 3 === 0 ? "on" : ""} />
+                            <span
+                              key={i}
+                              className={i % 3 === 0 ? "on" : ""}
+                            />
                           ))}
                         </div>
                       </div>
                       <div className="cf-qrText">
-                        <div className="cf-qrMain">Scan with your banking app</div>
+                        <div className="cf-qrMain">
+                          Scan with your banking app
+                        </div>
                         <div className="cf-muted">Payment ID: {paymentId}</div>
                       </div>
                     </div>
@@ -172,7 +193,9 @@ export default function BookPaymentPage() {
                       </div>
                       <div className="cf-payField">
                         <div className="cf-muted">Account Name</div>
-                        <div className="cf-payValue">CinemaFlow Entertainment Ltd.</div>
+                        <div className="cf-payValue">
+                          CinemaFlow Entertainment Ltd.
+                        </div>
                       </div>
                       <div className="cf-payField">
                         <div className="cf-muted">Reference Number</div>
@@ -217,7 +240,7 @@ export default function BookPaymentPage() {
               </div>
             </div>
 
-            {/* RIGHT: Summary */}
+            {/* RIGHT */}
             <div className="cf-card cf-bookRight">
               <h3 className="cf-h3">🎟️ Booking Summary</h3>
 
@@ -277,6 +300,7 @@ export default function BookPaymentPage() {
                 <span className="cf-price">${booking?.total?.toFixed(2)}</span>
               </div>
 
+              {/* ✅ FIXED: call completeBooking() */}
               <button className="cf-greenBtn" type="button" onClick={completeBooking}>
                 ✓ Complete Booking
               </button>
