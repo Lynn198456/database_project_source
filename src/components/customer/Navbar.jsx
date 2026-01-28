@@ -10,57 +10,38 @@ export default function Navbar() {
 
   return (
     <header className="cf-nav">
+      {/* LEFT */}
       <div className="cf-nav__left">
-        {/* Logo */}
-        <div
-          className="cf-logo"
-          onClick={() => navigate("/customer")}
-          style={{ cursor: "pointer" }}
-        >
-          <div className="cf-logo__icon">🎞️</div>
-          <div>
-            <div className="cf-logo__title">CinemaFlow</div>
-            <div className="cf-logo__sub">Premium Cinema Experience</div>
-          </div>
+        <div className="cf-logo" onClick={() => navigate("/customer")}>
+          🎞️ <b>CinemaFlow</b>
         </div>
 
-        {/* Search */}
         <div className="cf-search">
-          <span style={{ opacity: 0.7 }}>🔎</span>
-          <input placeholder="Search movies..." />
+          🔎 <input placeholder="Search movies..." />
         </div>
       </div>
 
-      {/* Center links */}
+      {/* CENTER LINKS */}
       <nav className="cf-links">
-        <NavLink to="/customer" end className={({ isActive }) => `cf-link ${isActive ? "cf-link--active" : ""}`}>
-          Home
-        </NavLink>
-
-        <NavLink to="/customer/movies" className={({ isActive }) => `cf-link ${isActive ? "cf-link--active" : ""}`}>
-          Movies
-        </NavLink>
-
-        <NavLink to="/customer/showtimes" className={({ isActive }) => `cf-link ${isActive ? "cf-link--active" : ""}`}>
-          Showtimes
-        </NavLink>
-
-        <NavLink to="/customer/theaters" className={({ isActive }) => `cf-link ${isActive ? "cf-link--active" : ""}`}>
-          Theaters
-        </NavLink>
+        <NavLink to="/customer" end className="cf-link">Home</NavLink>
+        <NavLink to="/customer/movies" className="cf-link">Movies</NavLink>
+        <NavLink to="/customer/showtimes" className="cf-link">Showtimes</NavLink>
+        <NavLink to="/customer/theaters" className="cf-link">Theaters</NavLink>
+        
       </nav>
 
-      {/* Right buttons (My Tickets, Profile, Logout) */}
-      <div className="cf-nav__right">
-        <NavLink to="/customer/tickets" className={({ isActive }) => `cf-pillBtn ${isActive ? "cf-pillBtn--active" : ""}`}>
+      {/* RIGHT */}
+      <div style={{ display: "flex", gap: 10 }}>
+        {/* ✅ FIXED */}
+        <NavLink to="/customer/tickets" className="cf-btn cf-btn--outline">
           🎟️ My Tickets
         </NavLink>
 
-        <NavLink to="/customer/profile" className={({ isActive }) => `cf-pillBtn ${isActive ? "cf-pillBtn--active" : ""}`}>
+        <NavLink to="/customer/profile" className="cf-btn cf-btn--outline">
           👤 Profile
         </NavLink>
 
-        <button className="cf-pillBtn" type="button" onClick={logout}>
+        <button className="cf-btn" onClick={logout}>
           Logout
         </button>
       </div>
