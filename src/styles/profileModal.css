@@ -1,0 +1,130 @@
+/* Dark overlay */
+.ep-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+}
+
+/* Glass card */
+.ep-card{
+  width: min(760px, 96vw);
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  background: linear-gradient(180deg, rgba(28,46,80,.95), rgba(18,26,48,.95));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+
+/* Header */
+.ep-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+
+.ep-title{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255,255,255,.92);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.ep-icon{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59,130,246,.18);
+  border: 1px solid rgba(59,130,246,.25);
+}
+
+/* Close button */
+.ep-x{
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.65);
+  font-size: 20px;
+  cursor: pointer;
+}
+.ep-x:hover{ color: #fff; }
+
+/* Form */
+.ep-form{
+  margin-top: 6px;
+  display: grid;
+  gap: 14px;
+}
+
+.ep-field{ display: grid; gap: 8px; }
+
+.ep-label{
+  color: rgba(255,255,255,.65);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.ep-input, .ep-textarea{
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.92);
+  outline: none;
+  font-weight: 800;
+}
+.ep-textarea{ resize: none; padding-top: 12px; }
+
+.ep-input:focus, .ep-textarea:focus{
+  border-color: rgba(59,130,246,.45);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* Actions */
+.ep-actions{
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ep-btn{
+  border: none;
+  border-radius: 14px;
+  padding: 14px 14px;
+  cursor: pointer;
+  font-weight: 900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+}
+
+.ep-btnGhost{
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+}
+
+.ep-btnPrimary{
+  background: linear-gradient(180deg, #1d4ed8, #0b46ff);
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+.ep-btn:hover{ filter: brightness(1.05); }
+
+@media (max-width: 560px){
+  .ep-actions{ grid-template-columns: 1fr; }
+}
