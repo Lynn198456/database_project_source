@@ -1,5 +1,6 @@
 import "../styles/customer.css";
 import "../styles/profileModal.css";
+import "../styles/profilePlus.css";
 import { useEffect, useMemo, useState } from "react";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
@@ -24,6 +25,11 @@ const FALLBACK_USER = {
   spent: 420,
   bookings: 28,
   watched: 24,
+
+  // preferences
+  prefEmail: true,
+  prefSMS: false,
+  prefPromo: true,
 };
 
 export default function Profile() {
@@ -40,8 +46,15 @@ export default function Profile() {
     address: initialUser.address || "",
   });
 
+  // local preference state (so UI updates instantly)
+  const [prefs, setPrefs] = useState({
+    prefEmail: !!initialUser.prefEmail,
+    prefSMS: !!initialUser.prefSMS,
+    prefPromo: !!initialUser.prefPromo,
+  });
+
   useEffect(() => {
-    // ESC to close modal
+    // ESC closes modal
     function onKeyDown(e) {
       if (e.key === "Escape") setEditOpen(false);
     }
@@ -71,7 +84,6 @@ export default function Profile() {
   }
 
   function saveChanges() {
-    // simple validation
     if (!form.name.trim()) return alert("Full Name is required.");
     if (!form.email.trim()) return alert("Email is required.");
     if (!form.address.trim()) return alert("Address is required.");
@@ -82,12 +94,27 @@ export default function Profile() {
       email: form.email.trim(),
       phone: form.phone.trim(),
       address: form.address.trim(),
+
+      // keep preferences too
+      prefEmail: prefs.prefEmail,
+      prefSMS: prefs.prefSMS,
+      prefPromo: prefs.prefPromo,
     };
 
     localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
     setUser(updated);
     setEditOpen(false);
     setMsg("Profile updated successfully ✅");
+  }
+
+  function updatePref(key, value) {
+    const next = { ...prefs, [key]: value };
+    setPrefs(next);
+
+    // save immediately to localStorage (nice UX)
+    const updated = { ...user, ...next };
+    localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
+    setUser(updated);
   }
 
   return (
@@ -128,7 +155,11 @@ export default function Profile() {
             <div className="cf-profileMain">
               <div className="cf-profileAvatarBlock">
                 <div className="cf-avatarLarge">👤</div>
-                <button className="cf-grayBtn" type="button" onClick={() => alert("Change photo later")}>
+                <button
+                  className="cf-grayBtn"
+                  type="button"
+                  onClick={() => alert("Change photo later")}
+                >
                   Change Photo
                 </button>
               </div>
@@ -182,7 +213,229 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* ... keep the rest of your page as-is (payment, preferences, etc.) ... */}
+            {/* PAYMENT + PREFERENCES */}
+            <div className="pf-row2">
+              {/* Payment Methods */}
+              <div className="pf-panel">
+                <div className="pf-panelHead">
+                  <div className="pf-panelTitle">
+                    <span className="pf-ico">💳</span> Payment Methods
+                  </div>
+                  <button className="pf-btnBlue" type="button" onClick={() => alert("Add card later")}>
+                    Add New
+                  </button>
+                </div>
+
+                <div className="pf-payCard pf-payCard--active">
+                  <div className="pf-payTop">
+                    <div className="pf-payName">Visa •••• 4242</div>
+                    <span className="pf-pillGreen">Default</span>
+                  </div>
+                  <div className="pf-paySub">Expires 12/2025</div>
+                </div>
+
+                <div className="pf-payCard">
+                  <div className="pf-payTop">
+                    <div className="pf-payName">Mastercard •••• 8888</div>
+                  </div>
+                  <div className="pf-paySub">Expires 08/2026</div>
+                </div>
+              </div>
+
+              {/* Preferences */}
+              <div className="pf-panel">
+                <div className="pf-panelHead">
+                  <div className="pf-panelTitle">
+                    <span className="pf-ico">⚙️</span> Preferences
+                  </div>
+                </div>
+
+                <div className="pf-toggleCard">
+                  <div className="pf-toggleLeft">
+                    <span className="pf-icoSmall">🔔</span>
+                    <div className="pf-toggleText">Email Notifications</div>
+                  </div>
+                  <label className="pf-switch">
+                    <input
+                      type="checkbox"
+                      checked={prefs.prefEmail}
+                      onChange={(e) => updatePref("prefEmail", e.target.checked)}
+                    />
+                    <span className="pf-slider" />
+                  </label>
+                </div>
+
+                <div className="pf-toggleCard">
+                  <div className="pf-toggleLeft">
+                    <span className="pf-icoSmall">📳</span>
+                    <div className="pf-toggleText">SMS Notifications</div>
+                  </div>
+                  <label className="pf-switch">
+                    <input
+                      type="checkbox"
+                      checked={prefs.prefSMS}
+                      onChange={(e) => updatePref("prefSMS", e.target.checked)}
+                    />
+                    <span className="pf-slider" />
+                  </label>
+                </div>
+
+                <div className="pf-toggleCard">
+                  <div className="pf-toggleLeft">
+                    <span className="pf-icoSmall">✉️</span>
+                    <div className="pf-toggleText">Promotional Emails</div>
+                  </div>
+                  <label className="pf-switch">
+                    <input
+                      type="checkbox"
+                      checked={prefs.prefPromo}
+                      onChange={(e) => updatePref("prefPromo", e.target.checked)}
+                    />
+                    <span className="pf-slider" />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* FAVORITE THEATERS */}
+            <div className="pf-panel pf-panelFull">
+              <div className="pf-panelHead">
+                <div className="pf-panelTitle">
+                  <span className="pf-ico">📍</span> Favorite Theaters
+                </div>
+                <button className="pf-btnGhost" type="button" onClick={() => alert("Manage later")}>
+                  Manage
+                </button>
+              </div>
+
+              <div className="pf-theaterGrid2">
+                <div className="pf-theaterCard2">
+                  <div
+                    className="pf-theaterImg"
+                    style={{
+                      backgroundImage:
+                        "url(https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?q=80&w=1200&auto=format&fit=crop)",
+                    }}
+                  />
+                  <div className="pf-theaterBody">
+                    <div className="pf-theaterName">CinemaFlow Downtown</div>
+                    <div className="pf-theaterAddr">123 Main Street</div>
+                    <div className="pf-theaterVisits">⭐ 8 visits</div>
+                  </div>
+                </div>
+
+                <div className="pf-theaterCard2 pf-theaterCard2--active">
+                  <div
+                    className="pf-theaterImg"
+                    style={{
+                      backgroundImage:
+                        "url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop)",
+                    }}
+                  />
+                  <div className="pf-theaterBody">
+                    <div className="pf-theaterName">CinemaFlow Mall Location</div>
+                    <div className="pf-theaterAddr">456 Shopping Ave</div>
+                    <div className="pf-theaterVisits">⭐ 5 visits</div>
+                  </div>
+                </div>
+
+                <div className="pf-theaterCard2">
+                  <div
+                    className="pf-theaterImg"
+                    style={{
+                      backgroundImage:
+                        "url(https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop)",
+                    }}
+                  />
+                  <div className="pf-theaterBody">
+                    <div className="pf-theaterName">CinemaFlow Suburban</div>
+                    <div className="pf-theaterAddr">789 Suburban Blvd</div>
+                    <div className="pf-theaterVisits">⭐ 2 visits</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* WATCHLIST */}
+            <div className="pf-panel pf-panelFull">
+              <div className="pf-panelHead">
+                <div className="pf-panelTitle">
+                  <span className="pf-ico">🎞️</span> My Watchlist
+                </div>
+                <div className="pf-link" onClick={() => alert("View all later")}>View All →</div>
+              </div>
+
+              <div className="pf-watchRow">
+                {[
+                  {
+                    title: "Future World",
+                    date: "December 2024",
+                    img: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1200&auto=format&fit=crop",
+                  },
+                  {
+                    title: "Love in Paris",
+                    date: "December 2024",
+                    img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop",
+                  },
+                  {
+                    title: "Mystery Island",
+                    date: "December 2024",
+                    img: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop",
+                  },
+                  {
+                    title: "Action Hero",
+                    date: "December 2024",
+                    img: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop",
+                  },
+                ].map((m) => (
+                  <div key={m.title} className="pf-watchCard">
+                    <div className="pf-watchImg" style={{ backgroundImage: `url(${m.img})` }}>
+                      <div className="pf-coming">Coming Soon</div>
+                    </div>
+                    <div className="pf-watchBody">
+                      <div className="pf-watchTitle">{m.title}</div>
+                      <div className="pf-watchDate">{m.date}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SECURITY SETTINGS */}
+            <div className="pf-panel pf-panelFull">
+              <div className="pf-panelHead">
+                <div className="pf-panelTitle">
+                  <span className="pf-ico">🔒</span> Security Settings
+                </div>
+              </div>
+
+              <div className="pf-secList">
+                <div className="pf-secRow" onClick={() => alert("Change password later")}>
+                  <div>Change Password</div>
+                  <div className="pf-secIcon">✏️</div>
+                </div>
+
+                <div className="pf-secRow">
+                  <div>Two-Factor Authentication</div>
+                  <div className="pf-pillGreen">Enabled</div>
+                </div>
+
+                <div className="pf-secRow" onClick={() => alert("Login history later")}>
+                  <div>Login History</div>
+                  <div className="pf-secIcon">✏️</div>
+                </div>
+              </div>
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div className="pf-actionsBottom">
+              <button className="pf-btnSave" type="button" onClick={() => setMsg("Changes saved ✅")}>
+                💾 Save Changes
+              </button>
+              <button className="pf-btnDelete" type="button" onClick={() => alert("Delete account later")}>
+                Delete Account
+              </button>
+            </div>
           </div>
         </main>
 

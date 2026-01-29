@@ -1,0 +1,309 @@
+/* Layout */
+.pf-row2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.pf-panel{
+  border-radius: 18px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.10);
+  padding: 18px;
+}
+
+.pf-panelFull{ margin-top: 18px; }
+
+.pf-panelHead{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.pf-panelTitle{
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 18px;
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+
+.pf-ico{ opacity: .9; }
+.pf-icoSmall{ opacity:.85; }
+
+/* Buttons */
+.pf-btnBlue{
+  background: linear-gradient(180deg, #1d4ed8, #0b46ff);
+  color:#fff;
+  font-weight:900;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border:none;
+  cursor:pointer;
+}
+
+.pf-btnGhost{
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.92);
+  font-weight:900;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor:pointer;
+}
+
+.pf-link{
+  color: #ffb100;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* Payment cards */
+.pf-payCard{
+  border-radius: 16px;
+  padding: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  margin-top: 12px;
+}
+
+.pf-payCard--active{
+  border-color: rgba(255,166,0,.45);
+  box-shadow: 0 0 0 1px rgba(255,166,0,.18) inset;
+}
+
+.pf-payTop{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+}
+
+.pf-payName{
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.pf-paySub{
+  margin-top: 8px;
+  color: rgba(255,255,255,.60);
+  font-weight: 800;
+}
+
+.pf-pillGreen{
+  background: rgba(34,197,94,.20);
+  border: 1px solid rgba(34,197,94,.28);
+  color: rgba(220,255,235,.95);
+  font-weight: 900;
+  padding: 8px 12px;
+  border-radius: 999px;
+}
+
+/* Preferences toggle cards */
+.pf-toggleCard{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  margin-top: 12px;
+}
+
+.pf-toggleLeft{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  color: rgba(255,255,255,.88);
+  font-weight: 900;
+}
+
+/* Switch */
+.pf-switch{ position: relative; width: 52px; height: 28px; }
+.pf-switch input{ display:none; }
+
+.pf-slider{
+  position:absolute; inset:0;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.14);
+  transition: .2s;
+}
+
+.pf-slider:before{
+  content:"";
+  position:absolute;
+  width: 22px; height: 22px;
+  left: 3px; top: 2.5px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.92);
+  transition:.2s;
+}
+
+.pf-switch input:checked + .pf-slider{
+  background: linear-gradient(180deg, #ffb100, #f07d00);
+  border-color: rgba(255,166,0,.35);
+}
+.pf-switch input:checked + .pf-slider:before{
+  transform: translateX(24px);
+}
+
+/* Favorite theaters cards */
+.pf-theaterGrid2{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pf-theaterCard2{
+  overflow:hidden;
+  border-radius: 18px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.pf-theaterCard2--active{
+  border-color: rgba(255,166,0,.45);
+  box-shadow: 0 0 0 1px rgba(255,166,0,.18) inset;
+}
+
+.pf-theaterImg{
+  height: 140px;
+  background-size: cover;
+  background-position:center;
+  filter: saturate(1.05);
+}
+
+.pf-theaterBody{
+  padding: 14px;
+}
+
+.pf-theaterName{
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 16px;
+}
+.pf-theaterAddr{
+  margin-top: 6px;
+  color: rgba(255,255,255,.60);
+  font-weight: 800;
+}
+.pf-theaterVisits{
+  margin-top: 10px;
+  color: #ffb100;
+  font-weight: 900;
+}
+
+/* Watchlist row */
+.pf-watchRow{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pf-watchCard{
+  border-radius: 18px;
+  overflow:hidden;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.pf-watchImg{
+  height: 220px;
+  background-size: cover;
+  background-position:center;
+  position: relative;
+}
+
+.pf-coming{
+  position:absolute;
+  top: 12px;
+  right: 12px;
+  background: #ff2d90;
+  color: #fff;
+  font-weight: 900;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.pf-watchBody{
+  padding: 14px;
+}
+
+.pf-watchTitle{
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 16px;
+}
+.pf-watchDate{
+  margin-top: 6px;
+  color: rgba(255,255,255,.55);
+  font-weight: 800;
+}
+
+/* Security */
+.pf-secList{
+  display:grid;
+  gap: 12px;
+}
+
+.pf-secRow{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.10);
+  color: rgba(255,255,255,.90);
+  font-weight: 900;
+}
+
+.pf-secIcon{
+  opacity:.8;
+}
+
+/* Bottom actions */
+.pf-actionsBottom{
+  margin-top: 18px;
+  display:flex;
+  gap: 12px;
+}
+
+.pf-btnSave{
+  background: linear-gradient(180deg, #1d4ed8, #0b46ff);
+  color:#fff;
+  font-weight: 900;
+  border:none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-width: 220px;
+  cursor:pointer;
+}
+
+.pf-btnDelete{
+  background: #e11d2e;
+  color:#fff;
+  font-weight: 900;
+  border:none;
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-width: 220px;
+  cursor:pointer;
+}
+
+@media (max-width: 1100px){
+  .pf-theaterGrid2{ grid-template-columns: 1fr; }
+  .pf-watchRow{ grid-template-columns: 1fr; }
+  .pf-row2{ grid-template-columns: 1fr; }
+  .pf-actionsBottom{ flex-direction: column; }
+  .pf-btnSave, .pf-btnDelete{ width: 100%; }
+}
