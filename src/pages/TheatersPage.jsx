@@ -1,13 +1,13 @@
 import "../styles/customer.css";
 import "../styles/theaters.css";
 import { useMemo, useState } from "react";
-import Navbar from "../components/customer/Navbar";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/customer/Navbar";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
-// Leaflet marker fix (Vite)
+// Leaflet marker fix for Vite
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -46,10 +46,9 @@ export default function TheatersPage() {
   const [view, setView] = useState("LIST"); // LIST | MAP
   const [selectedId, setSelectedId] = useState(THEATERS[0]?.id || "");
 
-  const selected = useMemo(
-    () => THEATERS.find((t) => t.id === selectedId) || THEATERS[0],
-    [selectedId]
-  );
+  const selected = useMemo(() => {
+    return THEATERS.find((t) => t.id === selectedId) || THEATERS[0];
+  }, [selectedId]);
 
   const mapCenter = useMemo(() => {
     if (!selected) return [13.736717, 100.523186];
@@ -92,9 +91,8 @@ export default function TheatersPage() {
             </div>
           </div>
 
-          {/* Content */}
+          {/* LIST VIEW */}
           {view === "LIST" ? (
-            // ✅ LIST VIEW
             <div className="th-listView">
               <div className="th-listGrid">
                 {THEATERS.map((t) => (
@@ -137,7 +135,7 @@ export default function TheatersPage() {
                 ))}
               </div>
 
-              {/* Selected theater detail */}
+              {/* Selected detail */}
               {selected && (
                 <div className="th-detail">
                   <div className="th-detailTitle">Selected Theater</div>
@@ -162,12 +160,12 @@ export default function TheatersPage() {
               )}
             </div>
           ) : (
-            // ✅ MAP VIEW
+            /* MAP VIEW */
             <div className="th-mapWrap">
               <div className="th-mapTop">
-                <div className="th-mapTopLeft">
+                <div>
                   <div className="th-mapTitle">{selected?.name || "Theater Map"}</div>
-                  <div className="th-mapSub">{selected?.address}</div>
+                  <div className="th-mapSub">{selected?.address || ""}</div>
                 </div>
 
                 <div className="th-mapTopRight">
@@ -212,6 +210,13 @@ export default function TheatersPage() {
               </MapContainer>
             </div>
           )}
+
+          {/* Optional back button */}
+          <div style={{ marginTop: 16 }}>
+            <button className="th-smallBtn th-smallBtn--ghost" onClick={() => navigate(-1)} type="button">
+              ← Back
+            </button>
+          </div>
         </div>
       </main>
     </div>
