@@ -1,0 +1,287 @@
+/* Top header */
+.lp-top{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  margin: 10px 0 18px;
+}
+.lp-back{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: rgba(255,255,255,.9);
+  font-weight: 900;
+  cursor:pointer;
+}
+.lp-back:hover{ background: rgba(255,255,255,.10); }
+.lp-title{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  color: rgba(255,255,255,.95);
+  font-weight: 900;
+  font-size: 22px;
+}
+.lp-titleIcon{
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,166,0,.16);
+  border: 1px solid rgba(255,166,0,.25);
+}
+
+/* Hero balance card */
+.lp-hero{
+  border-radius: 18px;
+  border: 1px solid rgba(255,166,0,.25);
+  background: radial-gradient(1200px 400px at 50% 0%, rgba(255,166,0,.20), rgba(255,255,255,0)),
+              rgba(255,255,255,.03);
+  box-shadow: 0 20px 50px rgba(0,0,0,.35);
+  padding: 22px;
+  margin-bottom: 16px;
+}
+.lp-heroInner{
+  text-align:center;
+}
+.lp-heroLabel{
+  color: rgba(255,255,255,.75);
+  font-weight: 700;
+}
+.lp-heroValue{
+  margin-top: 6px;
+  font-size: 64px;
+  font-weight: 1000;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.95);
+}
+.lp-tierPill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  margin: 10px auto 16px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffb100, #f07d00);
+  color: #fff;
+  font-weight: 900;
+}
+
+/* Progress card inside hero */
+.lp-progressCard{
+  margin: 0 auto;
+  width: min(980px, 100%);
+  text-align:left;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 16px;
+}
+.lp-progressTop{
+  display:flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.lp-progressTitle{
+  color: rgba(255,255,255,.90);
+  font-weight: 900;
+}
+.lp-progressRight{
+  color: #ffcc33;
+  font-weight: 900;
+}
+.lp-bar{
+  margin-top: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.10);
+  overflow:hidden;
+}
+.lp-barFill{
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb100, #f07d00);
+}
+.lp-progressSub{
+  margin-top: 10px;
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+}
+
+/* Stat cards row */
+.lp-stats{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.lp-stat{
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+}
+.lp-statTop{
+  color: rgba(255,255,255,.85);
+  font-weight: 900;
+  display:flex;
+  align-items:center;
+  gap: 8px;
+}
+.lp-statValue{
+  margin-top: 8px;
+  font-size: 46px;
+  font-weight: 1000;
+  color: rgba(255,255,255,.95);
+}
+.lp-green{ background: linear-gradient(180deg, rgba(34,197,94,.30), rgba(255,255,255,.03)); }
+.lp-red{ background: linear-gradient(180deg, rgba(239,68,68,.30), rgba(255,255,255,.03)); }
+.lp-purple{ background: linear-gradient(180deg, rgba(168,85,247,.30), rgba(255,255,255,.03)); }
+
+/* Panels */
+.lp-panel{
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  margin-bottom: 16px;
+}
+.lp-panelHead{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.lp-panelTitle{
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  font-size: 18px;
+}
+
+/* Rewards grid */
+.lp-rewardGrid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.lp-rewardCard{
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 18px;
+  text-align:center;
+}
+.lp-rewardEmoji{
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.lp-rewardTitle{
+  color: rgba(255,255,255,.95);
+  font-weight: 1000;
+  font-size: 18px;
+}
+.lp-rewardDesc{
+  margin-top: 8px;
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+  min-height: 42px;
+}
+.lp-rewardCost{
+  margin-top: 14px;
+  color: #ffb100;
+  font-weight: 1000;
+  font-size: 18px;
+}
+.lp-redeemBtn{
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  cursor:pointer;
+  font-weight: 1000;
+  color: #fff;
+  background: linear-gradient(180deg, #ffb100, #f07d00);
+}
+.lp-redeemBtn:hover{ filter: brightness(1.04); }
+.lp-redeemBtnDisabled{
+  opacity: .45;
+  cursor:not-allowed;
+}
+
+/* History list */
+.lp-history{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lp-row{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 14px;
+}
+.lp-dot{
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 16px;
+  border: 1px solid rgba(255,255,255,.10);
+}
+.lp-dotGreen{ background: rgba(34,197,94,.18); }
+.lp-dotRed{ background: rgba(239,68,68,.18); }
+
+.lp-rowMid{ flex: 1; }
+.lp-rowTitle{
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+}
+.lp-rowDate{
+  margin-top: 6px;
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+  font-size: 14px;
+}
+.lp-amt{
+  font-weight: 1000;
+  font-size: 20px;
+}
+.lp-amtGreen{ color: #22c55e; }
+.lp-amtRed{ color: #ef4444; }
+
+/* Toast */
+.lp-toast{
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(34,197,94,.18);
+  border: 1px solid rgba(34,197,94,.28);
+  color: rgba(220,255,235,.95);
+  font-weight: 1000;
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .lp-rewardGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lp-stats{ grid-template-columns: 1fr; }
+}
+@media (max-width: 640px){
+  .lp-rewardGrid{ grid-template-columns: 1fr; }
+  .lp-heroValue{ font-size: 52px; }
+}

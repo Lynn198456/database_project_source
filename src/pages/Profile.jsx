@@ -219,10 +219,18 @@ export default function Profile() {
               </div>
 
 
-              <div className="cf-statCard orange">
+              <div
+                className="cf-statCard orange"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate("/customer/loyalty")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/loyalty")}
+                style={{ cursor: "pointer" }}
+                >
                 ⭐ Loyalty Points
                 <strong>{user.points}</strong>
               </div>
+
 
               <div className="cf-statCard green">
                 💰 Total Spent
