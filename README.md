@@ -17,7 +17,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 ## 📸 Screenshot
-![Dashboard Screenshot](images/dashboards.png)
+![Dashboard Screenshot](image/dashboards.jpg)
 
-<img src="images/dashboards.jpg" width="800" alt="Dashboard Screenshot" />
+<img src="image/dashboards.jpg" width="800" alt="Dashboard Screenshot" />
 
