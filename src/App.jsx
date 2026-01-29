@@ -17,6 +17,8 @@ import BookPaymentPage from "./pages/BookPayment";
 import BookingConfirmed from "./pages/BookingConfirmed";
 import MovieDetailPage from "./pages/MovieDetailPage";
 import MoviesWatchedPage from "./pages/MoviesWatchedPage";
+import BookingHistoryPage from "./pages/BookingHistoryPage";
+
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -218,6 +220,17 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/customer/booking-history"
+          element={
+            <ProtectedRoute>
+              <RoleRoute allowRole="CUSTOMER">
+                <BookingHistoryPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+
 
 
         {/* ADMIN */}

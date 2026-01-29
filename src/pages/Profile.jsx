@@ -208,10 +208,16 @@ export default function Profile() {
                 <strong>{user.watched}</strong>
               </div>
 
-              <div className="cf-statCard purple">
+              <div
+                className="cf-statCard purple"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/customer/booking-history")}
+                title="View Booking History"
+              >
                 📅 Total Bookings
                 <strong>{user.bookings}</strong>
               </div>
+
 
               <div className="cf-statCard orange">
                 ⭐ Loyalty Points
