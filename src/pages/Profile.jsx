@@ -2,6 +2,7 @@ import "../styles/customer.css";
 import "../styles/profileModal.css";
 import "../styles/profilePlus.css";
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
 
@@ -33,6 +34,8 @@ const FALLBACK_USER = {
 };
 
 export default function Profile() {
+  const navigate = useNavigate();
+
   const initialUser = useMemo(() => getUser() || FALLBACK_USER, []);
   const [user, setUser] = useState(initialUser);
 
@@ -195,18 +198,26 @@ export default function Profile() {
 
             {/* STATS */}
             <div className="cf-statGrid">
-              <div className="cf-statCard blue">
+              <div
+                className="cf-statCard blue"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/customer/movies-watched")}
+                title="View Movies Watched"
+              >
                 🎬 Movies Watched
                 <strong>{user.watched}</strong>
               </div>
+
               <div className="cf-statCard purple">
                 📅 Total Bookings
                 <strong>{user.bookings}</strong>
               </div>
+
               <div className="cf-statCard orange">
                 ⭐ Loyalty Points
                 <strong>{user.points}</strong>
               </div>
+
               <div className="cf-statCard green">
                 💰 Total Spent
                 <strong>${user.spent}.00</strong>
@@ -221,7 +232,11 @@ export default function Profile() {
                   <div className="pf-panelTitle">
                     <span className="pf-ico">💳</span> Payment Methods
                   </div>
-                  <button className="pf-btnBlue" type="button" onClick={() => alert("Add card later")}>
+                  <button
+                    className="pf-btnBlue"
+                    type="button"
+                    onClick={() => alert("Add card later")}
+                  >
                     Add New
                   </button>
                 </div>
@@ -303,7 +318,11 @@ export default function Profile() {
                 <div className="pf-panelTitle">
                   <span className="pf-ico">📍</span> Favorite Theaters
                 </div>
-                <button className="pf-btnGhost" type="button" onClick={() => alert("Manage later")}>
+                <button
+                  className="pf-btnGhost"
+                  type="button"
+                  onClick={() => alert("Manage later")}
+                >
                   Manage
                 </button>
               </div>
@@ -362,7 +381,9 @@ export default function Profile() {
                 <div className="pf-panelTitle">
                   <span className="pf-ico">🎞️</span> My Watchlist
                 </div>
-                <div className="pf-link" onClick={() => alert("View all later")}>View All →</div>
+                <div className="pf-link" onClick={() => alert("View all later")}>
+                  View All →
+                </div>
               </div>
 
               <div className="pf-watchRow">
@@ -389,7 +410,10 @@ export default function Profile() {
                   },
                 ].map((m) => (
                   <div key={m.title} className="pf-watchCard">
-                    <div className="pf-watchImg" style={{ backgroundImage: `url(${m.img})` }}>
+                    <div
+                      className="pf-watchImg"
+                      style={{ backgroundImage: `url(${m.img})` }}
+                    >
                       <div className="pf-coming">Coming Soon</div>
                     </div>
                     <div className="pf-watchBody">
@@ -429,10 +453,18 @@ export default function Profile() {
 
             {/* ACTION BUTTONS */}
             <div className="pf-actionsBottom">
-              <button className="pf-btnSave" type="button" onClick={() => setMsg("Changes saved ✅")}>
+              <button
+                className="pf-btnSave"
+                type="button"
+                onClick={() => setMsg("Changes saved ✅")}
+              >
                 💾 Save Changes
               </button>
-              <button className="pf-btnDelete" type="button" onClick={() => alert("Delete account later")}>
+              <button
+                className="pf-btnDelete"
+                type="button"
+                onClick={() => alert("Delete account later")}
+              >
                 Delete Account
               </button>
             </div>
@@ -450,7 +482,12 @@ export default function Profile() {
                   <span className="ep-icon">✏️</span>
                   Edit Profile
                 </div>
-                <button className="ep-x" onClick={closeEdit} type="button" aria-label="Close">
+                <button
+                  className="ep-x"
+                  onClick={closeEdit}
+                  type="button"
+                  aria-label="Close"
+                >
                   ✕
                 </button>
               </div>
