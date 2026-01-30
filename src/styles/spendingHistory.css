@@ -1,0 +1,415 @@
+/* ===========================
+   Spending History (CinemaFlow)
+   File: src/styles/spendingHistory.css
+   =========================== */
+
+.sp-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 8px 0 16px;
+}
+
+.sp-back {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.sp-back:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.18);
+}
+
+.sp-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.95);
+}
+
+.sp-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(34,197,94,0.18);
+  border: 1px solid rgba(34,197,94,0.22);
+}
+
+/* HERO */
+.sp-hero {
+  margin: 10px 0 18px;
+  padding: 26px 26px;
+  border-radius: 18px;
+  border: 1px solid rgba(34,197,94,0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(16,185,129,0.20),
+    rgba(2,6,23,0.16)
+  );
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  text-align: center;
+}
+
+.sp-heroLabel {
+  color: rgba(255,255,255,0.80);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+
+.sp-heroValue {
+  font-size: 64px;
+  line-height: 1.05;
+  font-weight: 950;
+  color: rgba(255,255,255,0.98);
+  margin: 6px 0 6px;
+}
+
+.sp-heroSub {
+  color: rgba(255,255,255,0.65);
+  font-weight: 700;
+}
+
+/* STATS (3 cards) */
+.sp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.sp-stat {
+  border-radius: 16px;
+  padding: 18px 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+}
+
+.sp-statLabel {
+  color: rgba(255,255,255,0.78);
+  font-weight: 800;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp-statValue {
+  font-size: 44px;
+  font-weight: 950;
+  color: rgba(255,255,255,0.98);
+  letter-spacing: 0.3px;
+}
+
+/* stat color themes */
+.sp-blue {
+  background: linear-gradient(135deg, rgba(37,99,235,0.35), rgba(255,255,255,0.05));
+  border-color: rgba(37,99,235,0.22);
+}
+.sp-purple {
+  background: linear-gradient(135deg, rgba(147,51,234,0.35), rgba(255,255,255,0.05));
+  border-color: rgba(147,51,234,0.22);
+}
+.sp-orange {
+  background: linear-gradient(135deg, rgba(245,158,11,0.32), rgba(255,255,255,0.05));
+  border-color: rgba(245,158,11,0.22);
+}
+
+/* PANELS */
+.sp-panel {
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 18px 55px rgba(0,0,0,0.28);
+  padding: 18px 18px;
+  margin-bottom: 18px;
+}
+
+.sp-panelHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+
+.sp-panelHead span {
+  opacity: 0.95;
+}
+
+/* Category Cards */
+.sp-catCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.sp-cat {
+  border-radius: 16px;
+  padding: 16px 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+}
+
+.sp-catName {
+  color: rgba(255,255,255,0.85);
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.sp-catMoney {
+  font-size: 40px;
+  font-weight: 950;
+  color: rgba(255,255,255,0.98);
+}
+
+.sp-catSub {
+  color: rgba(255,255,255,0.70);
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+.sp-blueCard {
+  background: linear-gradient(135deg, rgba(37,99,235,0.40), rgba(255,255,255,0.04));
+  border-color: rgba(37,99,235,0.22);
+}
+.sp-orangeCard {
+  background: linear-gradient(135deg, rgba(245,158,11,0.38), rgba(255,255,255,0.04));
+  border-color: rgba(245,158,11,0.22);
+}
+.sp-purpleCard {
+  background: linear-gradient(135deg, rgba(147,51,234,0.38), rgba(255,255,255,0.04));
+  border-color: rgba(147,51,234,0.22);
+}
+
+/* Bars */
+.sp-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sp-barRow {
+  display: grid;
+  grid-template-columns: 180px 1fr 170px;
+  gap: 14px;
+  align-items: center;
+}
+
+.sp-barLabel {
+  color: rgba(255,255,255,0.82);
+  font-weight: 900;
+}
+
+.sp-barTrack {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.09);
+  overflow: hidden;
+}
+
+.sp-barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(59,130,246,0.95), rgba(59,130,246,0.45));
+}
+
+.sp-barRight {
+  text-align: right;
+  color: rgba(245,158,11,0.95);
+  font-weight: 950;
+}
+
+/* Monthly Grid */
+.sp-monthGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sp-monthCard {
+  border-radius: 16px;
+  padding: 16px 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+}
+
+.sp-monthName {
+  color: rgba(255,255,255,0.72);
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.sp-monthMoney {
+  font-size: 42px;
+  font-weight: 950;
+  color: rgba(255,255,255,0.98);
+  margin-bottom: 6px;
+}
+
+.sp-monthSub {
+  color: rgba(255,255,255,0.65);
+  font-weight: 800;
+}
+
+/* Transactions */
+.sp-txList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sp-txRow {
+  display: grid;
+  grid-template-columns: 54px 1fr 140px;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+}
+
+.sp-txIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+}
+
+.sp-icoBlue {
+  background: rgba(37,99,235,0.22);
+  border-color: rgba(37,99,235,0.28);
+}
+.sp-icoOrange {
+  background: rgba(245,158,11,0.22);
+  border-color: rgba(245,158,11,0.28);
+}
+.sp-icoPurple {
+  background: rgba(147,51,234,0.22);
+  border-color: rgba(147,51,234,0.28);
+}
+
+.sp-txMid {
+  min-width: 0;
+}
+
+.sp-txTitle {
+  color: rgba(255,255,255,0.94);
+  font-weight: 950;
+  font-size: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sp-txSub {
+  margin-top: 4px;
+  color: rgba(255,255,255,0.65);
+  font-weight: 800;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sp-tag {
+  color: rgba(59,130,246,0.95);
+  font-weight: 950;
+}
+
+.sp-txMoney {
+  text-align: right;
+  color: rgba(34,197,94,0.95);
+  font-weight: 950;
+  font-size: 22px;
+}
+
+/* Tips Panel */
+.sp-tipPanel {
+  border-color: rgba(245,158,11,0.25);
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(255,255,255,0.03));
+}
+
+.sp-tips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.sp-tip {
+  border-radius: 16px;
+  padding: 16px 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.05);
+}
+
+.sp-tipTitle {
+  color: rgba(245,158,11,0.95);
+  font-weight: 950;
+  margin-bottom: 8px;
+}
+
+.sp-tipDesc {
+  color: rgba(255,255,255,0.72);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width: 1100px) {
+  .sp-monthGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .sp-stats {
+    grid-template-columns: 1fr;
+  }
+  .sp-catCards {
+    grid-template-columns: 1fr;
+  }
+  .sp-tips {
+    grid-template-columns: 1fr;
+  }
+  .sp-barRow {
+    grid-template-columns: 130px 1fr 130px;
+  }
+}
+
+@media (max-width: 560px) {
+  .sp-heroValue {
+    font-size: 48px;
+  }
+  .sp-statValue {
+    font-size: 38px;
+  }
+  .sp-txRow {
+    grid-template-columns: 50px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .sp-txMoney {
+    grid-column: 1 / -1;
+    text-align: left;
+    margin-left: 64px;
+  }
+}

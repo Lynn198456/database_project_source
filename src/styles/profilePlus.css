@@ -307,3 +307,11 @@
   .pf-actionsBottom{ flex-direction: column; }
   .pf-btnSave, .pf-btnDelete{ width: 100%; }
 }
+.cf-statCard {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cf-statCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+}

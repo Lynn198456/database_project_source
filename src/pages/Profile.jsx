@@ -232,9 +232,20 @@ export default function Profile() {
               </div>
 
 
-              <div className="cf-statCard green">
+              <div
+                className="cf-statCard green"
+                role="button"
+                tabIndex={0}
+                title="View Spending History"
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate("/customer/spending-history")}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    navigate("/customer/spending-history");
+                  }
+                }}
+              >
                 💰 Total Spent
-                <strong>${user.spent}.00</strong>
               </div>
             </div>
 

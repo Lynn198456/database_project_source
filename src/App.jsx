@@ -19,6 +19,7 @@ import MovieDetailPage from "./pages/MovieDetailPage";
 import MoviesWatchedPage from "./pages/MoviesWatchedPage";
 import BookingHistoryPage from "./pages/BookingHistoryPage";
 import LoyaltyPointsPage from "./pages/LoyaltyPointsPage";
+import SpendingHistoryPage from "./pages/SpendingHistoryPage";
 
 /*
   localStorage user example:
@@ -237,6 +238,16 @@ export default function App() {
             <ProtectedRoute>
               <RoleRoute allowRole="CUSTOMER">
                 <LoyaltyPointsPage />
+              </RoleRoute>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/spending-history"
+          element={
+            <ProtectedRoute >
+              <RoleRoute allowRole="CUSTOMER">
+                <SpendingHistoryPage/>
               </RoleRoute>
             </ProtectedRoute>
           }
