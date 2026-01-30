@@ -338,4 +338,64 @@
   align-items: center;
   gap: 16px;   /* 👈 ADD THIS LINE */
 }
+/* Payment action buttons */
+.pf-payActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pf-payBtn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pf-payBtn:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+.pf-payBtnDanger {
+  border-color: rgba(239,68,68,0.5);
+  color: #ffb4b4;
+}
+
+.pf-payBtnDanger:hover {
+  background: rgba(239,68,68,0.15);
+}
+.pf-payActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pf-payBtn {
+  flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.pf-payBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pf-payBtnDanger {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.pf-payBtnDanger:hover {
+  background: rgba(239, 68, 68, 0.28);
+}
 

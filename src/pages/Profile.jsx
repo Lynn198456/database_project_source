@@ -132,6 +132,51 @@ export default function Profile() {
     localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
     setUser(updated);
   }
+  const [cards, setCards] = useState(() => {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_cards");
+    return raw
+      ? JSON.parse(raw)
+      : [
+          { id: 1, brand: "Visa", last4: "4242", exp: "12/2025", isDefault: true },
+          { id: 2, brand: "Mastercard", last4: "8888", exp: "08/2026", isDefault: false },
+        ];
+  } catch {
+    return [];
+  }
+});
+
+  function saveCards(next) {
+    setCards(next);
+    localStorage.setItem("cinemaFlow_cards", JSON.stringify(next));
+  }
+
+  function setDefaultCard(id) {
+    const next = cards.map((c) => ({
+      ...c,
+      isDefault: c.id === id,
+    }));
+    saveCards(next);
+  }
+
+  function removeCard(id) {
+    if (cards.length === 1) {
+      alert("You must have at least one payment method.");
+      return;
+    }
+
+    const ok = window.confirm("Remove this payment method?");
+    if (!ok) return;
+
+    let next = cards.filter((c) => c.id !== id);
+
+    // if default card was removed → set first as default
+    if (!next.some((c) => c.isDefault)) {
+      next[0].isDefault = true;
+    }
+
+    saveCards(next);
+  }
 
   return (
     <div className="cf-containerWide">
@@ -169,30 +214,30 @@ export default function Profile() {
 
             {/* PROFILE CARD */}
             <div className="cf-profileMain">
-              <div className="cf-profileAvatarBlock">
-<div className="cf-profileAvatarBlock">
-  <div className="cf-avatarLarge">
-    {user.photo ? (
-      <img
-        src={user.photo}
-        alt="Profile"
-        className="cf-avatarImg"
-      />
-    ) : (
-      <span>👤</span>
-    )}
-  </div>
+              <div className="cf-profileTop">
+            <div className="cf-profileAvatarBlock">
+              <div className="cf-avatarLarge">
+                {user.photo ? (
+                  <img
+                    src={user.photo}
+                    alt="Profile"
+                    className="cf-avatarImg"
+                  />
+                ) : (
+                  <span>👤</span>
+                )}
+              </div>
 
-  <label className="cf-grayBtn">
-    Change Photo
-    <input
-      type="file"
-      accept="image/*"
-      hidden
-      onChange={handlePhotoChange}
-    />
-  </label>
-</div>
+              <label className="cf-grayBtn">
+                Change Photo
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handlePhotoChange}
+                />
+              </label>
+            </div>
               </div>
 
               <div className="cf-profileInfo">
@@ -280,35 +325,56 @@ export default function Profile() {
             {/* PAYMENT + PREFERENCES */}
             <div className="pf-row2">
               {/* Payment Methods */}
-              <div className="pf-panel">
-                <div className="pf-panelHead">
-                  <div className="pf-panelTitle">
-                    <span className="pf-ico">💳</span> Payment Methods
-                  </div>
-                  <button
-                    className="pf-btnBlue"
-                    type="button"
-                    onClick={() => alert("Add card later")}
-                  >
-                    Add New
-                  </button>
-                </div>
+<div className="pf-panel">
+  <div className="pf-panelHead">
+    <div className="pf-panelTitle">
+      <span className="pf-ico">💳</span> Payment Methods
+    </div>
+    <button
+      className="pf-btnBlue"
+      type="button"
+      onClick={() => alert("Add card later")}
+    >
+      Add New
+    </button>
+  </div>
 
-                <div className="pf-payCard pf-payCard--active">
-                  <div className="pf-payTop">
-                    <div className="pf-payName">Visa •••• 4242</div>
-                    <span className="pf-pillGreen">Default</span>
-                  </div>
-                  <div className="pf-paySub">Expires 12/2025</div>
-                </div>
+  {cards.map((card) => (
+    <div
+      key={card.id}
+      className={`pf-payCard ${card.isDefault ? "pf-payCard--active" : ""}`}
+    >
+      <div className="pf-payTop">
+        <div className="pf-payName">
+          {card.brand} •••• {card.last4}
+        </div>
+        {card.isDefault && <span className="pf-pillGreen">Default</span>}
+      </div>
 
-                <div className="pf-payCard">
-                  <div className="pf-payTop">
-                    <div className="pf-payName">Mastercard •••• 8888</div>
-                  </div>
-                  <div className="pf-paySub">Expires 08/2026</div>
-                </div>
-              </div>
+      <div className="pf-paySub">Expires {card.exp}</div>
+
+      <div className="pf-payActions">
+        {!card.isDefault && (
+          <button
+            className="pf-payBtn"
+            type="button"
+            onClick={() => setDefaultCard(card.id)}
+          >
+            ⭐ Set Default
+          </button>
+        )}
+
+        <button
+          className="pf-payBtn pf-payBtnDanger"
+          type="button"
+          onClick={() => removeCard(card.id)}
+        >
+          🗑 Remove
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
 
               {/* Preferences */}
               <div className="pf-panel">
