@@ -39,6 +39,19 @@ export default function Profile() {
   const initialUser = useMemo(() => getUser() || FALLBACK_USER, []);
   const [user, setUser] = useState(initialUser);
 
+  // Handle profile photo change
+  function handlePhotoChange(e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const updated = { ...user, photo: event.target.result };
+      localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
+      setUser(updated);
+    };
+    reader.readAsDataURL(file);
+  }
+
   const [editOpen, setEditOpen] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -157,14 +170,29 @@ export default function Profile() {
             {/* PROFILE CARD */}
             <div className="cf-profileMain">
               <div className="cf-profileAvatarBlock">
-                <div className="cf-avatarLarge">👤</div>
-                <button
-                  className="cf-grayBtn"
-                  type="button"
-                  onClick={() => alert("Change photo later")}
-                >
-                  Change Photo
-                </button>
+<div className="cf-profileAvatarBlock">
+  <div className="cf-avatarLarge">
+    {user.photo ? (
+      <img
+        src={user.photo}
+        alt="Profile"
+        className="cf-avatarImg"
+      />
+    ) : (
+      <span>👤</span>
+    )}
+  </div>
+
+  <label className="cf-grayBtn">
+    Change Photo
+    <input
+      type="file"
+      accept="image/*"
+      hidden
+      onChange={handlePhotoChange}
+    />
+  </label>
+</div>
               </div>
 
               <div className="cf-profileInfo">
