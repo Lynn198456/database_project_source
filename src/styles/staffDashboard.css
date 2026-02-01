@@ -1,0 +1,224 @@
+/* ===== PAGE BASE ===== */
+.staff-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0b1220, #1b1140);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== TOP NAV ===== */
+.staff-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.staff-brand {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+}
+
+.staff-brand .welcome {
+  font-size: 13px;
+  color: #38bdf8;
+}
+
+.staff-menu {
+  display: flex;
+  gap: 10px;
+}
+
+.staff-menu button {
+  background: transparent;
+  border: none;
+  color: #cbd5f5;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.staff-menu button.active,
+.staff-menu button:hover {
+  background: #0ea5e9;
+  color: white;
+}
+
+.staff-bell {
+  position: relative;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.staff-bell .badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+/* ===== MAIN ===== */
+.staff-container {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 0 20px 40px;
+}
+
+/* ===== CARDS ===== */
+.staff-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.staff-card h3 {
+  margin-bottom: 14px;
+  font-size: 18px;
+}
+
+/* ===== CLOCK ===== */
+.clock-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-green {
+  background: #16a34a;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-red {
+  background: #dc2626;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 14px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===== OVERVIEW ===== */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.ov {
+  padding: 22px;
+  border-radius: 16px;
+  color: white;
+}
+
+.ov p {
+  opacity: 0.9;
+}
+
+.ov h2 {
+  margin-top: 6px;
+  font-size: 30px;
+}
+
+.ov.blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.ov.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.ov.purple { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+.ov.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+
+/* ===== TWO COLUMNS ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+@media (max-width: 900px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== TAGS ===== */
+.tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+.tag.current {
+  background: #16a34a;
+  color: white;
+}
+
+/* ===== SHIFTS ===== */
+.shift {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.shift.off {
+  opacity: 0.6;
+}
+
+/* ===== TASKS ===== */
+.task {
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.task input {
+  margin-right: 10px;
+}
+
+.task span {
+  font-size: 12px;
+  opacity: 0.85;
+  margin-left: 26px;
+}
+
+.task.high {
+  border-left: 6px solid #dc2626;
+  background: rgba(220, 38, 38, 0.15);
+}
+
+.task.medium {
+  border-left: 6px solid #f97316;
+  background: rgba(249, 115, 22, 0.15);
+}
+
+.task.done {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+/* ===== FOOTER ===== */
+.staff-footer {
+  text-align: center;
+  padding: 24px;
+  opacity: 0.6;
+  font-size: 13px;
+}

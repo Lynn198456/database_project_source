@@ -1,0 +1,65 @@
+/* ===== TASKS ===== */
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  margin-top: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.task-item input {
+  width: 18px;
+  height: 18px;
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.priority {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.priority.high {
+  background: rgba(239,68,68,0.25);
+  color: #ef4444;
+}
+
+.priority.medium {
+  background: rgba(249,115,22,0.25);
+  color: #f97316;
+}
+
+.task-item.completed {
+  opacity: 0.6;
+}
+
+.task-item.completed strong {
+  text-decoration: line-through;
+}
+
+.completed-text {
+  color: #22c55e;
+  font-size: 13px;
+}
+
+.check-icon {
+  color: #22c55e;
+  font-size: 18px;
+}

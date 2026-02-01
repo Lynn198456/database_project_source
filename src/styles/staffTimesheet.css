@@ -1,0 +1,72 @@
+/* ===== TIMESHEET ===== */
+
+.week-hours {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.week-hour-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.week-hours-value {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+
+.timesheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.timesheet-table th {
+  text-align: left;
+  padding: 12px;
+  background: rgba(255,255,255,0.06);
+  font-weight: 600;
+}
+
+.timesheet-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Status colors */
+.pill.completed,
+.pill.approved {
+  background: rgba(34,197,94,0.2);
+  color: #22c55e;
+}
+
+.pill.current {
+  background: rgba(59,130,246,0.2);
+  color: #3b82f6;
+}
+
+.pill.scheduled,
+.pill.pending {
+  background: rgba(249,115,22,0.2);
+  color: #f97316;
+}
+
+.pill.off {
+  background: rgba(148,163,184,0.2);
+  color: #94a3b8;
+}
