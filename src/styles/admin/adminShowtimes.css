@@ -1,0 +1,934 @@
+/* =========================
+   ADMIN SHOWTIMES PAGE
+   ========================= */
+
+.as-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(1000px 600px at 10% 10%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 90% 25%, rgba(168, 85, 247, 0.18), transparent 55%),
+    linear-gradient(135deg, #0a1220, #0b1b2a);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.as-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 22px 18px 44px;
+}
+
+.as-muted {
+  color: rgba(226, 232, 240, 0.7);
+}
+.as-accent {
+  color: #c084fc;
+}
+
+/* ===== Header row ===== */
+.as-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  margin: 14px 0 18px;
+}
+
+.as-titleBox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.as-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow: 0 16px 34px rgba(168, 85, 247, 0.22);
+  font-size: 22px;
+}
+
+.as-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 1000;
+}
+.as-sub {
+  margin: 4px 0 0;
+  color: rgba(226, 232, 240, 0.75);
+  font-size: 13px;
+}
+
+.as-primaryBtn {
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 900;
+  color: white;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  box-shadow: 0 18px 36px rgba(249, 115, 22, 0.18);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.as-primaryBtn:hover {
+  filter: brightness(1.03);
+}
+.as-plus {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ===== Cards ===== */
+.as-card {
+  margin-top: 16px;
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.as-cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.as-cardHeadRow {
+  margin-bottom: 14px;
+}
+
+.as-cardHeadLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-cardHeadIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.as-cardHeadTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 1000;
+}
+
+.as-dateInput {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  outline: none;
+}
+.as-dateInput:focus {
+  border-color: rgba(192, 132, 252, 0.7);
+  box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.14);
+}
+
+.as-linkBtn {
+  border: none;
+  background: transparent;
+  color: #f59e0b;
+  font-weight: 900;
+  cursor: pointer;
+}
+.as-linkBtn:hover {
+  text-decoration: underline;
+}
+
+/* ===== Date strip ===== */
+.as-dateStrip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+}
+
+.as-datePill {
+  cursor: pointer;
+  border-radius: 16px;
+  padding: 14px 12px;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(226, 232, 240, 0.78);
+  text-align: center;
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+.as-datePill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(192, 132, 252, 0.35);
+}
+.as-datePill.active {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 18px 40px rgba(168, 85, 247, 0.22);
+}
+
+.as-dateWeek {
+  font-size: 12px;
+  opacity: 0.95;
+  font-weight: 900;
+}
+.as-dateNum {
+  margin-top: 6px;
+  font-size: 26px;
+  font-weight: 1000;
+  line-height: 1.1;
+}
+.as-dateMonth {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+.as-todayTag {
+  margin: 10px auto 0;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.95);
+  color: #111827;
+  font-weight: 1000;
+  font-size: 12px;
+}
+
+/* ===== Filters ===== */
+.as-filters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.as-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.75);
+  font-weight: 800;
+}
+
+.as-field select {
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  outline: none;
+}
+.as-field select:focus {
+  border-color: rgba(192, 132, 252, 0.65);
+  box-shadow: 0 0 0 4px rgba(192, 132, 252, 0.14);
+}
+
+/* ===== View row + tabs ===== */
+.as-viewRow {
+  margin: 18px 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.as-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.as-tab {
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  color: rgba(226, 232, 240, 0.85);
+  font-weight: 900;
+}
+.as-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.as-tab.active {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: white;
+  box-shadow: 0 18px 40px rgba(168, 85, 247, 0.18);
+}
+
+/* ===== Table ===== */
+.as-tableCard {
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.as-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.as-table thead th {
+  text-align: left;
+  padding: 14px 14px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.85);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.as-table tbody td {
+  padding: 16px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.as-strong {
+  font-weight: 900;
+  color: white;
+}
+
+.as-dim {
+  color: rgba(226, 232, 240, 0.75);
+}
+
+.as-right {
+  text-align: right;
+}
+
+.as-empty {
+  text-align: center;
+  padding: 22px 14px;
+  color: rgba(226, 232, 240, 0.7);
+}
+
+/* Status pills */
+.as-pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.as-pill.available {
+  background: rgba(34, 197, 94, 0.18);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.28);
+}
+
+.as-pill.filling {
+  background: rgba(245, 158, 11, 0.18);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+.as-pill.soldout {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.28);
+}
+
+/* Action icons */
+.as-actions {
+  display: inline-flex;
+  gap: 10px;
+}
+
+.as-iconBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  color: white;
+  display: grid;
+  place-items: center;
+}
+
+.as-iconBtn.edit {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+.as-iconBtn.del {
+  background: #e11d48;
+}
+.as-iconBtn:hover {
+  filter: brightness(1.05);
+}
+
+/* ===== Placeholder views ===== */
+.as-placeholder {
+  margin-top: 10px;
+}
+
+.as-placeholderCard {
+  border-radius: 18px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.as-placeholderTitle {
+  font-weight: 1000;
+  font-size: 16px;
+  color: white;
+}
+.as-placeholderText {
+  margin-top: 6px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.75);
+}
+
+/* ===== Stats ===== */
+.as-statsCard {
+  margin-top: 18px;
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+}
+
+.as-statsTitle {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 1000;
+}
+
+.as-statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.as-stat {
+  border-radius: 16px;
+  padding: 18px;
+  color: white;
+  font-weight: 900;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+}
+
+.as-statLabel {
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.as-statValue {
+  margin-top: 10px;
+  font-size: 38px;
+  font-weight: 1000;
+}
+
+.as-stat.blue {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+.as-stat.green {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+.as-stat.purple {
+  background: linear-gradient(135deg, #9333ea, #7e22ce);
+}
+.as-stat.orange {
+  background: linear-gradient(135deg, #f97316, #c2410c);
+}
+
+.as-footer {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.65);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1100px) {
+  .as-dateStrip {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .as-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .as-statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .as-topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .as-primaryBtn {
+    justify-content: center;
+  }
+  .as-dateStrip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .as-filters {
+    grid-template-columns: 1fr;
+  }
+  .as-viewRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .as-tabs {
+    justify-content: space-between;
+  }
+  .as-statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================
+   CALENDAR VIEW (Movie Groups)
+   ========================= */
+
+.as-calGrid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1050px) {
+  .as-calGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.as-calMovie {
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.as-calMovieHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.as-calMovieIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow: 0 14px 30px rgba(168, 85, 247, 0.18);
+  font-size: 18px;
+}
+
+.as-calMovieTitle {
+  font-weight: 1000;
+  font-size: 16px;
+  color: white;
+}
+
+.as-calMovieSub {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.72);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.as-calSmallIcon {
+  opacity: 0.9;
+}
+
+/* Showtime card inside movie group */
+.as-calShowList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.as-calShowCard {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.as-calShowTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.as-calTime {
+  font-size: 22px;
+  font-weight: 1000;
+  color: white;
+  letter-spacing: 0.3px;
+}
+
+.as-calTopRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Screen type tags */
+.as-calTag {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.as-calTag.imax {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.30);
+  color: #f59e0b;
+}
+
+.as-calTag.standard {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.as-calTag.premium {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.28);
+  color: #c084fc;
+}
+
+.as-calTag.dolby {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.26);
+  color: #60a5fa;
+}
+
+/* Lines */
+.as-calLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  color: rgba(226, 232, 240, 0.78);
+  font-size: 13px;
+}
+
+.as-calLineIcon {
+  width: 18px;
+  opacity: 0.9;
+}
+
+.as-calSeats {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+/* Actions */
+.as-calActions {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 42px;
+  gap: 10px;
+}
+
+.as-calBtn {
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 1000;
+  color: white;
+}
+
+.as-calBtn.edit {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.as-calBtn.del {
+  background: #e11d48;
+  display: grid;
+  place-items: center;
+}
+
+.as-calBtn:hover {
+  filter: brightness(1.05);
+}
+
+.as-calEmpty {
+  padding: 10px;
+  color: rgba(226, 232, 240, 0.65);
+  font-size: 13px;
+  text-align: center;
+}
+/* =========================
+   TIMELINE VIEW (Movie Rows)
+   ========================= */
+
+.as-timeline {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.as-timeRow {
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  display: grid;
+  grid-template-columns: 320px 1fr;
+}
+
+@media (max-width: 1050px) {
+  .as-timeRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* LEFT PANEL */
+.as-timeLeft {
+  padding: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.25);
+}
+
+@media (max-width: 1050px) {
+  .as-timeLeft {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+.as-timeLeftIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow: 0 14px 30px rgba(168, 85, 247, 0.18);
+}
+
+.as-timeTitle {
+  font-size: 16px;
+  font-weight: 1000;
+  color: white;
+}
+
+.as-timeSub {
+  margin-top: 6px;
+  color: rgba(226, 232, 240, 0.75);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.as-timeCount {
+  margin-top: 14px;
+  color: rgba(226, 232, 240, 0.70);
+  font-size: 13px;
+}
+
+.as-timeCountNum {
+  color: #c084fc;
+  font-weight: 1000;
+}
+
+/* RIGHT PANEL */
+.as-timeRight {
+  padding: 18px;
+}
+
+.as-timeRightHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.as-timeRightTitle {
+  font-size: 14px;
+  font-weight: 1000;
+  color: rgba(226, 232, 240, 0.9);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.as-timeRightIcon {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+}
+
+/* Horizontal cards */
+.as-timeCards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 1200px) {
+  .as-timeCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 750px) {
+  .as-timeCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.as-timeCard {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.as-timeCard.glow {
+  border-color: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
+
+.as-timeCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.as-timeCardTime {
+  font-size: 22px;
+  font-weight: 1000;
+  color: white;
+}
+
+/* Screen tags */
+.as-timeTag {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.as-timeTag.imax {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.30);
+  color: #f59e0b;
+}
+.as-timeTag.standard {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.22);
+  color: rgba(226, 232, 240, 0.85);
+}
+.as-timeTag.premium {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.28);
+  color: #c084fc;
+}
+.as-timeTag.dolby {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.26);
+  color: #60a5fa;
+}
+
+/* Info lines */
+.as-timeInfo {
+  color: rgba(226, 232, 240, 0.76);
+  font-size: 13px;
+}
+
+.as-timeLine {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.as-timeLineIcon {
+  width: 18px;
+  opacity: 0.9;
+}
+
+.as-timeSeats {
+  color: rgba(226, 232, 240, 0.65);
+}
+
+/* Buttons */
+.as-timeBtns {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 1fr 42px;
+  gap: 10px;
+}
+
+.as-timeEdit {
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 1000;
+  color: white;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.as-timeDel {
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 1000;
+  color: white;
+  background: #e11d48;
+  display: grid;
+  place-items: center;
+}
+
+.as-timeEdit:hover,
+.as-timeDel:hover {
+  filter: brightness(1.05);
+}
