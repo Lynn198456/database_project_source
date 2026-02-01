@@ -1,3 +1,4 @@
+// src/pages/Profile.jsx
 import "../styles/customer.css";
 import "../styles/profileModal.css";
 import "../styles/profilePlus.css";
@@ -6,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
 
+/* ----------------------------- localStorage helpers ----------------------------- */
 function getUser() {
   try {
     const raw = localStorage.getItem("cinemaFlow_user");
@@ -15,6 +17,56 @@ function getUser() {
   }
 }
 
+function saveUser(user) {
+  localStorage.setItem("cinemaFlow_user", JSON.stringify(user));
+}
+
+function loadCards() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_cards");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveCards(cards) {
+  localStorage.setItem("cinemaFlow_cards", JSON.stringify(cards));
+}
+
+function loadProfilePhoto() {
+  try {
+    return localStorage.getItem("cinemaFlow_profilePhoto") || "";
+  } catch {
+    return "";
+  }
+}
+
+function saveProfilePhoto(dataUrl) {
+  localStorage.setItem("cinemaFlow_profilePhoto", dataUrl || "");
+}
+
+function maskLast4(last4) {
+  return `•••• ${last4}`;
+}
+
+function onlyDigits(val) {
+  return (val || "").replace(/\D/g, "");
+}
+
+function isValidCardNumber(num) {
+  const digits = onlyDigits(num);
+  return /^\d{12,19}$/.test(digits);
+}
+
+function isValidExp(exp) {
+  const v = (exp || "").trim();
+  if (!/^\d{2}\/\d{2}$/.test(v)) return false;
+  const [mm, yy] = v.split("/").map(Number);
+  return mm >= 1 && mm <= 12 && yy >= 0;
+}
+
+/* ----------------------------- fallback demo user ----------------------------- */
 const FALLBACK_USER = {
   name: "John Doe",
   email: "john.doe@email.com",
@@ -36,22 +88,14 @@ const FALLBACK_USER = {
 export default function Profile() {
   const navigate = useNavigate();
 
+  /* ----------------------------- user state ----------------------------- */
   const initialUser = useMemo(() => getUser() || FALLBACK_USER, []);
   const [user, setUser] = useState(initialUser);
 
-  // Handle profile photo change
-  function handlePhotoChange(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const updated = { ...user, photo: event.target.result };
-      localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
-      setUser(updated);
-    };
-    reader.readAsDataURL(file);
-  }
+  // profile photo (stored as dataURL in localStorage)
+  const [photo, setPhoto] = useState(() => loadProfilePhoto());
 
+  // edit profile modal
   const [editOpen, setEditOpen] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -62,22 +106,57 @@ export default function Profile() {
     address: initialUser.address || "",
   });
 
-  // local preference state (so UI updates instantly)
+  // preferences state
   const [prefs, setPrefs] = useState({
     prefEmail: !!initialUser.prefEmail,
     prefSMS: !!initialUser.prefSMS,
     prefPromo: !!initialUser.prefPromo,
   });
 
-  useEffect(() => {
-    // ESC closes modal
-    function onKeyDown(e) {
-      if (e.key === "Escape") setEditOpen(false);
-    }
-    if (editOpen) window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [editOpen]);
+  /* ----------------------------- payment cards state ----------------------------- */
+  const initialCards = useMemo(() => {
+    const stored = loadCards();
+    if (stored && Array.isArray(stored) && stored.length > 0) return stored;
 
+    // seed (demo)
+    return [
+      { id: 1, brand: "Visa", last4: "4242", exp: "12/25", isDefault: true },
+      { id: 2, brand: "Mastercard", last4: "8888", exp: "08/26", isDefault: false },
+    ];
+  }, []);
+
+  const [cards, setCards] = useState(initialCards);
+
+  // Add Card modal
+  const [addOpen, setAddOpen] = useState(false);
+  const [cardForm, setCardForm] = useState({
+    brand: "Visa",
+    cardNumber: "",
+    exp: "",
+  });
+
+  // Save seeded cards once (so refresh keeps them)
+  useEffect(() => {
+    const existing = loadCards();
+    if (!existing || !Array.isArray(existing) || existing.length === 0) {
+      saveCards(initialCards);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* ----------------------------- ESC closes modals ----------------------------- */
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key === "Escape") {
+        setEditOpen(false);
+        setAddOpen(false);
+      }
+    }
+    if (editOpen || addOpen) window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [editOpen, addOpen]);
+
+  /* ----------------------------- profile edit handlers ----------------------------- */
   function openEdit() {
     setMsg("");
     const u = getUser() || user || FALLBACK_USER;
@@ -111,13 +190,13 @@ export default function Profile() {
       phone: form.phone.trim(),
       address: form.address.trim(),
 
-      // keep preferences too
+      // keep preferences
       prefEmail: prefs.prefEmail,
       prefSMS: prefs.prefSMS,
       prefPromo: prefs.prefPromo,
     };
 
-    localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
+    saveUser(updated);
     setUser(updated);
     setEditOpen(false);
     setMsg("Profile updated successfully ✅");
@@ -127,57 +206,110 @@ export default function Profile() {
     const next = { ...prefs, [key]: value };
     setPrefs(next);
 
-    // save immediately to localStorage (nice UX)
     const updated = { ...user, ...next };
-    localStorage.setItem("cinemaFlow_user", JSON.stringify(updated));
+    saveUser(updated);
     setUser(updated);
   }
-  const [cards, setCards] = useState(() => {
-  try {
-    const raw = localStorage.getItem("cinemaFlow_cards");
-    return raw
-      ? JSON.parse(raw)
-      : [
-          { id: 1, brand: "Visa", last4: "4242", exp: "12/2025", isDefault: true },
-          { id: 2, brand: "Mastercard", last4: "8888", exp: "08/2026", isDefault: false },
-        ];
-  } catch {
-    return [];
-  }
-});
 
-  function saveCards(next) {
-    setCards(next);
-    localStorage.setItem("cinemaFlow_cards", JSON.stringify(next));
-  }
+  /* ----------------------------- photo upload (future-ready) ----------------------------- */
+  function onPickPhoto(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  function setDefaultCard(id) {
-    const next = cards.map((c) => ({
-      ...c,
-      isDefault: c.id === id,
-    }));
-    saveCards(next);
-  }
-
-  function removeCard(id) {
-    if (cards.length === 1) {
-      alert("You must have at least one payment method.");
+    // Basic file type guard
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
       return;
     }
 
-    const ok = window.confirm("Remove this payment method?");
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = String(reader.result || "");
+      setPhoto(dataUrl);
+      saveProfilePhoto(dataUrl);
+      setMsg("Profile photo updated ✅");
+    };
+    reader.readAsDataURL(file);
+
+    // allow re-select same file later
+    e.target.value = "";
+  }
+
+  function removePhoto() {
+    const ok = window.confirm("Remove your profile photo?");
+    if (!ok) return;
+    setPhoto("");
+    saveProfilePhoto("");
+    setMsg("Profile photo removed ✅");
+  }
+
+  /* ----------------------------- payment methods handlers ----------------------------- */
+  function persistCards(next) {
+    setCards(next);
+    saveCards(next);
+  }
+
+  function openAddCard() {
+    setCardForm({ brand: "Visa", cardNumber: "", exp: "" });
+    setAddOpen(true);
+  }
+
+  function closeAddCard() {
+    setAddOpen(false);
+  }
+
+  function onCardChange(e) {
+    const { name, value } = e.target;
+    setCardForm((p) => ({ ...p, [name]: value }));
+  }
+
+  function setDefaultCard(id) {
+    const next = cards.map((c) => ({ ...c, isDefault: c.id === id }));
+    persistCards(next);
+    setMsg("Default card updated ✅");
+  }
+
+  function removeCard(id) {
+    const ok = window.confirm("Remove this card?");
     if (!ok) return;
 
     let next = cards.filter((c) => c.id !== id);
 
-    // if default card was removed → set first as default
-    if (!next.some((c) => c.isDefault)) {
-      next[0].isDefault = true;
+    // If default removed, set first as default
+    if (next.length > 0 && !next.some((c) => c.isDefault)) {
+      next = next.map((c, i) => ({ ...c, isDefault: i === 0 }));
     }
 
-    saveCards(next);
+    persistCards(next);
+    setMsg("Card removed ✅");
   }
 
+  function addCard() {
+    const digits = onlyDigits(cardForm.cardNumber);
+    const exp = (cardForm.exp || "").trim();
+
+    if (!isValidCardNumber(digits)) {
+      return alert("Enter a valid card number (12–19 digits).");
+    }
+    if (!isValidExp(exp)) {
+      return alert("Expiry must be MM/YY (example 08/26).");
+    }
+
+    const newCard = {
+      id: Date.now(),
+      brand: cardForm.brand,
+      last4: digits.slice(-4),
+      exp,
+      isDefault: cards.length === 0,
+    };
+
+    const next = [...cards, newCard];
+    persistCards(next);
+    setAddOpen(false);
+    setMsg("Card added ✅");
+  }
+
+  /* ----------------------------- UI ----------------------------- */
   return (
     <div className="cf-containerWide">
       <div className="cf-page">
@@ -214,30 +346,47 @@ export default function Profile() {
 
             {/* PROFILE CARD */}
             <div className="cf-profileMain">
-              <div className="cf-profileTop">
-            <div className="cf-profileAvatarBlock">
-              <div className="cf-avatarLarge">
-                {user.photo ? (
-                  <img
-                    src={user.photo}
-                    alt="Profile"
-                    className="cf-avatarImg"
-                  />
-                ) : (
-                  <span>👤</span>
-                )}
-              </div>
+              <div className="cf-profileAvatarBlock">
+                <div className="cf-avatarLarge" style={{ overflow: "hidden" }}>
+                  {photo ? (
+                    <img
+                      src={photo}
+                      alt="Profile"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  ) : (
+                    "👤"
+                  )}
+                </div>
 
-              <label className="cf-grayBtn">
-                Change Photo
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handlePhotoChange}
-                />
-              </label>
-            </div>
+                {/* spacing: give button margin-top */}
+                <div style={{ marginTop: 14, width: "100%" }}>
+                  <label className="cf-grayBtn" style={{ display: "block", textAlign: "center", cursor: "pointer" }}>
+                    Change Photo
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={onPickPhoto}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+
+                  {photo && (
+                    <button
+                      className="cf-grayBtn"
+                      type="button"
+                      onClick={removePhoto}
+                      style={{ marginTop: 10 }}
+                    >
+                      Remove Photo
+                    </button>
+                  )}
+                </div>
               </div>
 
               <div className="cf-profileInfo">
@@ -273,8 +422,11 @@ export default function Profile() {
             <div className="cf-statGrid">
               <div
                 className="cf-statCard blue"
+                role="button"
+                tabIndex={0}
                 style={{ cursor: "pointer" }}
                 onClick={() => navigate("/customer/movies-watched")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/movies-watched")}
                 title="View Movies Watched"
               >
                 🎬 Movies Watched
@@ -283,14 +435,16 @@ export default function Profile() {
 
               <div
                 className="cf-statCard purple"
+                role="button"
+                tabIndex={0}
                 style={{ cursor: "pointer" }}
                 onClick={() => navigate("/customer/booking-history")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/booking-history")}
                 title="View Booking History"
               >
                 📅 Total Bookings
                 <strong>{user.bookings}</strong>
               </div>
-
 
               <div
                 className="cf-statCard orange"
@@ -299,82 +453,93 @@ export default function Profile() {
                 onClick={() => navigate("/customer/loyalty")}
                 onKeyDown={(e) => e.key === "Enter" && navigate("/customer/loyalty")}
                 style={{ cursor: "pointer" }}
-                >
+                title="View Loyalty Points"
+              >
                 ⭐ Loyalty Points
                 <strong>{user.points}</strong>
               </div>
-
 
               <div
                 className="cf-statCard green"
                 role="button"
                 tabIndex={0}
-                title="View Spending History"
                 style={{ cursor: "pointer" }}
                 onClick={() => navigate("/customer/spending-history")}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    navigate("/customer/spending-history");
-                  }
-                }}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/spending-history")}
+                title="View Spending History"
               >
                 💰 Total Spent
+                <strong>${user.spent}.00</strong>
               </div>
             </div>
 
             {/* PAYMENT + PREFERENCES */}
             <div className="pf-row2">
               {/* Payment Methods */}
-<div className="pf-panel">
-  <div className="pf-panelHead">
-    <div className="pf-panelTitle">
-      <span className="pf-ico">💳</span> Payment Methods
-    </div>
-    <button
-      className="pf-btnBlue"
-      type="button"
-      onClick={() => alert("Add card later")}
-    >
-      Add New
-    </button>
-  </div>
+              <div className="pf-panel">
+                <div className="pf-panelHead">
+                  <div className="pf-panelTitle">
+                    <span className="pf-ico">💳</span> Payment Methods
+                  </div>
 
-  {cards.map((card) => (
-    <div
-      key={card.id}
-      className={`pf-payCard ${card.isDefault ? "pf-payCard--active" : ""}`}
-    >
-      <div className="pf-payTop">
-        <div className="pf-payName">
-          {card.brand} •••• {card.last4}
-        </div>
-        {card.isDefault && <span className="pf-pillGreen">Default</span>}
-      </div>
+                  {/* ✅ real add card feature (no alert) */}
+                  <button className="pf-btnBlue" type="button" onClick={openAddCard}>
+                    Add New
+                  </button>
+                </div>
 
-      <div className="pf-paySub">Expires {card.exp}</div>
+                {cards.length === 0 ? (
+                  <div className="pf-payCard" style={{ opacity: 0.85 }}>
+                    <div className="pf-payName">No cards yet</div>
+                    <div className="pf-paySub">Click “Add New” to add a card.</div>
+                  </div>
+                ) : (
+                  cards.map((c) => (
+                    <div
+                      key={c.id}
+                      className={`pf-payCard ${c.isDefault ? "pf-payCard--active" : ""}`}
+                    >
+                      <div className="pf-payTop">
+                        <div className="pf-payName">
+                          {c.brand} {maskLast4(c.last4)}
+                        </div>
+                        {c.isDefault && <span className="pf-pillGreen">Default</span>}
+                      </div>
 
-      <div className="pf-payActions">
-        {!card.isDefault && (
-          <button
-            className="pf-payBtn"
-            type="button"
-            onClick={() => setDefaultCard(card.id)}
-          >
-            ⭐ Set Default
-          </button>
-        )}
+                      <div className="pf-paySub">Expires {c.exp}</div>
 
-        <button
-          className="pf-payBtn pf-payBtnDanger"
-          type="button"
-          onClick={() => removeCard(card.id)}
-        >
-          🗑 Remove
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
+                      <div className="pf-payActions">
+                        {!c.isDefault ? (
+                          <button
+                            className="pf-payBtn"
+                            type="button"
+                            onClick={() => setDefaultCard(c.id)}
+                          >
+                            Set Default
+                          </button>
+                        ) : (
+                          <button
+                            className="pf-payBtn"
+                            type="button"
+                            disabled
+                            style={{ opacity: 0.6 }}
+                          >
+                            Default
+                          </button>
+                        )}
+
+                        <button
+                          className="pf-payBtn pf-payBtnDanger"
+                          type="button"
+                          onClick={() => removeCard(c.id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
 
               {/* Preferences */}
               <div className="pf-panel">
@@ -437,13 +602,14 @@ export default function Profile() {
                 <div className="pf-panelTitle">
                   <span className="pf-ico">📍</span> Favorite Theaters
                 </div>
-                <button
-                  className="pf-btnGhost"
-                  type="button"
-                  onClick={() => alert("Manage later")}
-                >
-                  Manage
-                </button>
+<button
+  className="pf-btnGhost"
+  type="button"
+  onClick={() => navigate("/customer/favorite-theaters")}
+>
+  Manage
+</button>
+
               </div>
 
               <div className="pf-theaterGrid2">
@@ -529,10 +695,7 @@ export default function Profile() {
                   },
                 ].map((m) => (
                   <div key={m.title} className="pf-watchCard">
-                    <div
-                      className="pf-watchImg"
-                      style={{ backgroundImage: `url(${m.img})` }}
-                    >
+                    <div className="pf-watchImg" style={{ backgroundImage: `url(${m.img})` }}>
                       <div className="pf-coming">Coming Soon</div>
                     </div>
                     <div className="pf-watchBody">
@@ -572,18 +735,10 @@ export default function Profile() {
 
             {/* ACTION BUTTONS */}
             <div className="pf-actionsBottom">
-              <button
-                className="pf-btnSave"
-                type="button"
-                onClick={() => setMsg("Changes saved ✅")}
-              >
+              <button className="pf-btnSave" type="button" onClick={() => setMsg("Changes saved ✅")}>
                 💾 Save Changes
               </button>
-              <button
-                className="pf-btnDelete"
-                type="button"
-                onClick={() => alert("Delete account later")}
-              >
+              <button className="pf-btnDelete" type="button" onClick={() => alert("Delete account later")}>
                 Delete Account
               </button>
             </div>
@@ -601,12 +756,7 @@ export default function Profile() {
                   <span className="ep-icon">✏️</span>
                   Edit Profile
                 </div>
-                <button
-                  className="ep-x"
-                  onClick={closeEdit}
-                  type="button"
-                  aria-label="Close"
-                >
+                <button className="ep-x" onClick={closeEdit} type="button" aria-label="Close">
                   ✕
                 </button>
               </div>
@@ -664,6 +814,70 @@ export default function Profile() {
                 </button>
                 <button className="ep-btn ep-btnPrimary" onClick={saveChanges} type="button">
                   💾 Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ✅ ADD CARD MODAL */}
+        {addOpen && (
+          <div className="ep-overlay" onMouseDown={closeAddCard}>
+            <div className="ep-card" onMouseDown={(e) => e.stopPropagation()}>
+              <div className="ep-head">
+                <div className="ep-title">
+                  <span className="ep-icon">💳</span>
+                  Add Payment Method
+                </div>
+                <button className="ep-x" onClick={closeAddCard} type="button" aria-label="Close">
+                  ✕
+                </button>
+              </div>
+
+              <div className="ep-form">
+                <div className="ep-field">
+                  <div className="ep-label">Card Brand</div>
+                  <select
+                    className="ep-input"
+                    name="brand"
+                    value={cardForm.brand}
+                    onChange={onCardChange}
+                  >
+                    <option value="Visa">Visa</option>
+                    <option value="Mastercard">Mastercard</option>
+                    <option value="AMEX">AMEX</option>
+                  </select>
+                </div>
+
+                <div className="ep-field">
+                  <div className="ep-label">Card Number</div>
+                  <input
+                    className="ep-input"
+                    name="cardNumber"
+                    value={cardForm.cardNumber}
+                    onChange={onCardChange}
+                    placeholder="1234 5678 9012 3456"
+                  />
+                </div>
+
+                <div className="ep-field">
+                  <div className="ep-label">Expiry (MM/YY)</div>
+                  <input
+                    className="ep-input"
+                    name="exp"
+                    value={cardForm.exp}
+                    onChange={onCardChange}
+                    placeholder="08/26"
+                  />
+                </div>
+              </div>
+
+              <div className="ep-actions">
+                <button className="ep-btn ep-btnGhost" onClick={closeAddCard} type="button">
+                  Cancel
+                </button>
+                <button className="ep-btn ep-btnPrimary" onClick={addCard} type="button">
+                  ✅ Add Card
                 </button>
               </div>
             </div>

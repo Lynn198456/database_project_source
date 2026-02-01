@@ -20,6 +20,7 @@ import MoviesWatchedPage from "./pages/MoviesWatchedPage";
 import BookingHistoryPage from "./pages/BookingHistoryPage";
 import LoyaltyPointsPage from "./pages/LoyaltyPointsPage";
 import SpendingHistoryPage from "./pages/SpendingHistoryPage";
+import FavoriteTheaters from "./pages/FavoriteTheaters";
 
 /*
   localStorage user example:
@@ -252,6 +253,8 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+<Route path="/customer/favorite-theaters" element={<FavoriteTheaters />} />
+
 
 
 
