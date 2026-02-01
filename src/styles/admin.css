@@ -1,0 +1,97 @@
+/* ===== ADMIN PAGE BASE ===== */
+.admin-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1e293b, #020617);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.admin-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ===== TITLES ===== */
+.admin-title {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.admin-muted {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* ===== KPI GRID ===== */
+.admin-kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.kpi {
+  border-radius: 18px;
+  padding: 20px;
+  color: white;
+}
+
+.kpi.blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+.kpi.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.kpi.purple { background: linear-gradient(135deg, #9333ea, #7e22ce); }
+.kpi.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+
+.kpiTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kpiIcon {
+  font-size: 26px;
+}
+
+.kpiLabel {
+  margin-top: 14px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.kpiValue {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.kpiHint {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* ===== MAIN GRID ===== */
+.admin-mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 24px;
+}
+
+@media (max-width: 1100px) {
+  .admin-mainGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== FOOTER ===== */
+.admin-footer {
+  text-align: center;
+  margin-top: 40px;
+  opacity: 0.6;
+  font-size: 13px;
+}

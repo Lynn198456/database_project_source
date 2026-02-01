@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import CustomerHome from "./pages/CustomerHome";
 import MoviesPage from "./pages/MoviesPage";
-import AdminDashboard from "./pages/AdminDashboard";
 import ShowtimesPage from "./pages/ShowtimesPage";
 import TheatersPage from "./pages/TheatersPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
@@ -28,7 +27,12 @@ import StaffSchedule from "./pages/staff/StaffSchedule";
 import StaffTimesheet from "./pages/staff/StaffTimesheet";
 import StaffTasks from "./pages/staff/StaffTasks";
 import StaffProfile from "./pages/staff/StaffProfile";
-
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminMovies from "./pages/admin/AdminMovies";
+import AdminShowtimes from "./pages/admin/AdminShowtimes";
+import AdminTheaters from "./pages/admin/AdminTheaters";
+import AdminTeam from "./pages/admin/AdminTeam";
+import AdminProfile from "./pages/admin/AdminProfile";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -270,23 +274,14 @@ export default function App() {
 <Route path="/staff/timesheet" element={<StaffTimesheet />} />
 <Route path="/staff/tasks" element={<StaffTasks />} />
 <Route path="/staff/profile" element={<StaffProfile />} />
-
-
-
-
-        {/* ADMIN */}
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <RoleRoute allowRole="ADMIN">
-                <AdminDashboard />
-              </RoleRoute>
-            </ProtectedRoute>
-          }
-        />
-
-
+      {/* ADMIN ROUTES */}
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/movies" element={<AdminMovies />} />
+      <Route path="/admin/showtimes" element={<AdminShowtimes />} />
+      <Route path="/admin/theaters" element={<AdminTheaters />} />
+      <Route path="/admin/team" element={<AdminTeam />} />
+      <Route path="/admin/profile" element={<AdminProfile />} />
+      
         {/* Default / fallback */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
