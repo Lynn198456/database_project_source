@@ -1,10 +1,26 @@
 import "../../styles/staffDashboard.css";
+import "../../styles/staffProfile.css";
+import StaffNavbar from "../../components/staff/StaffNavbar";
 
 export default function StaffProfile() {
+  const staff = {
+    name: "Michael Chen",
+    role: "Box Office Lead",
+    employeeId: "EMP-2024-0042",
+    department: "Operations",
+    location: "Downtown Branch",
+    joinDate: "Mar 15, 2023",
+    email: "michael.chen@cinemaflow.com",
+    phone: "+1 (555) 234-5678",
+    emergencyName: "Sarah Chen",
+    emergencyPhone: "+1 (555) 987-6543",
+  };
+
   return (
     <div className="staff-page">
-      <main className="staff-container">
+      <StaffNavbar />
 
+      <main className="staff-container">
         {/* HEADER */}
         <div className="section-head">
           <h2>👤 My Profile</h2>
@@ -12,59 +28,52 @@ export default function StaffProfile() {
         </div>
 
         <div className="profile-grid">
-
-          {/* LEFT PROFILE CARD */}
+          {/* LEFT CARD */}
           <div className="staff-card profile-card">
-            <div className="avatar-circle">
-              <span>👤</span>
+            <div className="profile-top">
+              <div className="avatar-circle">👤</div>
+
+              <div className="profile-title">
+                <h3 className="profile-name">{staff.name}</h3>
+                <p className="profile-role">{staff.role}</p>
+              </div>
             </div>
 
-            <h3>Michael Chen</h3>
-            <p className="role">Box Office Lead</p>
-
-            <div className="info-box">
-              <label>Employee ID</label>
-              <span>EMP-2024-0042</span>
-            </div>
-
-            <div className="info-box">
-              <label>Department</label>
-              <span>Operations</span>
-            </div>
-
-            <div className="info-box">
-              <label>Location</label>
-              <span>Downtown Branch</span>
-            </div>
-
-            <div className="info-box">
-              <label>Join Date</label>
-              <span>Mar 15, 2023</span>
+            <div className="profile-kv">
+              <div className="kv-row">
+                <span className="kv-label">Employee ID</span>
+                <span className="kv-value">{staff.employeeId}</span>
+              </div>
+              <div className="kv-row">
+                <span className="kv-label">Department</span>
+                <span className="kv-value">{staff.department}</span>
+              </div>
+              <div className="kv-row">
+                <span className="kv-label">Location</span>
+                <span className="kv-value">{staff.location}</span>
+              </div>
+              <div className="kv-row">
+                <span className="kv-label">Join Date</span>
+                <span className="kv-value">{staff.joinDate}</span>
+              </div>
             </div>
           </div>
 
-          {/* RIGHT CONTENT */}
+          {/* RIGHT SIDE */}
           <div className="profile-right">
-
             {/* CONTACT INFO */}
             <div className="staff-card">
-              <h3 className="card-title">👥 Contact Information</h3>
+              <h3 className="card-title">📇 Contact Information</h3>
 
               <div className="form-row">
                 <div className="form-group">
                   <label>Email</label>
-                  <input
-                    value="michael.chen@cinemaflow.com"
-                    readOnly
-                  />
+                  <input value={staff.email} readOnly />
                 </div>
 
                 <div className="form-group">
                   <label>Phone</label>
-                  <input
-                    value="+1 (555) 234-5678"
-                    readOnly
-                  />
+                  <input value={staff.phone} readOnly />
                 </div>
               </div>
             </div>
@@ -78,12 +87,10 @@ export default function StaffProfile() {
                   <span>Total Hours</span>
                   <strong>856 hrs</strong>
                 </div>
-
                 <div className="stat-card purple">
                   <span>Shifts Completed</span>
                   <strong>142</strong>
                 </div>
-
                 <div className="stat-card green">
                   <span>Tasks Completed</span>
                   <strong>387</strong>
@@ -98,23 +105,19 @@ export default function StaffProfile() {
               <div className="form-row">
                 <div className="form-group">
                   <label>Contact Name</label>
-                  <input value="Sarah Chen" readOnly />
+                  <input value={staff.emergencyName} readOnly />
                 </div>
 
                 <div className="form-group">
                   <label>Contact Phone</label>
-                  <input value="+1 (555) 987-6543" readOnly />
+                  <input value={staff.emergencyPhone} readOnly />
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
-        <div className="staff-footer">
-          © 2025 CinemaFlow Staff Portal
-        </div>
-
+        <div className="staff-footer">© 2025 CinemaFlow Staff Portal</div>
       </main>
     </div>
   );

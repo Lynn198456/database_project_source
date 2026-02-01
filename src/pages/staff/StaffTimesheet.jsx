@@ -1,14 +1,35 @@
+import { useMemo } from "react";
+import StaffNavbar from "../../components/staff/StaffNavbar";
 import "../../styles/staffTimesheet.css";
 
+// ---- staff loader (same pattern everywhere) ----
+function getStaff() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_staff");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_STAFF = {
+  name: "Michael Chen",
+  role: "Box Office",
+  location: "Downtown",
+  notifications: 3,
+};
+
 export default function StaffTimesheet() {
+  const staff = useMemo(() => getStaff() || FALLBACK_STAFF, []);
+
   const weekSummary = [
-    { day: "Mon", hours: "8h", status: "completed" },
-    { day: "Tue", hours: "7.5h", status: "completed" },
-    { day: "Wed", hours: "8h", status: "current" },
-    { day: "Thu", hours: "0h", status: "scheduled" },
-    { day: "Fri", hours: "0h", status: "scheduled" },
-    { day: "Sat", hours: "0h", status: "off" },
-    { day: "Sun", hours: "0h", status: "off" },
+    { day: "Mon", hours: "8h", status: "Completed" },
+    { day: "Tue", hours: "7.5h", status: "Completed" },
+    { day: "Wed", hours: "8h", status: "Current" },
+    { day: "Thu", hours: "0h", status: "Scheduled" },
+    { day: "Fri", hours: "0h", status: "Scheduled" },
+    { day: "Sat", hours: "0h", status: "Off" },
+    { day: "Sun", hours: "0h", status: "Off" },
   ];
 
   const entries = [
@@ -18,7 +39,7 @@ export default function StaffTimesheet() {
       out: "05:00 PM",
       hours: "8.0",
       position: "Box Office",
-      status: "approved",
+      status: "Approved",
     },
     {
       date: "Nov 24",
@@ -26,7 +47,7 @@ export default function StaffTimesheet() {
       out: "09:30 PM",
       hours: "7.5",
       position: "Floor Staff",
-      status: "approved",
+      status: "Approved",
     },
     {
       date: "Nov 23",
@@ -34,69 +55,76 @@ export default function StaffTimesheet() {
       out: "05:00 PM",
       hours: "8.0",
       position: "Box Office",
-      status: "pending",
+      status: "Pending",
     },
   ];
 
   return (
     <div className="staff-page">
+      {/* ✅ NAVBAR */}
+      <StaffNavbar staff={staff} />
+
+      {/* ✅ CONTENT */}
       <main className="staff-container">
-        {/* HEADER */}
-        <div className="section-head">
-          <h2>🕒 My Timesheet</h2>
-          <p className="muted">Track your hours and earnings</p>
-        </div>
-
-        {/* WEEK OVERVIEW */}
-        <div className="staff-card">
-          <h3 className="card-title">📈 This Week</h3>
-
-          <div className="week-hours">
-            {weekSummary.map((d) => (
-              <div key={d.day} className="week-hour-card">
-                <strong>{d.day}</strong>
-                <div className="week-hours-value">{d.hours}</div>
-                <span className={`pill ${d.status}`}>{d.status}</span>
-              </div>
-            ))}
+        <div className="staff-wrap">
+          {/* HEADER */}
+          <div className="section-head">
+            <h2>🕒 My Timesheet</h2>
+            <p className="muted">Track your hours and earnings</p>
           </div>
-        </div>
 
-        {/* TIME ENTRIES */}
-        <div className="staff-card">
-          <h3 className="card-title">📋 Time Entries</h3>
+          {/* WEEK OVERVIEW */}
+          <div className="staff-card">
+            <h3>📊 This Week</h3>
 
-          <table className="timesheet-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Clock In</th>
-                <th>Clock Out</th>
-                <th>Hours</th>
-                <th>Position</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {entries.map((e, i) => (
-                <tr key={i}>
-                  <td>{e.date}</td>
-                  <td>{e.in}</td>
-                  <td>{e.out}</td>
-                  <td>{e.hours}</td>
-                  <td>{e.position}</td>
-                  <td>
-                    <span className={`pill ${e.status}`}>{e.status}</span>
-                  </td>
-                </tr>
+            <div className="week-summary">
+              {weekSummary.map((d) => (
+                <div key={d.day} className={`day-summary ${d.status.toLowerCase()}`}>
+                  <strong>{d.day}</strong>
+                  <span>{d.hours}</span>
+                  <small>{d.status}</small>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
+          </div>
 
-        <div className="staff-footer">
-          © 2025 CinemaFlow Staff Portal
+          {/* TIME ENTRIES */}
+          <div className="staff-card">
+            <h3>📋 Time Entries</h3>
+
+            <div className="table-wrap">
+              <table className="timesheet-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Clock In</th>
+                    <th>Clock Out</th>
+                    <th>Hours</th>
+                    <th>Position</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entries.map((e, i) => (
+                    <tr key={i}>
+                      <td>{e.date}</td>
+                      <td>{e.in}</td>
+                      <td>{e.out}</td>
+                      <td>{e.hours}</td>
+                      <td>{e.position}</td>
+                      <td>
+                        <span className={`status ${e.status.toLowerCase()}`}>
+                          {e.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="staff-footer">© 2025 CinemaFlow Staff Portal</div>
         </div>
       </main>
     </div>

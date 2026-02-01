@@ -2,38 +2,57 @@
 
 .task-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
-  padding: 16px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 14px;
-  margin-top: 12px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  margin-top: 14px;
   border: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s ease, transform 0.15s ease;
 }
 
+.task-item:hover {
+  background: rgba(255,255,255,0.09);
+  transform: translateY(-1px);
+}
+
+/* Checkbox */
 .task-item input {
   width: 18px;
   height: 18px;
+  margin-top: 4px;
+  cursor: pointer;
 }
 
+/* Content */
 .task-info {
   flex: 1;
 }
 
+.task-info strong {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Meta row */
 .task-meta {
   display: flex;
   gap: 12px;
   margin-top: 6px;
   font-size: 13px;
   color: #94a3b8;
+  align-items: center;
 }
 
+/* Priority pills */
 .priority {
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: capitalize;
+  letter-spacing: 0.3px;
 }
 
 .priority.high {
@@ -46,8 +65,11 @@
   color: #f97316;
 }
 
+/* ===== COMPLETED ===== */
+
 .task-item.completed {
-  opacity: 0.6;
+  opacity: 0.55;
+  background: rgba(255,255,255,0.03);
 }
 
 .task-item.completed strong {
@@ -57,9 +79,12 @@
 .completed-text {
   color: #22c55e;
   font-size: 13px;
+  font-weight: 600;
 }
 
+/* Check icon */
 .check-icon {
   color: #22c55e;
   font-size: 18px;
+  margin-top: 2px;
 }
