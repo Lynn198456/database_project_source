@@ -21,6 +21,7 @@ import BookingHistoryPage from "./pages/BookingHistoryPage";
 import LoyaltyPointsPage from "./pages/LoyaltyPointsPage";
 import SpendingHistoryPage from "./pages/SpendingHistoryPage";
 import FavoriteTheaters from "./pages/FavoriteTheaters";
+import WatchlistPage from "./pages/Watchlist";
 
 /*
   localStorage user example:
@@ -254,6 +255,7 @@ export default function App() {
           }
         />
 <Route path="/customer/favorite-theaters" element={<FavoriteTheaters />} />
+<Route path="/customer/watchlist" element={<WatchlistPage />} />
 
 
 

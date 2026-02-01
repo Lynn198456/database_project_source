@@ -666,9 +666,16 @@ export default function Profile() {
                 <div className="pf-panelTitle">
                   <span className="pf-ico">🎞️</span> My Watchlist
                 </div>
-                <div className="pf-link" onClick={() => alert("View all later")}>
-                  View All →
-                </div>
+<div
+  className="pf-link"
+  role="button"
+  tabIndex={0}
+  onClick={() => navigate("/customer/watchlist")}
+  onKeyDown={(e) => e.key === "Enter" && navigate("/customer/watchlist")}
+>
+  View All →
+</div>
+
               </div>
 
               <div className="pf-watchRow">

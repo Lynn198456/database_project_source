@@ -1,0 +1,220 @@
+/* Watchlist layout */
+.wl-wrap {
+  padding-bottom: 28px;
+}
+
+.wl-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 18px 0 14px;
+}
+
+.wl-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wl-back {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.wl-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.wl-emoji {
+  opacity: 0.9;
+}
+
+.wl-clear {
+  border-radius: 14px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.wl-clear.isDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wl-msg {
+  margin: 10px 0 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: rgba(220, 255, 235, 0.95);
+  font-weight: 800;
+}
+
+/* Grid & Card */
+.wl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.wl-card {
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
+}
+
+.wl-img {
+  height: 165px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.wl-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 12px;
+  background: rgba(236, 72, 153, 0.25);
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.wl-body {
+  padding: 14px;
+}
+
+.wl-mTitle {
+  font-size: 18px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.wl-mDate {
+  margin-top: 6px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.wl-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* Buttons */
+.wl-primary,
+.wl-danger,
+.wl-ghost {
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  flex: 1;
+}
+
+.wl-primary {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: rgba(230, 245, 255, 0.95);
+}
+
+.wl-danger {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.28);
+  color: rgba(255, 220, 220, 0.95);
+}
+
+.wl-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Empty state */
+.wl-empty {
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wl-emptyTitle {
+  font-size: 18px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.wl-emptySub {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.wl-tip {
+  margin-top: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
+/* Confirm modal */
+.wl-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 9999;
+}
+
+.wl-modal {
+  width: min(520px, 95vw);
+  border-radius: 18px;
+  padding: 16px;
+  background: rgba(18, 25, 40, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.6);
+}
+
+.wl-modalTitle {
+  font-size: 18px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.wl-modalDesc {
+  margin-top: 8px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.wl-modalBtns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
