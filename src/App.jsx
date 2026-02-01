@@ -22,7 +22,8 @@ import LoyaltyPointsPage from "./pages/LoyaltyPointsPage";
 import SpendingHistoryPage from "./pages/SpendingHistoryPage";
 import FavoriteTheaters from "./pages/FavoriteTheaters";
 import WatchlistPage from "./pages/Watchlist";
-
+import ChangePassword from "./pages/ChangePassword";
+import LoginHistory from "./pages/LoginHistory";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -256,7 +257,8 @@ export default function App() {
         />
 <Route path="/customer/favorite-theaters" element={<FavoriteTheaters />} />
 <Route path="/customer/watchlist" element={<WatchlistPage />} />
-
+<Route path="/customer/change-password" element={<ChangePassword />} />
+<Route path="/customer/login-history" element={<LoginHistory />} />
 
 
 

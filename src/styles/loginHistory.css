@@ -1,0 +1,116 @@
+.lh-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.lh-back {
+  background: rgba(255,255,255,.08);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.lh-title {
+  flex: 1;
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+}
+
+.lh-clear {
+  background: rgba(239,68,68,.2);
+  border: 1px solid rgba(239,68,68,.4);
+  color: #ffdada;
+  padding: 8px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.lh-hero {
+  background: rgba(255,255,255,.05);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.lh-heroTitle {
+  font-weight: 800;
+  color: white;
+}
+
+.lh-heroEmail {
+  opacity: .8;
+  margin: 6px 0;
+}
+
+.lh-panel {
+  background: rgba(255,255,255,.05);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.lh-panelHead {
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.lh-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.lh-row:last-child {
+  border-bottom: none;
+}
+
+.lh-device {
+  font-weight: 700;
+}
+
+.lh-sub {
+  font-size: 13px;
+  opacity: .75;
+}
+
+.lh-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lh-pill.ok {
+  background: rgba(34,197,94,.2);
+  color: #b7ffd8;
+}
+
+.lh-pill.bad {
+  background: rgba(239,68,68,.2);
+  color: #ffd1d1;
+}
+
+.lh-tip {
+  background: rgba(255,255,255,.05);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.lh-btn {
+  margin-top: 10px;
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
