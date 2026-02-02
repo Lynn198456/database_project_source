@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import "../../styles/staffDashboard.css";
 import "../../styles/staffProfile.css";
 import StaffNavbar from "../../components/staff/StaffNavbar";
 

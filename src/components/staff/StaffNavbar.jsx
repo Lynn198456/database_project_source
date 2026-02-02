@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "../../styles/staffDashboard.css";
+import { useMemo } from "react";
+import "../../styles/staff/staffNavbar.css";
 
 function getStaff() {
   try {
@@ -10,74 +11,71 @@ function getStaff() {
   }
 }
 
-const FALLBACK_STAFF = {
-  name: "Staff Member",
-  notifications: 0,
-};
-
 export default function StaffNavbar() {
   const navigate = useNavigate();
-  const staff = getStaff() || FALLBACK_STAFF;
+
+  const staff = useMemo(() => getStaff() || { name: "Staff Member", notifications: 0 }, []);
+  const notif = Number(staff?.notifications || 0);
 
   function logout() {
+    // ✅ clear whatever you use for auth/session
     localStorage.removeItem("cinemaFlow_staff");
-    navigate("/login");
+    // if you have auth flags, clear them too:
+    localStorage.removeItem("cinemaFlow_staff_loggedIn");
+
+    navigate("/"); // change to "/login" if you have a login page
   }
 
   return (
-    <header className="staff-nav">
-      <div className="staff-navInner">
-        {/* BRAND */}
-        <div className="staff-brand">
-          <strong>🎞️ CinemaFlow Staff Portal</strong>
-          <span className="welcome">Welcome, {staff.name}</span>
+    <header className="sn-wrap">
+      <div className="sn-inner">
+        {/* Left: Brand */}
+        <div className="sn-left">
+          <div className="sn-brand">
+            <span className="sn-logo">🎬</span>
+            <div className="sn-brandText">
+              <div className="sn-title">CinemaFlow Staff Portal</div>
+              <div className="sn-sub">Welcome, {staff?.name || "Staff Member"}</div>
+            </div>
+          </div>
         </div>
 
-        {/* MENU */}
-        <nav className="staff-menu">
-          <NavLink to="/staff" end>
-            {({ isActive }) => (
-              <button className={isActive ? "active" : ""}>Dashboard</button>
-            )}
+        {/* Center: Nav */}
+        <nav className="sn-nav" aria-label="Staff navigation">
+          <NavLink to="/staff" end className={({ isActive }) => `sn-link ${isActive ? "active" : ""}`}>
+            Dashboard
           </NavLink>
 
-          <NavLink to="/staff/schedule">
-            {({ isActive }) => (
-              <button className={isActive ? "active" : ""}>My Schedule</button>
-            )}
+          <NavLink to="/staff/schedule" className={({ isActive }) => `sn-link ${isActive ? "active" : ""}`}>
+            My Schedule
           </NavLink>
 
-          <NavLink to="/staff/timesheet">
-            {({ isActive }) => (
-              <button className={isActive ? "active" : ""}>Timesheet</button>
-            )}
+          <NavLink to="/staff/timesheet" className={({ isActive }) => `sn-link ${isActive ? "active" : ""}`}>
+            Timesheet
           </NavLink>
 
-          <NavLink to="/staff/tasks">
-            {({ isActive }) => (
-              <button className={isActive ? "active" : ""}>Tasks</button>
-            )}
+          <NavLink to="/staff/tasks" className={({ isActive }) => `sn-link ${isActive ? "active" : ""}`}>
+            Tasks
           </NavLink>
 
-          <NavLink to="/staff/profile">
-            {({ isActive }) => (
-              <button className={isActive ? "active" : ""}>Profile</button>
-            )}
+          <NavLink to="/staff/profile" className={({ isActive }) => `sn-link ${isActive ? "active" : ""}`}>
+            Profile
           </NavLink>
-
-
         </nav>
 
-        {/* RIGHT ACTIONS */}
-        <div className="staff-actions">
-          <div className="staff-bell" title="Notifications">
+        {/* Right: Actions */}
+        <div className="sn-actions">
+          <button
+            type="button"
+            className="sn-bell"
+            title="Notifications"
+            onClick={() => navigate("/staff/profile")}
+          >
             🔔
-            {staff.notifications > 0 && (
-              <span className="badge">{staff.notifications}</span>
-            )}
-          </div>
+            {notif > 0 ? <span className="sn-badge">{notif > 99 ? "99+" : notif}</span> : null}
+          </button>
 
-          <button className="logout-btn" onClick={logout}>
+          <button type="button" className="sn-logout" onClick={logout}>
             Logout
           </button>
         </div>

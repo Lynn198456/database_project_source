@@ -1,318 +1,147 @@
-/* ===== PAGE BASE ===== */
+/* =========================
+   STAFF DASHBOARD UI
+   Works with your class names:
+   staff-wrap, staff-card, staff-grid, overview-grid, ov, task, announce...
+   ========================= */
+
 .staff-page {
   min-height: 100vh;
-  width: 100%;
-  background: linear-gradient(135deg, #0b1220, #1b1140);
-  color: #e5e7eb;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ===== TOP NAV ===== */
-.staff-nav {
-  width: 100%;
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* inner container (prevents nav from stretching too much on huge screens) */
-.staff-navInner {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 16px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.staff-brand {
-  display: flex;
-  flex-direction: column;
-  font-size: 18px;
-  user-select: none;
-}
-
-.staff-brand .welcome {
-  font-size: 13px;
-  color: #38bdf8;
-  opacity: 0.95;
-}
-
-.staff-menu {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.staff-menu button {
-  background: transparent;
-  border: 1px solid transparent;
-  color: #cbd5f5;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.15s ease, background 0.15s ease, border 0.15s ease;
-}
-
-.staff-menu button:hover {
-  background: rgba(14, 165, 233, 0.18);
-  border: 1px solid rgba(14, 165, 233, 0.5);
-  transform: translateY(-1px);
-}
-
-.staff-menu button.active {
-  background: #0ea5e9;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.staff-bell {
-  position: relative;
-  font-size: 22px;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 12px;
-  transition: background 0.15s ease;
-}
-.staff-bell:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.staff-bell .badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  background: #ef4444;
-  color: white;
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 999px;
-}
-
-/* ===== MAIN LAYOUT (FULL WIDTH) ===== */
+/* Main container already in your app; keep it centered */
 .staff-container {
-  width: 100%;
-  padding: 22px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 18px 60px;
 }
 
-/* center the content area while keeping background full screen */
 .staff-wrap {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
-/* ===== CARDS ===== */
-.staff-card {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.staff-card h3 {
-  margin: 0 0 14px;
-  font-size: 18px;
-}
-
+/* ---------- Common helpers ---------- */
 .muted {
-  opacity: 0.8;
+  opacity: 0.75;
+  color: #cfe0ff;
 }
 
 .section-title {
-  margin: 6px 0 12px;
+  margin: 18px 0 12px;
+  font-size: 16px;
+  font-weight: 900;
+  color: #eaf2ff;
 }
 
-/* ===== CLOCK ===== */
+/* ---------- Card base ---------- */
+.staff-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.staff-card h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 950;
+  color: #eaf2ff;
+}
+
+/* ---------- Time clock card ---------- */
 .clock-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
+.clock-card p {
+  margin: 6px 0 0;
+}
+
+/* Buttons */
 .btn-green,
-.btn-red {
-  color: white;
-  padding: 12px 20px;
-  border-radius: 14px;
-  font-size: 15px;
+.btn-red,
+.btn-blue {
   border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 900;
   cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease;
+  color: white;
 }
 
 .btn-green {
-  background: #16a34a;
+  background: linear-gradient(135deg, #22c55e, #15803d);
 }
 .btn-red {
-  background: #dc2626;
+  background: linear-gradient(135deg, #ef4444, #991b1b);
+}
+.btn-blue {
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
 }
 
-.btn-green:hover,
-.btn-red:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.05);
-}
-
-/* ===== OVERVIEW ===== */
+/* ---------- Overview KPI row ---------- */
 .overview-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr));
-  gap: 18px;
-  margin-bottom: 18px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 980px) {
+  .overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .ov {
-  padding: 22px;
   border-radius: 16px;
+  padding: 16px;
   color: white;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 .ov p {
+  margin: 0 0 10px;
+  font-size: 13px;
   opacity: 0.9;
-  margin: 0;
 }
-
 .ov h2 {
-  margin: 6px 0 0;
-  font-size: 30px;
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 0.3px;
 }
 
+/* Colors */
 .ov.blue {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
 }
 .ov.green {
-  background: linear-gradient(135deg, #16a34a, #15803d);
+  background: linear-gradient(135deg, #16a34a, #14532d);
 }
 .ov.purple {
-  background: linear-gradient(135deg, #9333ea, #7e22ce);
+  background: linear-gradient(135deg, #7c3aed, #4c1d95);
 }
 .ov.orange {
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, #f97316, #9a3412);
 }
 
-/* ===== MAIN GRID (REPLACES two-col) ===== */
+/* ---------- Main grid (fix empty big space) ---------- */
 .staff-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  margin-top: 18px;
-}
-
-/* ===== TAGS ===== */
-.tag {
-  display: inline-block;
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 999px;
-  margin-left: 12px;
-}
-
-.tag.current {
-  background: #16a34a;
-  color: white;
-}
-
-/* ===== SHIFTS ===== */
-.shift {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 12px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
-  gap: 12px;
-}
-
-.shift:last-child {
-  border-bottom: none;
-}
-
-.shift.off {
-  opacity: 0.6;
-}
-
-.dateBlue {
-  color: #38bdf8;
-}
-
-/* ===== TASKS ===== */
-.tasksWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.task {
-  display: flex;
-  flex-direction: column;
-  padding: 14px;
-  border-radius: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.taskTop {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.task input {
-  width: 16px;
-  height: 16px;
-}
-
-.taskMeta {
-  font-size: 12px;
-  opacity: 0.85;
-  margin-left: 26px;
-}
-
-.task.high {
-  border-left: 6px solid #dc2626;
-  background: rgba(220, 38, 38, 0.12);
-}
-
-.task.medium {
-  border-left: 6px solid #f97316;
-  background: rgba(249, 115, 22, 0.12);
-}
-
-.task.done {
-  opacity: 0.6;
-  text-decoration: line-through;
-}
-
-/* ===== ANNOUNCEMENTS ===== */
-.announce {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 12px;
-}
-.announce:last-child {
-  margin-bottom: 0;
-}
-
-/* ===== FOOTER ===== */
-.staff-footer {
-  text-align: center;
-  padding: 26px 10px;
-  opacity: 0.6;
-  font-size: 13px;
-  margin-top: 6px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1100px) {
-  .overview-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-  }
+  grid-template-columns: 380px 1fr;
+  gap: 16px;
+  align-items: start;
 }
 
 @media (max-width: 980px) {
@@ -321,29 +150,128 @@
   }
 }
 
-@media (max-width: 640px) {
-  .staff-navInner {
-    padding: 14px 16px;
-  }
-
-  .overview-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .clock-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-}
-.staff-navInner {
+/* ---------- Shift blocks ---------- */
+.shift {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.staff-actions {
+.shift + .shift {
+  margin-top: 10px;
+}
+
+.shift.off {
+  opacity: 0.55;
+}
+
+.dateBlue {
+  color: #60a5fa;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 950;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.tag.current {
+  background: rgba(34, 197, 94, 0.16);
+  color: #bff7d0;
+}
+
+/* ---------- Tasks ---------- */
+.tasksWrap {
+  display: grid;
+  gap: 12px;
+}
+
+.task {
+  display: block;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+
+.taskTop {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  margin-bottom: 6px;
+  color: #eaf2ff;
+}
+
+.task input {
+  margin-top: 2px;
+  transform: scale(1.12);
+}
+
+.taskMeta {
+  display: block;
+  font-size: 12px;
+  opacity: 0.75;
+  color: #cfe0ff;
+}
+
+.task.done {
+  opacity: 0.6;
+}
+.task.done strong {
+  text-decoration: line-through;
+}
+
+/* Priority left border */
+.task.high {
+  border-left: 5px solid rgba(239, 68, 68, 0.9);
+}
+.task.medium {
+  border-left: 5px solid rgba(249, 115, 22, 0.9);
+}
+.task.low {
+  border-left: 5px solid rgba(59, 130, 246, 0.9);
+}
+
+/* ---------- Announcements (make them cards) ---------- */
+.announce {
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.announce + .announce {
+  margin-top: 10px;
+}
+
+.announce strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #eaf2ff;
+  font-weight: 950;
+}
+
+.announce p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* ---------- Footer ---------- */
+.staff-footer {
+  margin-top: 18px;
+  text-align: center;
+  opacity: 0.6;
+  color: #cfe0ff;
+  font-size: 12px;
 }

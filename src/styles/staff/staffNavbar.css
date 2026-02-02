@@ -1,0 +1,103 @@
+.sn-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(8, 12, 20, 0.55);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sn-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+/* BRAND */
+.sn-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sn-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(255,255,255,0.08);
+}
+
+.sn-title {
+  font-weight: 800;
+  color: #eaf2ff;
+}
+
+.sn-sub {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* NAV */
+.sn-nav {
+  display: flex;
+  gap: 8px;
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+  border-radius: 999px;
+}
+
+.sn-link {
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  color: white;
+}
+
+.sn-link.active {
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
+}
+
+/* ACTIONS */
+.sn-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.sn-bell {
+  position: relative;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: white;
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.sn-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.sn-logout {
+  background: white;
+  color: #0b1220;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}

@@ -1,0 +1,490 @@
+/* ===== Timesheet Page (User Friendly) ===== */
+
+.ts-page{
+  min-height: 100vh;
+  padding: 26px 16px 40px;
+  color: #eaf0ff;
+}
+
+.ts-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Header */
+.ts-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.ts-title{
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: .2px;
+}
+
+.ts-sub{
+  margin: 6px 0 0;
+  opacity: .75;
+}
+
+.ts-weekBadge{
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 12px 14px;
+  min-width: 220px;
+  text-align: right;
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+}
+
+.ts-weekName{
+  font-weight: 700;
+}
+
+.ts-weekRange{
+  opacity: .75;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+/* Summary cards */
+.ts-summary{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin: 16px 0 22px;
+}
+
+.ts-card{
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+}
+
+.ts-cardLabel{
+  opacity: .8;
+  font-size: 13px;
+}
+
+.ts-cardValue{
+  margin-top: 10px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.ts-cardNote{
+  margin-top: 6px;
+  opacity: .7;
+  font-size: 13px;
+}
+
+/* Gradient accents */
+.ts-card.blue{ background: linear-gradient(135deg, rgba(37,99,235,.35), rgba(37,99,235,.12)); }
+.ts-card.purple{ background: linear-gradient(135deg, rgba(147,51,234,.35), rgba(147,51,234,.12)); }
+.ts-card.orange{ background: linear-gradient(135deg, rgba(249,115,22,.35), rgba(249,115,22,.12)); }
+.ts-card.green{ background: linear-gradient(135deg, rgba(34,197,94,.35), rgba(34,197,94,.12)); }
+
+/* Section */
+.ts-section{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  margin-bottom: 16px;
+}
+
+.ts-sectionHead{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ts-sectionHead h3{
+  margin: 0;
+  font-size: 18px;
+}
+
+.ts-miniMuted{
+  opacity: .7;
+  font-size: 13px;
+}
+
+/* Button */
+.ts-btn{
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.ts-btn:hover{ background: rgba(255,255,255,0.09); }
+
+/* Day Cards Grid */
+.ts-daysGrid{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+}
+
+.ts-dayCard{
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  min-height: 142px;
+}
+
+.ts-dayTop{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ts-dayName{
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.ts-dayDate{
+  opacity: .65;
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.ts-hours{
+  margin-top: 14px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.ts-dayMeta{
+  margin-top: 10px;
+  opacity: .8;
+  font-size: 12px;
+  display: grid;
+  gap: 4px;
+}
+
+/* Status pill */
+.ts-pill{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  white-space: nowrap;
+}
+
+/* Status colors */
+.ts-dayCard.green{ box-shadow: inset 4px 0 0 rgba(34,197,94,.9); }
+.ts-dayCard.blue{ box-shadow: inset 4px 0 0 rgba(59,130,246,.9); }
+.ts-dayCard.orange{ box-shadow: inset 4px 0 0 rgba(249,115,22,.95); }
+.ts-dayCard.gray{ opacity: .6; box-shadow: inset 4px 0 0 rgba(148,163,184,.7); }
+
+.ts-status{
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+}
+.ts-status.green{ box-shadow: inset 0 0 0 1px rgba(34,197,94,.35); }
+.ts-status.blue{ box-shadow: inset 0 0 0 1px rgba(59,130,246,.35); }
+.ts-status.orange{ box-shadow: inset 0 0 0 1px rgba(249,115,22,.35); }
+.ts-status.gray{ box-shadow: inset 0 0 0 1px rgba(148,163,184,.30); }
+
+/* Table */
+.ts-tableWrap{
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.ts-table{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 740px;
+  background: rgba(0,0,0,0.10);
+}
+
+.ts-table th, .ts-table td{
+  padding: 12px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 14px;
+}
+
+.ts-table th{
+  font-weight: 800;
+  background: rgba(255,255,255,0.04);
+}
+
+.ts-tdDay{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.ts-tdDayName{
+  font-weight: 800;
+}
+.ts-tdDayDate{
+  opacity: .7;
+  font-size: 12px;
+}
+
+/* Footer */
+.ts-footer{
+  text-align: center;
+  margin-top: 18px;
+  opacity: .65;
+}
+
+/* Responsive */
+@media (max-width: 1100px){
+  .ts-summary{ grid-template-columns: repeat(2, 1fr); }
+  .ts-daysGrid{ grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 700px){
+  .ts-head{ flex-direction: column; }
+  .ts-weekBadge{ width: 100%; text-align: left; }
+  .ts-daysGrid{ grid-template-columns: repeat(2, 1fr); }
+}
+/* ===== Staff Profile - User Friendly ===== */
+
+.sp-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+}
+
+/* Header */
+.sp-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin: 8px 0 18px;
+}
+
+.sp-title{
+  margin:0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color:#eaf2ff;
+}
+
+.sp-sub{
+  margin:6px 0 0;
+  opacity:.75;
+  color:#cfe0ff;
+}
+
+/* Button */
+.sp-editBtn{
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #eaf2ff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight:700;
+  transition: .2s ease;
+  white-space: nowrap;
+}
+
+.sp-editBtn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(59,130,246,0.6);
+  background: rgba(59,130,246,0.12);
+}
+
+/* Cards */
+.sp-card{
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+}
+
+.sp-card + .sp-card{
+  margin-top: 16px;
+}
+
+.sp-cardHead{
+  font-weight: 800;
+  color:#eaf2ff;
+  margin-bottom: 12px;
+  opacity: .95;
+}
+
+/* Top grid (fix overlap) */
+.sp-gridTop{
+  display:grid;
+  grid-template-columns: 1.05fr 1.25fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 980px){
+  .sp-gridTop{
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Profile card */
+.sp-avatarRow{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.sp-avatar{
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(34,211,238,.35), rgba(59,130,246,.35));
+  border: 1px solid rgba(255,255,255,0.14);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 26px;
+  font-weight: 900;
+  color:#eaf2ff;
+}
+
+.sp-name{
+  font-size: 20px;
+  font-weight: 900;
+  color:#eaf2ff;
+}
+
+.sp-role{
+  margin-top: 2px;
+  opacity: .75;
+  color:#cfe0ff;
+}
+
+/* meta blocks */
+.sp-metaGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 520px){
+  .sp-metaGrid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.sp-metaItem{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.sp-metaLabel{
+  font-size: 12px;
+  opacity: .70;
+  margin-bottom: 6px;
+  color:#cfe0ff;
+}
+
+.sp-metaValue{
+  font-weight: 800;
+  color:#eaf2ff;
+}
+
+/* Fields */
+.sp-formGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 720px){
+  .sp-formGrid{
+    grid-template-columns: 1fr;
+  }
+}
+
+.sp-field{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.sp-fieldLabel{
+  font-size: 12px;
+  opacity: .70;
+  margin-bottom: 6px;
+  color:#cfe0ff;
+}
+
+.sp-fieldValue{
+  font-weight: 800;
+  color:#eaf2ff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Stats */
+.sp-stats{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 860px){
+  .sp-stats{
+    grid-template-columns: 1fr;
+  }
+}
+
+.sp-stat{
+  border-radius: 16px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.sp-statLabel{
+  font-size: 13px;
+  opacity: .85;
+  margin-bottom: 8px;
+  color:#eaf2ff;
+}
+
+.sp-statValue{
+  font-size: 22px;
+  font-weight: 950;
+  color:#ffffff;
+}
+
+/* colored stat cards */
+.sp-stat.blue{
+  background: linear-gradient(135deg, rgba(37,99,235,0.55), rgba(30,58,138,0.55));
+}
+.sp-stat.purple{
+  background: linear-gradient(135deg, rgba(147,51,234,0.55), rgba(88,28,135,0.55));
+}
+.sp-stat.green{
+  background: linear-gradient(135deg, rgba(34,197,94,0.55), rgba(20,83,45,0.55));
+}

@@ -1,0 +1,313 @@
+/* =========================
+   STAFF SCHEDULE PAGE
+   ========================= */
+
+.staff-page {
+  min-height: 100vh;
+  padding: 28px 22px 60px;
+  background: radial-gradient(circle at top, rgba(168, 85, 247, 0.35), transparent 55%),
+    radial-gradient(circle at bottom, rgba(59, 130, 246, 0.35), transparent 55%),
+    linear-gradient(180deg, #070a16 0%, #0a1224 45%, #070a16 100%);
+  color: #e8eefc;
+}
+
+/* Center layout like your admin pages */
+.staff-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Head */
+.section-head {
+  margin-bottom: 18px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.muted {
+  opacity: 0.72;
+  margin-top: 6px;
+}
+
+/* Top row (week + button) */
+.schedule-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 16px;
+  flex-wrap: wrap;
+}
+
+.week-title {
+  font-weight: 800;
+  font-size: 16px;
+  opacity: 0.92;
+}
+
+/* Buttons */
+.btn-blue {
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.btn-blue:hover {
+  transform: translateY(-1px);
+  opacity: 0.96;
+}
+
+.btn-blue:active {
+  transform: translateY(0px);
+}
+
+/* Card container */
+.card-surface {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* Week grid */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 14px;
+}
+
+.day-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 14px 12px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 120px;
+  transition: transform 0.15s ease, border 0.15s ease;
+}
+
+.day-card:hover {
+  transform: translateY(-2px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.day-card.off {
+  opacity: 0.45;
+}
+
+.day-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  margin-bottom: 10px;
+  opacity: 0.92;
+}
+
+.day-name {
+  font-size: 14px;
+}
+
+.day-date {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.shift-box {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.95), rgba(37, 99, 235, 0.95));
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.shift-box span {
+  display: block;
+  margin-top: 6px;
+  opacity: 0.85;
+  font-weight: 700;
+}
+
+.day-off {
+  margin-top: 28px;
+  font-weight: 900;
+  letter-spacing: 0.4px;
+}
+
+/* =========================
+   STATS ROW (Bottom cards)
+   ========================= */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.stat-card {
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.stat-card .label {
+  opacity: 0.85;
+  font-weight: 700;
+}
+
+.stat-card .value {
+  margin-top: 10px;
+  font-size: 34px;
+  font-weight: 900;
+}
+
+.stat-blue {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.65), rgba(30, 64, 175, 0.55));
+}
+
+.stat-purple {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.65), rgba(88, 28, 135, 0.55));
+}
+
+.stat-green {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.55), rgba(21, 128, 61, 0.50));
+}
+
+/* =========================
+   MODAL (Request Time Off)
+   ========================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 999;
+}
+
+.modal-box {
+  width: min(720px, 96vw);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(20, 25, 40, 0.95);
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-head h3 {
+  margin: 0;
+  font-weight: 900;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Form */
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 190px;
+}
+
+.form-input {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: rgba(160, 120, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(160, 120, 255, 0.15);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-purple {
+  background: rgba(150, 90, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.btn-purple:hover {
+  background: rgba(150, 90, 255, 0.45);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 980px) {
+  .week-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .week-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
