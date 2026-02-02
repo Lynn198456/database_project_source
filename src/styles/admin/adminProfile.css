@@ -1,0 +1,689 @@
+/* Uses your same admin-page background idea */
+.admin-page {
+  min-height: 100vh;
+  background: radial-gradient(1000px 600px at 10% 10%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 90% 25%, rgba(168, 85, 247, 0.18), transparent 55%),
+    linear-gradient(135deg, #0a1220, #0b1b2a);
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.admin-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 18px 40px;
+}
+
+.muted {
+  color: #94a3b8;
+}
+
+/* Header */
+.ap-headRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 10px 0 18px;
+}
+.ap-headLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ap-headIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.35);
+}
+.ap-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 1000;
+}
+.ap-editBtn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 900;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.25);
+}
+.ap-editBtn:hover {
+  filter: brightness(1.05);
+}
+.ap-pen {
+  margin-right: 8px;
+}
+
+/* Main Profile Card */
+.ap-profileCard {
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.ap-profileGrid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .ap-profileGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Avatar column */
+.ap-avatarCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 6px;
+}
+.ap-avatarCircle {
+  width: 190px;
+  height: 190px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.95), rgba(99, 102, 241, 0.55));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.ap-avatarIcon {
+  font-size: 64px;
+  opacity: 0.95;
+}
+.ap-softBtn {
+  width: 160px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-weight: 900;
+  padding: 11px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.ap-softBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.ap-rolePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+.ap-roleDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #a855f7;
+}
+
+/* Info column */
+.ap-nameBlock {
+  margin-top: 6px;
+}
+.ap-name {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 1000;
+}
+.ap-subLine {
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.ap-infoGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .ap-infoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ap-infoBox {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.ap-infoLabel {
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(203, 213, 225, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ap-infoIcon {
+  opacity: 0.95;
+}
+.ap-infoValue {
+  margin-top: 8px;
+  font-weight: 900;
+  color: #fff;
+}
+
+/* Permissions strip */
+.ap-permStrip {
+  margin-top: 14px;
+  border-radius: 18px;
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.18));
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.ap-permHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ap-permTitle {
+  font-weight: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ap-linkBtn {
+  border: none;
+  background: transparent;
+  color: #c084fc;
+  font-weight: 900;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.95;
+}
+.ap-linkBtn:hover {
+  opacity: 1;
+}
+.ap-permPills {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.ap-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.ap-pill-purple {
+  background: rgba(168, 85, 247, 0.22);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+.ap-pill-blue {
+  background: rgba(37, 99, 235, 0.22);
+  border-color: rgba(37, 99, 235, 0.35);
+}
+.ap-pill-green {
+  background: rgba(34, 197, 94, 0.18);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+.ap-pill-orange {
+  background: rgba(249, 115, 22, 0.18);
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+/* Block heading */
+.ap-blockHead {
+  margin: 18px 0 10px;
+}
+.ap-blockHead h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 1000;
+}
+
+/* Stat cards */
+.ap-statRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (max-width: 1100px) {
+  .ap-statRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 620px) {
+  .ap-statRow {
+    grid-template-columns: 1fr;
+  }
+}
+.ap-statCard {
+  border-radius: 18px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
+}
+.ap-statTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ap-statIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.14);
+}
+.ap-statTag {
+  font-size: 12px;
+  font-weight: 900;
+  opacity: 0.95;
+}
+.ap-statLabel {
+  margin-top: 12px;
+  font-size: 14px;
+  opacity: 0.95;
+  font-weight: 800;
+}
+.ap-statValue {
+  margin-top: 8px;
+  font-size: 34px;
+  font-weight: 1000;
+}
+.ap-statNote {
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+.ap-statCard.blue {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+.ap-statCard.purple {
+  background: linear-gradient(135deg, #9333ea, #7e22ce);
+}
+.ap-statCard.green {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+.ap-statCard.orange {
+  background: linear-gradient(135deg, #f97316, #c2410c);
+}
+
+/* Generic card */
+.ap-card {
+  margin-top: 14px;
+  border-radius: 22px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.3);
+}
+.ap-cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.ap-cardTitle {
+  font-weight: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ap-miniIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.12);
+}
+.ap-miniIcon.purple {
+  background: rgba(168, 85, 247, 0.25);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+/* Activity */
+.ap-activityList {
+  display: grid;
+  gap: 12px;
+}
+.ap-activityItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ap-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  font-weight: 1000;
+}
+.ap-activityText {
+  font-weight: 900;
+}
+.ap-activityTime {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Two column */
+.ap-grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+@media (max-width: 900px) {
+  .ap-grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Settings lists */
+.ap-settingList,
+.ap-toggleList {
+  display: grid;
+  gap: 12px;
+}
+
+.ap-settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ap-settingRow.wide {
+  width: 100%;
+}
+.ap-settingLabel {
+  font-weight: 900;
+}
+
+.ap-miniBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+.ap-miniBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ap-enabled {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 1000;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+/* Toggle */
+.ap-toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ap-toggleLabel {
+  font-weight: 900;
+}
+.ap-switch {
+  width: 58px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+}
+.ap-switch .ap-knob {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 180ms ease;
+}
+.ap-switch.on {
+  background: rgba(168, 85, 247, 0.5);
+  border-color: rgba(168, 85, 247, 0.55);
+}
+.ap-switch.on .ap-knob {
+  transform: translateX(28px);
+  background: #fff;
+}
+
+/* Managed Theaters */
+.ap-purpleBtn {
+  border: none;
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 1000;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+.ap-purpleBtn:hover {
+  filter: brightness(1.05);
+}
+
+.ap-theaterRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+@media (max-width: 980px) {
+  .ap-theaterRow {
+    grid-template-columns: 1fr;
+  }
+}
+.ap-theaterCard {
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ap-theaterCard.primary {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15) inset;
+}
+.ap-theaterTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ap-theaterName {
+  font-weight: 1000;
+}
+.ap-greenTag {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 1000;
+  font-size: 12px;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+.ap-theaterMeta {
+  margin-top: 8px;
+  font-size: 13px;
+}
+.ap-theaterBottom {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Team minis */
+.ap-teamGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .ap-teamGrid {
+    grid-template-columns: 1fr;
+  }
+}
+.ap-teamMini {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+.ap-miniAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 1000;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.ap-miniAvatar.blue {
+  background: rgba(37, 99, 235, 0.5);
+}
+.ap-miniAvatar.purple {
+  background: rgba(168, 85, 247, 0.5);
+}
+.ap-miniAvatar.green {
+  background: rgba(34, 197, 94, 0.4);
+}
+.ap-miniAvatar.orange {
+  background: rgba(249, 115, 22, 0.45);
+}
+.ap-teamName {
+  font-weight: 1000;
+}
+.ap-teamRole {
+  margin-top: 2px;
+  font-size: 13px;
+}
+.ap-activePill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 1000;
+  font-size: 12px;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+/* System settings grid */
+.ap-settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 900px) {
+  .ap-settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Bottom actions */
+.ap-actionsRow {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.ap-saveBtn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 1000;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+.ap-saveBtn:hover {
+  filter: brightness(1.05);
+}
+.ap-cancelBtn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-weight: 1000;
+  padding: 12px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+.ap-cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.ap-spacer {
+  flex: 1;
+}
+.ap-dangerBtn {
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  border-radius: 14px;
+  color: #fff;
+  font-weight: 1000;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+.ap-dangerBtn:hover {
+  filter: brightness(1.05);
+}
+
+/* Footer */
+.admin-footer {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 13px;
+  text-align: center;
+}
