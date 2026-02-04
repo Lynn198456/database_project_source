@@ -1,11 +1,9 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import QuickBooking from "../../components/admin/QuickBooking";
 import "../../styles/admin/adminDashboard.css"; // ✅ ONLY THIS
 
 export default function AdminDashboard() {
-  const navigate = useNavigate();
   const kpis = useMemo(
     () => [
       { color: "blue", icon: "🎬", label: "Active Movies", value: "12", hint: "+2 this week" },
