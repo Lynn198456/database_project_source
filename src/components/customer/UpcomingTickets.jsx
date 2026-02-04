@@ -3,7 +3,7 @@ const UPCOMING = [
     id: "TKT-2024-001",
     title: "The Last Adventure",
     poster:
-      "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=1200&auto=format&fit=crop",
+      "/assets/last-adventure.jpg",
     status: "Confirmed",
     theater: "Cinema Listic Downtown - Screen 1 - IMAX",
     date: "Nov 25, 2024",
@@ -16,7 +16,7 @@ const UPCOMING = [
     id: "TKT-2024-002",
     title: "Hearts Entwined",
     poster:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop",
+      "/assets/hearts-entwined.jpg",
     status: "Confirmed",
     theater: "Cinema Listic Mall Location - Screen 3 - Premium",
     date: "Nov 28, 2024",

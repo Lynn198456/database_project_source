@@ -21,7 +21,7 @@ const SEED_FAV = [
     name: "Cinema Listic Downtown",
     address: "123 Main Street",
     visits: 8,
-    img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1400&auto=format&fit=crop",
+    img: "/assets/hearts-entwined.jpg",
   },
   {
     id: "TH-002",

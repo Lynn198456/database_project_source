@@ -9,7 +9,7 @@ const featuredMovie = {
   status: "Now Showing",
   rating: 4.5,
   image:
-    "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1400&auto=format&fit=crop",
+    "/assets/last-adventure.jpg",
 };
 
 export default function Hero() {

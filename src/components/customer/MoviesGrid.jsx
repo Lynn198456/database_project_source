@@ -7,7 +7,7 @@ const movies = [
     rating: 4.5,
     age: "PG-13",
     status: "NOW",
-    img: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1400",
+    img: "/assets/last-adventure.jpg",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const movies = [
     rating: 4.2,
     age: "PG",
     status: "NOW",
-    img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1400",
+    img: "/assets/hearts-entwined.jpg",
   },
   {
     id: 3,

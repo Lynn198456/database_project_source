@@ -6,7 +6,7 @@ const DEFAULT_BOOKING = {
   movieTitle: "The Last Adventure",
   genre: "Action, Sci-Fi",
   poster:
-    "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=900&auto=format&fit=crop",
+    "/assets/last-adventure.jpg",
   date: "Nov 25, 2024",
   time: "07:45 PM",
   theater: "Cinema Listic Downtown",

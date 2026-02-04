@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import "../../styles/admin/adminTheaters.css";
 
@@ -233,11 +232,12 @@ function safeLoad() {
 function safeSave(value) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-  } catch {}
+  } catch {
+    // Ignore write errors (e.g., private mode)
+  }
 }
 
 export default function AdminTheaters() {
-  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [theaters, setTheaters] = useState(() => safeLoad() || demoTheaters);
@@ -304,7 +304,7 @@ export default function AdminTheaters() {
       phone: "(000) 000-0000",
       distance: "--",
       hero:
-        "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=80",
+        "/assets/hearts-entwined.jpg",
       stats: { screens: 4, seats: 600, todaysShows: 0, occupancy: 0 },
       facilities: ["Standard"],
       location: { lat: 40.741, lng: -73.99 },

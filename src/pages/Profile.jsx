@@ -633,7 +633,7 @@ export default function Profile() {
                     className="pf-theaterImg"
                     style={{
                       backgroundImage:
-                        "url(https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop)",
+                        "url(/assets/hearts-entwined.jpg)",
                     }}
                   />
                   <div className="pf-theaterBody">
