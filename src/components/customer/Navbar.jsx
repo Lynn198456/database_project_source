@@ -22,12 +22,19 @@ export default function Navbar() {
       </div>
 
       {/* CENTER LINKS */}
-      <nav className="cf-links">
-        <NavLink to="/customer" end className="cf-link">Home</NavLink>
-        <NavLink to="/customer/movies" className="cf-link">Movies</NavLink>
-        <NavLink to="/customer/showtimes" className="cf-link">Showtimes</NavLink>
-        <NavLink to="/customer/theaters" className="cf-link">Theaters</NavLink>
-        
+      <nav className="cf-links" aria-label="Customer navigation">
+        <NavLink to="/customer" end className={({ isActive }) => `cf-link ${isActive ? "active" : ""}`}>
+          Home
+        </NavLink>
+        <NavLink to="/customer/movies" className={({ isActive }) => `cf-link ${isActive ? "active" : ""}`}>
+          Movies
+        </NavLink>
+        <NavLink to="/customer/showtimes" className={({ isActive }) => `cf-link ${isActive ? "active" : ""}`}>
+          Showtimes
+        </NavLink>
+        <NavLink to="/customer/theaters" className={({ isActive }) => `cf-link ${isActive ? "active" : ""}`}>
+          Theaters
+        </NavLink>
       </nav>
 
       {/* RIGHT */}

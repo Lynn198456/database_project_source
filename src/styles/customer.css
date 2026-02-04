@@ -49,14 +49,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 14px 24px;
-  border-bottom: 1px solid var(--line-soft);
-  background: rgba(7, 11, 20, 0.7);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(8, 12, 20, 0.55);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 .cf-nav__left {
@@ -111,25 +112,41 @@ body {
 /* Links */
 .cf-links {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  background: rgba(255,255,255,0.06);
+  padding: 6px;
+  border-radius: 999px;
 }
 
 .cf-link {
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 8px 14px;
+  border-radius: 999px;
   text-decoration: none;
-  color: var(--text-muted);
+  font-weight: 700;
+  color: #eaf2ff;
 }
 
-.cf-link:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text-main);
+.cf-link.active {
+  background: linear-gradient(135deg, #06b6d4, #0284c7);
 }
 
-.cf-link--active {
-  background: rgba(245, 158, 11, 0.25);
-  color: #ffdca8;
-  border: 1px solid rgba(245, 158, 11, 0.35);
+/* Navbar action buttons (scoped) */
+.cf-nav .cf-btn--outline {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #eaf2ff;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.cf-nav .cf-btn {
+  background: #ffffff;
+  color: #0b1220;
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 800;
 }
 
 /* ---------- BUTTONS ---------- */
@@ -2692,4 +2709,3 @@ body {
   padding: 0 20px 26px;
   flex-wrap:wrap;
 }
-
