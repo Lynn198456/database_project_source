@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/admin/adminProfile.css";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 
 export default function AdminProfile() {
+  const navigate = useNavigate();
   const initialProfile = useMemo(
     () => ({
       name: "Sarah Johnson",
@@ -42,7 +44,9 @@ export default function AdminProfile() {
   );
 
   const [profile, setProfile] = useState(initialProfile);
+  const [photo, setPhoto] = useState("");
   const [editOpen, setEditOpen] = useState(false);
+  const [pwdOpen, setPwdOpen] = useState(false);
   const [form, setForm] = useState({
     name: initialProfile.name,
     title: initialProfile.title,
@@ -50,6 +54,11 @@ export default function AdminProfile() {
     phone: initialProfile.phone,
     org: initialProfile.org,
     location: initialProfile.location,
+  });
+  const [pwdForm, setPwdForm] = useState({
+    current: "",
+    next: "",
+    confirm: "",
   });
 
   const [notif, setNotif] = useState({
@@ -96,6 +105,47 @@ export default function AdminProfile() {
     setEditOpen(false);
   }
 
+  function openPassword() {
+    setPwdForm({ current: "", next: "", confirm: "" });
+    setPwdOpen(true);
+  }
+
+  function closePassword() {
+    setPwdOpen(false);
+  }
+
+  function updatePwd(key, value) {
+    setPwdForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function savePassword(e) {
+    e.preventDefault();
+    if (!pwdForm.current.trim() || !pwdForm.next.trim()) {
+      alert("Please fill in all password fields.");
+      return;
+    }
+    if (pwdForm.next !== pwdForm.confirm) {
+      alert("New password and confirmation do not match.");
+      return;
+    }
+    setPwdOpen(false);
+  }
+
+  function onPickPhoto(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhoto(String(reader.result || ""));
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  }
+
   return (
     
     <div className="admin-page">
@@ -122,9 +172,16 @@ export default function AdminProfile() {
             {/* Left avatar */}
             <div className="ap-avatarCol">
               <div className="ap-avatarCircle">
-                <span className="ap-avatarIcon">👤</span>
+                {photo ? (
+                  <img src={photo} alt="Admin profile" className="ap-avatarImg" />
+                ) : (
+                  <span className="ap-avatarIcon">👤</span>
+                )}
               </div>
-              <button className="ap-softBtn">Change Photo</button>
+              <label className="ap-softBtn ap-uploadBtn">
+                Change Photo
+                <input type="file" accept="image/*" onChange={onPickPhoto} />
+              </label>
               <div className="ap-rolePill">
                 <span className="ap-roleDot" />
                 {profile.role}
@@ -217,10 +274,19 @@ export default function AdminProfile() {
             </div>
 
             <div className="ap-settingList">
-              <SettingRow label="Change Password" right={<SmallIconBtn />} />
+              <SettingRow
+                label="Change Password"
+                right={<SmallIconBtn onClick={openPassword} ariaLabel="Change password" />}
+              />
               <SettingRow label="Two-Factor Authentication" right={<span className="ap-enabled">Enabled</span>} />
-              <SettingRow label="API Access Keys" right={<SmallIconBtn />} />
-              <SettingRow label="Login History" right={<SmallIconBtn />} />
+              <SettingRow
+                label="API Access Keys"
+                right={<SmallIconBtn onClick={() => navigate("/admin/api-keys")} ariaLabel="API access keys" />}
+              />
+              <SettingRow
+                label="Login History"
+                right={<SmallIconBtn onClick={() => navigate("/admin/login-history")} ariaLabel="Login history" />}
+              />
             </div>
           </div>
 
@@ -387,6 +453,55 @@ export default function AdminProfile() {
           </div>
         </div>
       ) : null}
+
+      {pwdOpen ? (
+        <div className="ap-modalOverlay" onClick={closePassword}>
+          <div className="ap-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ap-modalHead">
+              <h3>Change Password</h3>
+              <button className="ap-modalClose" onClick={closePassword}>
+                ✕
+              </button>
+            </div>
+
+            <form className="ap-modalBody" onSubmit={savePassword}>
+              <label className="ap-modalSpan">
+                Current Password
+                <input
+                  type="password"
+                  value={pwdForm.current}
+                  onChange={(e) => updatePwd("current", e.target.value)}
+                />
+              </label>
+              <label>
+                New Password
+                <input
+                  type="password"
+                  value={pwdForm.next}
+                  onChange={(e) => updatePwd("next", e.target.value)}
+                />
+              </label>
+              <label>
+                Confirm New Password
+                <input
+                  type="password"
+                  value={pwdForm.confirm}
+                  onChange={(e) => updatePwd("confirm", e.target.value)}
+                />
+              </label>
+
+              <div className="ap-modalActions">
+                <button className="ap-modalPrimary" type="submit">
+                  Update Password
+                </button>
+                <button className="ap-modalSecondary" type="button" onClick={closePassword}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -422,8 +537,12 @@ function SettingRowWide({ label }) {
   );
 }
 
-function SmallIconBtn() {
-  return <button className="ap-miniBtn">✎</button>;
+function SmallIconBtn({ onClick, ariaLabel }) {
+  return (
+    <button className="ap-miniBtn" onClick={onClick} aria-label={ariaLabel}>
+      ✎
+    </button>
+  );
 }
 
 function ToggleRow({ label, on, onToggle }) {

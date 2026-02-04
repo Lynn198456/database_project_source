@@ -105,6 +105,14 @@
   font-size: 64px;
   opacity: 0.95;
 }
+
+.ap-avatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
 .ap-softBtn {
   width: 160px;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -117,6 +125,18 @@
 }
 .ap-softBtn:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.ap-uploadBtn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ap-uploadBtn input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 .ap-rolePill {
   display: inline-flex;
@@ -710,6 +730,10 @@
   color: rgba(226, 232, 240, 0.85);
 }
 
+.ap-modalSpan {
+  grid-column: span 2;
+}
+
 .ap-modalBody input {
   background: rgba(2, 6, 23, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -753,6 +777,9 @@
   .ap-modalActions {
     grid-column: span 1;
     justify-content: stretch;
+  }
+  .ap-modalSpan {
+    grid-column: span 1;
   }
 }
 .ap-cancelBtn:hover {

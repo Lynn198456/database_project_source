@@ -35,6 +35,8 @@ import AdminTeam from "./pages/admin/AdminTeam";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminMovieEdit from "./pages/admin/AdminMovieEdit";
 import AdminSchedule from "./pages/admin/AdminSchedule";
+import AdminApiKeys from "./pages/admin/AdminApiKeys";
+import AdminLoginHistory from "./pages/admin/AdminLoginHistory";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -283,6 +285,8 @@ export default function App() {
       <Route path="/admin/theaters" element={<AdminTheaters />} />
       <Route path="/admin/team" element={<AdminTeam />} />
       <Route path="/admin/profile" element={<AdminProfile />} />
+      <Route path="/admin/api-keys" element={<AdminApiKeys />} />
+      <Route path="/admin/login-history" element={<AdminLoginHistory />} />
       <Route path="/admin/movies/edit/:id" element={<AdminMovieEdit />} />
       <Route path="/admin/showtimes/schedule/:id" element={<AdminSchedule />} />
       
