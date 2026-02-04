@@ -37,6 +37,24 @@ export default function BookPaymentPage() {
 
   const refCode = "REF-95673988888";
   const paymentId = "PMT-67398888";
+  const qrPayload = useMemo(() => {
+    const payload = {
+      paymentId,
+      refCode,
+      amount: booking?.total ?? null,
+      currency: "THB",
+      movie: booking?.movieTitle ?? "",
+      date: booking?.date ?? "",
+      time: booking?.time ?? "",
+      theater: booking?.theater ?? "",
+      screen: booking?.screen ?? "",
+    };
+    return JSON.stringify(payload);
+  }, [booking, paymentId, refCode]);
+
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
+    qrPayload
+  )}`;
 
   function completeBooking() {
     if (!booking) return;
@@ -141,16 +159,12 @@ export default function BookPaymentPage() {
                 {method === "qr" && (
                   <div className="cf-payBody">
                     <div className="cf-qrBox">
-                      <div className="cf-qrFake">
-                        <div className="cf-qrGrid">
-                          {Array.from({ length: 81 }).map((_, i) => (
-                            <span
-                              key={i}
-                              className={i % 3 === 0 ? "on" : ""}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                      <img
+                        className="cf-qrImage"
+                        src={qrUrl}
+                        alt={`QR code for ${paymentId}`}
+                        loading="lazy"
+                      />
                       <div className="cf-qrText">
                         <div className="cf-qrMain">
                           Scan with your banking app

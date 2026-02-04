@@ -99,12 +99,12 @@ export default function UpcomingTickets() {
 
             {/* RIGHT QR + actions */}
             <div className="cf-ticketQR">
-              <div className="cf-qrBox">
-                <div className="cf-qrFake" aria-hidden="true">
+              <div className="cf-ticketQrBox">
+                <div className="cf-ticketQrFake" aria-hidden="true">
                   {/* fake QR look (no library needed) */}
-                  <div className="cf-qrGrid">
+                  <div className="cf-ticketQrGrid">
                     {Array.from({ length: 64 }).map((_, i) => (
-                      <span key={i} className="cf-qrCell" />
+                      <span key={i} className="cf-ticketQrCell" />
                     ))}
                   </div>
                 </div>
