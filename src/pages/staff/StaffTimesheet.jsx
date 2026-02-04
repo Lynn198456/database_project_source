@@ -55,7 +55,7 @@ export default function StaffTimesheet() {
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = `CinemaFlow_Timesheet_${data.range.replace(/ /g, "_")}.csv`;
+  link.download = `Cinema Listic_Timesheet_${data.range.replace(/ /g, "_")}.csv`;
   link.click();
 
   URL.revokeObjectURL(url);
@@ -181,7 +181,7 @@ export default function StaffTimesheet() {
             </div>
           </div>
 
-          <div className="ts-footer">© 2025 CinemaFlow Staff Portal</div>
+          <div className="ts-footer">© 2025 Cinema Listic Staff Portal</div>
         </div>
       </div>
     </>

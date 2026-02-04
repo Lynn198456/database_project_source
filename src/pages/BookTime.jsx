@@ -20,9 +20,9 @@ const DATES = [
 ];
 
 const THEATERS = [
-  { name: "CinemaFlow Downtown", meta: "3.2 km away • 8 screens", screen: "Screen 1 - IMAX" },
-  { name: "CinemaFlow Mall Location", meta: "3.2 km away • 8 screens", screen: "Screen 2 - Standard" },
-  { name: "CinemaFlow Suburban", meta: "3.2 km away • 8 screens", screen: "Screen 3 - Premium" },
+  { name: "Cinema Listic Downtown", meta: "3.2 km away • 8 screens", screen: "Screen 1 - IMAX" },
+  { name: "Cinema Listic Mall Location", meta: "3.2 km away • 8 screens", screen: "Screen 2 - Standard" },
+  { name: "Cinema Listic Suburban", meta: "3.2 km away • 8 screens", screen: "Screen 3 - Premium" },
 ];
 
 const SHOWTIMES = [

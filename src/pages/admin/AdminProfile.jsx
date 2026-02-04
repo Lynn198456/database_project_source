@@ -12,7 +12,7 @@ export default function AdminProfile() {
       since: "Administrator since January 2023",
       email: "sarah.johnson@cinemaflow.com",
       phone: "+1 (555) 987-6543",
-      org: "CinemaFlow Networks",
+      org: "Cinema Listic Networks",
       location: "Downtown Branch",
       role: "Administrator",
       permissions: ["Full Access", "User Management", "Content Editor", "Financial Reports"],
@@ -382,7 +382,7 @@ export default function AdminProfile() {
           </div>
         </div>
 
-        <div className="admin-footer">© 2025 CinemaFlow. All rights reserved.</div>
+        <div className="admin-footer">© 2025 Cinema Listic. All rights reserved.</div>
       </div>
 
       {editOpen ? (

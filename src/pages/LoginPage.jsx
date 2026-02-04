@@ -32,7 +32,7 @@ export default function LoginPage() {
   return (
     <div style={styles.container}>
       <form onSubmit={handleLogin} style={styles.card}>
-        <h1 style={styles.title}>Cinema Flow</h1>
+        <h1 style={styles.title}>Cinema Listic</h1>
         <p style={styles.subtitle}>Login to continue</p>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -68,6 +68,13 @@ export default function LoginPage() {
 
         <p style={styles.hint}>
           (Demo) Choose a role → it will redirect to the correct page.
+        </p>
+
+        <p style={styles.hint}>
+          New here?{" "}
+          <button type="button" onClick={() => navigate("/register")} style={styles.linkButton}>
+            Create an account
+          </button>
         </p>
       </form>
     </div>
@@ -127,4 +134,12 @@ const styles = {
     fontSize: 14,
   },
   hint: { marginTop: 14, fontSize: 12, color: "rgba(255,255,255,0.6)" },
+  linkButton: {
+    border: "none",
+    background: "transparent",
+    color: "#93c5fd",
+    cursor: "pointer",
+    padding: 0,
+    fontSize: "inherit",
+  },
 };

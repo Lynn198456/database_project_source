@@ -5,7 +5,7 @@ const UPCOMING = [
     poster:
       "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?q=80&w=1200&auto=format&fit=crop",
     status: "Confirmed",
-    theater: "CinemaFlow Downtown - Screen 1 - IMAX",
+    theater: "Cinema Listic Downtown - Screen 1 - IMAX",
     date: "Nov 25, 2024",
     time: "07:45 PM",
     seats: ["A12", "A13"],
@@ -18,7 +18,7 @@ const UPCOMING = [
     poster:
       "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop",
     status: "Confirmed",
-    theater: "CinemaFlow Mall Location - Screen 3 - Premium",
+    theater: "Cinema Listic Mall Location - Screen 3 - Premium",
     date: "Nov 28, 2024",
     time: "02:00 PM",
     seats: ["B8", "B9"],

@@ -298,7 +298,7 @@ export default function AdminMoviesPage() {
 )
 }
 
-        <footer className="am-footer">© 2025 CinemaFlow. All rights reserved.</footer>
+        <footer className="am-footer">© 2025 Cinema Listic. All rights reserved.</footer>
       </div>
     </div>
   );

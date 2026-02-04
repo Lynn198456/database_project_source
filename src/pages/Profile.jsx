@@ -622,7 +622,7 @@ export default function Profile() {
                     }}
                   />
                   <div className="pf-theaterBody">
-                    <div className="pf-theaterName">CinemaFlow Downtown</div>
+                    <div className="pf-theaterName">Cinema Listic Downtown</div>
                     <div className="pf-theaterAddr">123 Main Street</div>
                     <div className="pf-theaterVisits">⭐ 8 visits</div>
                   </div>
@@ -637,7 +637,7 @@ export default function Profile() {
                     }}
                   />
                   <div className="pf-theaterBody">
-                    <div className="pf-theaterName">CinemaFlow Mall Location</div>
+                    <div className="pf-theaterName">Cinema Listic Mall Location</div>
                     <div className="pf-theaterAddr">456 Shopping Ave</div>
                     <div className="pf-theaterVisits">⭐ 5 visits</div>
                   </div>
@@ -652,7 +652,7 @@ export default function Profile() {
                     }}
                   />
                   <div className="pf-theaterBody">
-                    <div className="pf-theaterName">CinemaFlow Suburban</div>
+                    <div className="pf-theaterName">Cinema Listic Suburban</div>
                     <div className="pf-theaterAddr">789 Suburban Blvd</div>
                     <div className="pf-theaterVisits">⭐ 2 visits</div>
                   </div>

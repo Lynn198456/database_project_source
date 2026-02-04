@@ -13,7 +13,7 @@ export default function Navbar() {
       {/* LEFT */}
       <div className="cf-nav__left">
         <div className="cf-logo" onClick={() => navigate("/customer")}>
-          🎞️ <b>CinemaFlow</b>
+          🎞️ <b>Cinema Listic</b>
         </div>
 
         <div className="cf-search">

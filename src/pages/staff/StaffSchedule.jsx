@@ -248,7 +248,7 @@ export default function StaffSchedule() {
           </div>
 
           <div style={{ marginTop: 22, textAlign: "center" }} className="muted">
-            © 2025 CinemaFlow Staff Portal
+            © 2025 Cinema Listic Staff Portal
           </div>
         </div>
 

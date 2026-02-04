@@ -16,7 +16,7 @@ export default function BookPaymentPage() {
             genre: "Action, Sci-Fi",
             date: "Nov 25, 2024",
             time: "07:45 PM",
-            theater: "CinemaFlow Downtown",
+            theater: "Cinema Listic Downtown",
             screen: "Screen 1 - IMAX",
             seats: ["F11", "H11"],
             qty: 2,
@@ -185,7 +185,7 @@ export default function BookPaymentPage() {
                     <div className="cf-payCard">
                       <div className="cf-payField">
                         <div className="cf-muted">Bank Name</div>
-                        <div className="cf-payValue">CinemaFlow Bank</div>
+                        <div className="cf-payValue">Cinema Listic Bank</div>
                       </div>
                       <div className="cf-payField">
                         <div className="cf-muted">Account Number</div>
@@ -194,7 +194,7 @@ export default function BookPaymentPage() {
                       <div className="cf-payField">
                         <div className="cf-muted">Account Name</div>
                         <div className="cf-payValue">
-                          CinemaFlow Entertainment Ltd.
+                          Cinema Listic Entertainment Ltd.
                         </div>
                       </div>
                       <div className="cf-payField">

@@ -72,7 +72,7 @@ export default function TodaysShowtimes() {
         <div className="cf-locationLeft">
           <div className="cf-miniIcon cf-miniIcon--orange">📍</div>
           <div>
-            <div className="cf-locationTitle">CinemaFlow Downtown</div>
+            <div className="cf-locationTitle">Cinema Listic Downtown</div>
             <div className="cf-locationSub">123 Main Street, City • Open Now</div>
           </div>
         </div>

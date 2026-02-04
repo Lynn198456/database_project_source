@@ -53,7 +53,7 @@ export default function AdminShowtimes() {
   );
 
   const theaters = useMemo(
-    () => ["CinemaFlow Downtown", "CinemaFlow Mall", "CinemaFlow Riverside"],
+    () => ["Cinema Listic Downtown", "Cinema Listic Mall", "Cinema Listic Riverside"],
     []
   );
 
@@ -65,7 +65,7 @@ export default function AdminShowtimes() {
         movie: "The Last Adventure",
         screen: "Screen 1 - IMAX",
         screenType: "imax",
-        theater: "CinemaFlow Downtown",
+        theater: "Cinema Listic Downtown",
         time: "10:00 AM",
         seats: { booked: 45, total: 120 },
       },
@@ -75,7 +75,7 @@ export default function AdminShowtimes() {
         movie: "The Last Adventure",
         screen: "Screen 2 - Standard",
         screenType: "standard",
-        theater: "CinemaFlow Downtown",
+        theater: "Cinema Listic Downtown",
         time: "01:15 PM",
         seats: { booked: 102, total: 150 },
       },
@@ -85,7 +85,7 @@ export default function AdminShowtimes() {
         movie: "Hearts Entwined",
         screen: "Screen 3 - Premium",
         screenType: "premium",
-        theater: "CinemaFlow Downtown",
+        theater: "Cinema Listic Downtown",
         time: "02:00 PM",
         seats: { booked: 12, total: 100 },
       },
@@ -95,7 +95,7 @@ export default function AdminShowtimes() {
         movie: "Laugh Out Loud",
         screen: "Screen 1 - IMAX",
         screenType: "imax",
-        theater: "CinemaFlow Mall",
+        theater: "Cinema Listic Mall",
         time: "03:30 PM",
         seats: { booked: 67, total: 120 },
       },
@@ -105,7 +105,7 @@ export default function AdminShowtimes() {
         movie: "Midnight Shadows",
         screen: "Screen 4 - Dolby Atmos",
         screenType: "dolby",
-        theater: "CinemaFlow Downtown",
+        theater: "Cinema Listic Downtown",
         time: "05:00 PM",
         seats: { booked: 150, total: 150 },
       },
@@ -115,7 +115,7 @@ export default function AdminShowtimes() {
         movie: "The Last Adventure",
         screen: "Screen 1 - IMAX",
         screenType: "imax",
-        theater: "CinemaFlow Downtown",
+        theater: "Cinema Listic Downtown",
         time: "07:45 PM",
         seats: { booked: 89, total: 120 },
       },
@@ -125,7 +125,7 @@ export default function AdminShowtimes() {
         movie: "Hearts Entwined",
         screen: "Screen 2 - Standard",
         screenType: "standard",
-        theater: "CinemaFlow Mall",
+        theater: "Cinema Listic Mall",
         time: "08:00 PM",
         seats: { booked: 67, total: 150 },
       },
@@ -135,7 +135,7 @@ export default function AdminShowtimes() {
         movie: "Laugh Out Loud",
         screen: "Screen 3 - Premium",
         screenType: "premium",
-        theater: "CinemaFlow Mall",
+        theater: "Cinema Listic Mall",
         time: "09:15 PM",
         seats: { booked: 43, total: 100 },
       },
@@ -708,7 +708,7 @@ export default function AdminShowtimes() {
         </section>
 
         {/* Footer (optional) */}
-        <footer className="as-footer">© 2025 CinemaFlow. All rights reserved.</footer>
+        <footer className="as-footer">© 2025 Cinema Listic. All rights reserved.</footer>
       </main>
     </div>
   );

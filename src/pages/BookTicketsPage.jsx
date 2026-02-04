@@ -144,7 +144,7 @@ export default function BookTicketsPage() {
                 </div>
                 <div className="cf-bookInfoRow">
                   <span>📍 Theater</span>
-                  <span>CinemaFlow Downtown</span>
+                  <span>Cinema Listic Downtown</span>
                 </div>
               </div>
 

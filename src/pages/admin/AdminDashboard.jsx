@@ -229,7 +229,7 @@ export default function AdminDashboard() {
                 </div>
               </section>
 
-              <footer className="admin-footer">© 2025 CinemaFlow. All rights reserved.</footer>
+              <footer className="admin-footer">© 2025 Cinema Listic. All rights reserved.</footer>
             </div>
 
             {/* RIGHT */}

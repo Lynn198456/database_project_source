@@ -40,7 +40,7 @@ export default function BookingConfirmed() {
               <div className="cf-confirmBrand">
                 <div className="cf-confirmBrandIcon">🎟️</div>
                 <div>
-                  <div className="cf-confirmBrandName">CinemaFlow</div>
+                  <div className="cf-confirmBrandName">Cinema Listic</div>
                   <div className="cf-muted">E-Ticket</div>
                 </div>
               </div>
@@ -88,7 +88,7 @@ export default function BookingConfirmed() {
                     <div className="cf-confirmInfoIcon orange">📍</div>
                     <div>
                       <div className="cf-muted">Theater</div>
-                      <div>CinemaFlow Downtown</div>
+                      <div>Cinema Listic Downtown</div>
                       <div className="cf-muted">Screen 1 - IMAX</div>
                     </div>
                   </div>

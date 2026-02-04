@@ -22,7 +22,7 @@ L.Icon.Default.mergeOptions({
 const THEATERS = [
   {
     id: "t1",
-    name: "CinemaFlow Downtown",
+    name: "Cinema Listic Downtown",
     address: "Sukhumvit Rd, Bangkok",
     phone: "+66 2 123 4567",
     screens: 6,
@@ -31,7 +31,7 @@ const THEATERS = [
   },
   {
     id: "t2",
-    name: "CinemaFlow Mall",
+    name: "Cinema Listic Mall",
     address: "Central Mall, Bangkok",
     phone: "+66 2 987 6543",
     screens: 8,

@@ -9,7 +9,7 @@ const DEFAULT_BOOKING = {
     "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=900&auto=format&fit=crop",
   date: "Nov 25, 2024",
   time: "07:45 PM",
-  theater: "CinemaFlow Downtown",
+  theater: "Cinema Listic Downtown",
   screen: "Screen 1 - IMAX",
   taxRate: 0.08,
 };

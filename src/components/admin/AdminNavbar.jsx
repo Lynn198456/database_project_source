@@ -16,7 +16,7 @@ export default function AdminNavbar() {
         <div className="admin-brand">
           <div className="brand-icon">🎬</div>
           <div>
-            <strong>CinemaFlow Management</strong>
+            <strong>Cinema Listic Management</strong>
             <span>Administrator Dashboard</span>
           </div>
         </div>

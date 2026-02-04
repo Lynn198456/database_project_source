@@ -9,7 +9,7 @@ const STORAGE_KEY = "cinemaFlow_admin_theaters_v1";
 const demoTheaters = [
   {
     id: 1,
-    name: "CinemaFlow Downtown",
+    name: "Cinema Listic Downtown",
     status: "Active",
     address: "123 Main Street, City, State 12345",
     phone: "(555) 123-4567",
@@ -93,7 +93,7 @@ const demoTheaters = [
   },
   {
     id: 2,
-    name: "CinemaFlow Mall Location",
+    name: "Cinema Listic Mall Location",
     status: "Active",
     address: "456 Shopping Ave, City, State 12345",
     phone: "(555) 234-5678",
@@ -161,7 +161,7 @@ const demoTheaters = [
   },
   {
     id: 3,
-    name: "CinemaFlow Suburban",
+    name: "Cinema Listic Suburban",
     status: "Active",
     address: "88 Green Road, City, State 12345",
     phone: "(555) 345-6789",
@@ -528,7 +528,7 @@ export default function AdminTheaters() {
         </>
 
         <div className="theaters-footer">
-          © 2025 CinemaFlow. All rights reserved.
+          © 2025 Cinema Listic. All rights reserved.
         </div>
       </div>
 
@@ -540,7 +540,7 @@ export default function AdminTheaters() {
               <div className="drawerTitle">
                 <div className="drawerIcon">🖥️</div>
                 <div>
-                  <h3>Screens - {selected.name.replace("CinemaFlow ", "")}</h3>
+                  <h3>Screens - {selected.name.replace("Cinema Listic ", "")}</h3>
                   <p>Manage screens, capacity, and status</p>
                 </div>
               </div>

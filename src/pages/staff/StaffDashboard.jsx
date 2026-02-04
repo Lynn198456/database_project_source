@@ -178,7 +178,7 @@ export default function StaffDashboard() {
             </div>
           </div>
 
-          <div className="staff-footer">© 2025 CinemaFlow Staff Portal</div>
+          <div className="staff-footer">© 2025 Cinema Listic Staff Portal</div>
         </div>
       </main>
     </div>

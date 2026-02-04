@@ -34,7 +34,7 @@ export default function StaffNavbar() {
           <div className="sn-brand">
             <span className="sn-logo">🎬</span>
             <div className="sn-brandText">
-              <div className="sn-title">CinemaFlow Staff Portal</div>
+              <div className="sn-title">Cinema Listic Staff Portal</div>
               <div className="sn-sub">Welcome, {staff?.name || "Staff Member"}</div>
             </div>
           </div>

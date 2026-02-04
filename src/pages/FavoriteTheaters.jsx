@@ -18,21 +18,21 @@ function loadFavorites() {
 const SEED_FAV = [
   {
     id: "TH-001",
-    name: "CinemaFlow Downtown",
+    name: "Cinema Listic Downtown",
     address: "123 Main Street",
     visits: 8,
     img: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1400&auto=format&fit=crop",
   },
   {
     id: "TH-002",
-    name: "CinemaFlow Mall Location",
+    name: "Cinema Listic Mall Location",
     address: "456 Shopping Ave",
     visits: 5,
     img: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1400&auto=format&fit=crop",
   },
   {
     id: "TH-003",
-    name: "CinemaFlow Suburban",
+    name: "Cinema Listic Suburban",
     address: "789 Suburban Blvd",
     visits: 2,
     img: "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?q=80&w=1400&auto=format&fit=crop",

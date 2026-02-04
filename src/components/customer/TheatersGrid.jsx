@@ -1,7 +1,7 @@
 const THEATERS = [
   {
     id: 1,
-    name: "CinemaFlow Downtown",
+    name: "Cinema Listic Downtown",
     address: "123 Main Street, City, State 12345",
     phone: "(555) 123-4567",
     screens: 8,
@@ -12,7 +12,7 @@ const THEATERS = [
   },
   {
     id: 2,
-    name: "CinemaFlow Mall Location",
+    name: "Cinema Listic Mall Location",
     address: "456 Shopping Ave, City, State 12345",
     phone: "(555) 234-5678",
     screens: 6,
@@ -23,7 +23,7 @@ const THEATERS = [
   },
   {
     id: 3,
-    name: "CinemaFlow Riverside",
+    name: "Cinema Listic Riverside",
     address: "789 River Road, City, State 12345",
     phone: "(555) 345-6789",
     screens: 5,

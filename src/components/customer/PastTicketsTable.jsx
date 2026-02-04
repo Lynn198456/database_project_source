@@ -2,7 +2,7 @@ const PAST = [
   {
     id: "TKT-2024-003",
     movie: "Laugh Out Loud",
-    theater: "CinemaFlow Downtown",
+    theater: "Cinema Listic Downtown",
     datetime: "Nov 20, 2024 05:00 PM",
     seats: "B8, B9",
     price: 24.0,
@@ -11,7 +11,7 @@ const PAST = [
   {
     id: "TKT-2024-004",
     movie: "Midnight Shadows",
-    theater: "CinemaFlow Suburban",
+    theater: "Cinema Listic Suburban",
     datetime: "Nov 15, 2024 09:00 PM",
     seats: "F12",
     price: 12.0,
@@ -20,7 +20,7 @@ const PAST = [
   {
     id: "TKT-2024-005",
     movie: "The Last Adventure",
-    theater: "CinemaFlow Downtown",
+    theater: "Cinema Listic Downtown",
     datetime: "Nov 10, 2024 07:45 PM",
     seats: "C15, C16",
     price: 30.0,

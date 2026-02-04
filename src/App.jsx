@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Pages
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import CustomerHome from "./pages/CustomerHome";
 import MoviesPage from "./pages/MoviesPage";
 import ShowtimesPage from "./pages/ShowtimesPage";
@@ -81,6 +82,7 @@ export default function App() {
       <Routes>
         {/* Public */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
         {/* CUSTOMER ROUTES */}
         <Route
