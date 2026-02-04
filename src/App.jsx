@@ -33,6 +33,8 @@ import AdminShowtimes from "./pages/admin/AdminShowtimes";
 import AdminTheaters from "./pages/admin/AdminTheaters";
 import AdminTeam from "./pages/admin/AdminTeam";
 import AdminProfile from "./pages/admin/AdminProfile";
+import AdminMovieEdit from "./pages/admin/AdminMovieEdit";
+import AdminSchedule from "./pages/admin/AdminSchedule";
 /*
   localStorage user example:
   key: cinemaFlow_user

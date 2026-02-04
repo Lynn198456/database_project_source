@@ -715,50 +715,34 @@ export default function Profile() {
             </div>
 
             {/* SECURITY SETTINGS */}
-<div
-  className="pf-secRow"
-  role="button"
-  tabIndex={0}
-  onClick={() => setMsg("Change Password feature is coming soon ✅")}
-  onKeyDown={(e) => e.key === "Enter" && setMsg("Change Password feature is coming soon ✅")}
->
-<div
-  className="pf-secRow"
-  role="button"
-  tabIndex={0}
-  onClick={() => navigate("/customer/change-password")}
-  onKeyDown={(e) => e.key === "Enter" && navigate("/customer/change-password")}
->
-  <div>Change Password</div>
-  <div className="pf-secIcon">✏️</div>
-</div>
+            <div className="pf-secList">
+              <div
+                className="pf-secRow"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate("/customer/change-password")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/change-password")}
+              >
+                <div>Change Password</div>
+                <div className="pf-secIcon">✏️</div>
+              </div>
 
+              <div className="pf-secRow">
+                <div>Two-Factor Authentication</div>
+                <div className="pf-pillGreen">Enabled</div>
+              </div>
 
-<div className="pf-secRow">
-  <div>Two-Factor Authentication</div>
-  <div className="pf-pillGreen">Enabled</div>
-</div>
-
-<div
-  className="pf-secRow"
-  role="button"
-  tabIndex={0}
-  onClick={() => setMsg("Login History feature is coming soon ✅")}
-  onKeyDown={(e) => e.key === "Enter" && setMsg("Login History feature is coming soon ✅")}
->
-<div
-  className="pf-secRow"
-  role="button"
-  tabIndex={0}
-  onClick={() => navigate("/customer/login-history")}
-  onKeyDown={(e) => e.key === "Enter" && navigate("/customer/login-history")}
->
-  <div>Login History</div>
-  <div className="pf-secIcon">📜</div>
-</div>
-</div>
-</div>
-
+              <div
+                className="pf-secRow"
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate("/customer/login-history")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/login-history")}
+              >
+                <div>Login History</div>
+                <div className="pf-secIcon">📜</div>
+              </div>
+            </div>
 
             {/* ACTION BUTTONS */}
 
