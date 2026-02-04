@@ -126,6 +126,19 @@ export default function AdminTeam() {
   const [q, setQ] = useState("");
   const [role, setRole] = useState("All Roles");
   const [status, setStatus] = useState("All Status");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("add"); // add | edit
+  const [activeMemberId, setActiveMemberId] = useState(null);
+  const [form, setForm] = useState({
+    name: "",
+    role: "Staff",
+    department: "",
+    status: "Active",
+    email: "",
+    phone: "",
+    assignedTheaters: "",
+    permissions: "",
+  });
 
   const stats = useMemo(() => {
     const total = members.length;
@@ -162,11 +175,35 @@ export default function AdminTeam() {
   }, [members]);
 
   function onAddMember() {
-    alert("Add Team Member (connect modal later)");
+    setModalMode("add");
+    setActiveMemberId(null);
+    setForm({
+      name: "",
+      role: "Staff",
+      department: "",
+      status: "Active",
+      email: "",
+      phone: "",
+      assignedTheaters: "",
+      permissions: "",
+    });
+    setModalOpen(true);
   }
 
   function onEdit(member) {
-    alert(`Edit: ${member.name} (connect modal later)`);
+    setModalMode("edit");
+    setActiveMemberId(member.id);
+    setForm({
+      name: member.name,
+      role: member.role,
+      department: member.department,
+      status: member.status,
+      email: member.email,
+      phone: member.phone,
+      assignedTheaters: member.assignedTheaters.join(", "),
+      permissions: member.permissions.join(", "),
+    });
+    setModalOpen(true);
   }
 
   function onDelete(memberId) {
@@ -178,6 +215,65 @@ export default function AdminTeam() {
     setQ("");
     setRole("All Roles");
     setStatus("All Status");
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+  }
+
+  function updateField(key, value) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handleSave(e) {
+    e.preventDefault();
+    const assignedTheaters = form.assignedTheaters
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+    const permissions = form.permissions
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+
+    if (modalMode === "add") {
+      const nextId = Math.max(0, ...members.map((m) => m.id)) + 1;
+      const newMember = {
+        id: nextId,
+        name: form.name.trim(),
+        role: form.role,
+        department: form.department.trim() || "General",
+        status: form.status,
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        lastActive: "Just now",
+        assignedTheaters,
+        permissions,
+        avatarColor: "blue",
+        since: "Feb 2026",
+      };
+      setMembers((prev) => [newMember, ...prev]);
+    } else {
+      setMembers((prev) =>
+        prev.map((m) =>
+          m.id === activeMemberId
+            ? {
+                ...m,
+                name: form.name.trim(),
+                role: form.role,
+                department: form.department.trim() || "General",
+                status: form.status,
+                email: form.email.trim(),
+                phone: form.phone.trim(),
+                assignedTheaters,
+                permissions,
+              }
+            : m
+        )
+      );
+    }
+
+    closeModal();
   }
 
   return (
@@ -245,6 +341,10 @@ export default function AdminTeam() {
 
             <button className="team-clearBtn" onClick={clearAllFilters}>
               Clear
+            </button>
+
+            <button className="team-addInline" onClick={onAddMember}>
+              ＋ Add Member
             </button>
           </section>
 
@@ -367,6 +467,104 @@ export default function AdminTeam() {
           <footer className="admin-footer">© 2025 CinemaFlow. All rights reserved.</footer>
         </main>
       </div>
+
+      {modalOpen ? (
+        <div className="team-modalOverlay" onClick={closeModal}>
+          <div className="team-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="team-modalHead">
+              <h3>{modalMode === "add" ? "Add Team Member" : "Edit Team Member"}</h3>
+              <button className="team-modalClose" onClick={closeModal}>
+                ✕
+              </button>
+            </div>
+
+            <form className="team-modalBody" onSubmit={handleSave}>
+              <label>
+                Name
+                <input
+                  value={form.name}
+                  onChange={(e) => updateField("name", e.target.value)}
+                  required
+                />
+              </label>
+
+              <label>
+                Role
+                <select
+                  value={form.role}
+                  onChange={(e) => updateField("role", e.target.value)}
+                >
+                  <option>Administrator</option>
+                  <option>Manager</option>
+                  <option>Staff</option>
+                </select>
+              </label>
+
+              <label>
+                Department
+                <input
+                  value={form.department}
+                  onChange={(e) => updateField("department", e.target.value)}
+                />
+              </label>
+
+              <label>
+                Status
+                <select
+                  value={form.status}
+                  onChange={(e) => updateField("status", e.target.value)}
+                >
+                  <option>Active</option>
+                  <option>On Leave</option>
+                  <option>Inactive</option>
+                </select>
+              </label>
+
+              <label>
+                Email
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => updateField("email", e.target.value)}
+                />
+              </label>
+
+              <label>
+                Phone
+                <input
+                  value={form.phone}
+                  onChange={(e) => updateField("phone", e.target.value)}
+                />
+              </label>
+
+              <label className="team-modalSpan">
+                Assigned Theaters (comma separated)
+                <input
+                  value={form.assignedTheaters}
+                  onChange={(e) => updateField("assignedTheaters", e.target.value)}
+                />
+              </label>
+
+              <label className="team-modalSpan">
+                Permissions (comma separated)
+                <input
+                  value={form.permissions}
+                  onChange={(e) => updateField("permissions", e.target.value)}
+                />
+              </label>
+
+              <div className="team-modalActions">
+                <button className="team-modalPrimary" type="submit">
+                  {modalMode === "add" ? "Add Member" : "Save Changes"}
+                </button>
+                <button className="team-modalSecondary" type="button" onClick={closeModal}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

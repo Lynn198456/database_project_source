@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import "../../styles/admin/adminTheaters.css";
 
 const STORAGE_KEY = "cinemaFlow_admin_theaters_v1";
+
 
 const demoTheaters = [
   {
@@ -21,7 +23,7 @@ const demoTheaters = [
       occupancy: 68,
     },
     facilities: ["IMAX", "Dolby Atmos", "Premium Seating", "Cafe"],
-    coords: { x: 45, y: 40 }, // used for demo map positioning (percent)
+    location: { lat: 40.758, lng: -73.9855 },
     screens: [
       {
         id: 1,
@@ -105,7 +107,7 @@ const demoTheaters = [
       occupancy: 72,
     },
     facilities: ["4K Projection", "Dolby Atmos", "Food Court"],
-    coords: { x: 70, y: 55 },
+    location: { lat: 40.7306, lng: -73.9975 },
     screens: [
       {
         id: 1,
@@ -173,7 +175,7 @@ const demoTheaters = [
       occupancy: 61,
     },
     facilities: ["Kids Zone", "Snack Bar", "3D"],
-    coords: { x: 35, y: 70 },
+    location: { lat: 40.7128, lng: -74.006 },
     screens: [
       {
         id: 1,
@@ -235,7 +237,7 @@ function safeSave(value) {
 }
 
 export default function AdminTheaters() {
-  const [view, setView] = useState("list"); // list | map
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [theaters, setTheaters] = useState(() => safeLoad() || demoTheaters);
@@ -250,6 +252,7 @@ export default function AdminTheaters() {
     safeSave(theaters);
   }, [theaters]);
 
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return theaters.filter((t) => {
@@ -262,6 +265,7 @@ export default function AdminTheaters() {
       return matchesQ && matchesS;
     });
   }, [theaters, query, status]);
+
 
   const totals = useMemo(() => {
     const totalTheaters = theaters.length;
@@ -279,6 +283,7 @@ export default function AdminTheaters() {
   function clearFilters() {
     setQuery("");
     setStatus("all");
+    setSelectedId(null);
   }
 
   function openManage(tid) {
@@ -302,7 +307,7 @@ export default function AdminTheaters() {
         "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=80",
       stats: { screens: 4, seats: 600, todaysShows: 0, occupancy: 0 },
       facilities: ["Standard"],
-      coords: { x: 55, y: 60 },
+      location: { lat: 40.741, lng: -73.99 },
       screens: [],
     };
     setTheaters((prev) => [newTheater, ...prev]);
@@ -392,18 +397,7 @@ export default function AdminTheaters() {
           </div>
 
           <div className="theaters-toggle">
-            <button
-              className={`toggleBtn ${view === "list" ? "active" : ""}`}
-              onClick={() => setView("list")}
-            >
-              ☰ List View
-            </button>
-            <button
-              className={`toggleBtn ${view === "map" ? "active" : ""}`}
-              onClick={() => setView("map")}
-            >
-              🗺️ Map View
-            </button>
+            <button className="toggleBtn active">☰ List View</button>
           </div>
         </div>
 
@@ -425,17 +419,16 @@ export default function AdminTheaters() {
             <option value="inactive">Inactive</option>
           </select>
 
-          <button className="clearAll" onClick={clearFilters}>
+          <button className="clearAll" type="button" onClick={clearFilters}>
             Clear All
           </button>
         </div>
 
         {/* MAIN VIEW */}
-        {view === "list" ? (
-          <>
-            <div className="theaters-grid">
-              {filtered.map((t) => (
-                <div key={t.id} className="theater-card">
+        <>
+          <div className="theaters-grid">
+            {filtered.map((t) => (
+              <div key={t.id} className="theater-card">
                   <div
                     className="theater-hero"
                     style={{ backgroundImage: `url(${t.hero})` }}
@@ -499,98 +492,40 @@ export default function AdminTheaters() {
                   </div>
                 </div>
               ))}
-            </div>
+          </div>
 
-            {/* Performance Overview */}
-            <div className="perfCard">
-              <div className="perfHead">
-                <div className="perfIcon">📈</div>
-                <div>
-                  <h3>Performance Overview</h3>
-                  <p>Quick summary across all theaters</p>
-                </div>
-              </div>
-
-              <div className="perfGrid">
-                <div className="perfBox blue">
-                  <div className="perfLabel">Total Theaters</div>
-                  <div className="perfValue">{totals.totalTheaters}</div>
-                </div>
-                <div className="perfBox purple">
-                  <div className="perfLabel">Total Screens</div>
-                  <div className="perfValue">{totals.totalScreens}</div>
-                </div>
-                <div className="perfBox orange">
-                  <div className="perfLabel">Total Capacity</div>
-                  <div className="perfValue">
-                    {totals.totalCapacity.toLocaleString()}
-                  </div>
-                </div>
-                <div className="perfBox green">
-                  <div className="perfLabel">Avg Occupancy</div>
-                  <div className="perfValue">{totals.avgOcc}%</div>
-                </div>
+          {/* Performance Overview */}
+          <div className="perfCard">
+            <div className="perfHead">
+              <div className="perfIcon">📈</div>
+              <div>
+                <h3>Performance Overview</h3>
+                <p>Quick summary across all theaters</p>
               </div>
             </div>
-          </>
-        ) : (
-          <div className="mapCard">
-            <div className="mapInner">
-              <div className="mapTools">
-                <button className="mapToolBtn">＋</button>
-                <button className="mapToolBtn">➤</button>
-              </div>
 
-              <div className="legend">
-                <div className="legendTitle">Legend</div>
-                <div className="legendRow">
-                  <span className="legendDot theaterDot" /> Theater Location
-                </div>
-                <div className="legendRow">
-                  <span className="legendDot userDot" /> Your Location
+            <div className="perfGrid">
+              <div className="perfBox blue">
+                <div className="perfLabel">Total Theaters</div>
+                <div className="perfValue">{totals.totalTheaters}</div>
+              </div>
+              <div className="perfBox purple">
+                <div className="perfLabel">Total Screens</div>
+                <div className="perfValue">{totals.totalScreens}</div>
+              </div>
+              <div className="perfBox orange">
+                <div className="perfLabel">Total Capacity</div>
+                <div className="perfValue">
+                  {totals.totalCapacity.toLocaleString()}
                 </div>
               </div>
-
-              {/* "Your location" */}
-              <div className="mapMarker user" style={{ left: "55%", top: "48%" }}>
-                <div className="pulse user" />
-                <div className="pin user" />
-              </div>
-
-              {/* Theater markers */}
-              {filtered.map((t) => (
-                <button
-                  key={t.id}
-                  className="mapMarker theater"
-                  style={{ left: `${t.coords.x}%`, top: `${t.coords.y}%` }}
-                  onClick={() => openManage(t.id)}
-                  title={t.name}
-                >
-                  <div className="pulse theater" />
-                  <div className="pin theater" />
-                  <div className="distance">{t.distance}</div>
-                </button>
-              ))}
-
-              {/* Bottom theater quick cards */}
-              <div className="mapBottomCards">
-                {filtered.slice(0, 3).map((t) => (
-                  <div key={t.id} className="miniCard" onClick={() => openManage(t.id)}>
-                    <div className="miniTitle">
-                      {t.name.split("CinemaFlow ").join("") || t.name}
-                      <span className="miniPin">📍</span>
-                    </div>
-                    <div className="miniDistance">{t.distance}</div>
-                    <div className="miniTags">
-                      <span className="miniTag blue">{t.stats.screens} screens</span>
-                      <span className="miniTag purple">{t.stats.seats} seats</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="perfBox green">
+                <div className="perfLabel">Avg Occupancy</div>
+                <div className="perfValue">{totals.avgOcc}%</div>
               </div>
             </div>
           </div>
-        )}
+        </>
 
         <div className="theaters-footer">
           © 2025 CinemaFlow. All rights reserved.

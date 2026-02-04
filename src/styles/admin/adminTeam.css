@@ -133,7 +133,7 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   display: grid;
-  grid-template-columns: 1fr 180px 180px 110px;
+  grid-template-columns: 1fr 180px 180px 110px 150px;
   gap: 12px;
   align-items: center;
 }
@@ -187,6 +187,129 @@
 }
 .team-clearBtn:hover {
   background: rgba(255, 255, 255, 0.1);
+}
+
+.team-addInline {
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 12px 12px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+}
+
+.team-addInline:hover {
+  filter: brightness(1.05);
+}
+
+/* Modal */
+.team-modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.team-modal {
+  width: min(700px, 92%);
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 18px;
+  color: #e5e7eb;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.team-modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.team-modalHead h3 {
+  margin: 0;
+}
+
+.team-modalClose {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.team-modalBody {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.team-modalBody label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.team-modalBody input,
+.team-modalBody select {
+  background: rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #e5e7eb;
+}
+
+.team-modalSpan {
+  grid-column: span 2;
+}
+
+.team-modalActions {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.team-modalPrimary,
+.team-modalSecondary {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.team-modalPrimary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+}
+
+.team-modalSecondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 700px) {
+  .team-modalBody {
+    grid-template-columns: 1fr;
+  }
+  .team-modalSpan {
+    grid-column: span 1;
+  }
+  .team-modalActions {
+    grid-column: span 1;
+    justify-content: stretch;
+  }
 }
 
 /* List */

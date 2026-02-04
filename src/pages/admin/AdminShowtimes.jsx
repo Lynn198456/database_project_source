@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import "../../styles/admin/adminShowtimes.css";
 
@@ -24,6 +25,7 @@ function toISODate(d) {
 }
 
 export default function AdminShowtimes() {
+  const navigate = useNavigate();
   // Selected date (default today)
   const [selectedDate, setSelectedDate] = useState(() => toISODate(new Date()));
   const prettySelected = useMemo(() => formatPrettyDate(selectedDate), [selectedDate]);
@@ -200,7 +202,7 @@ export default function AdminShowtimes() {
   }, [selectedDate]);
 
   function onScheduleNew() {
-    alert("Schedule New Showtime (connect your form/page later)");
+    navigate("/admin/showtimes/schedule/new");
   }
 
   function onEditRow(id) {

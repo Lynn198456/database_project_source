@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import QuickBooking from "../../components/admin/QuickBooking";
 import "../../styles/admin/adminDashboard.css"; // ✅ ONLY THIS
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const kpis = useMemo(
     () => [
       { color: "blue", icon: "🎬", label: "Active Movies", value: "12", hint: "+2 this week" },
@@ -67,9 +69,6 @@ export default function AdminDashboard() {
             </div>
 
             <div className="admin-actionsRight">
-              <button className="btn-ghost" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-                ⬆ Back to top
-              </button>
             </div>
           </div>
 
@@ -143,8 +142,18 @@ export default function AdminDashboard() {
                         </div>
 
                         <div className="movie-actions">
-                          <button className="btn-primary">✏️ Edit</button>
-                          <button className="btn-ghost">📅 Schedule</button>
+                          <button
+                            className="btn-primary"
+                            onClick={() => navigate(`/admin/movies/edit/${m.id}`)}
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button
+                            className="btn-ghost"
+                            onClick={() => navigate(`/admin/showtimes/schedule/${m.id}`)}
+                          >
+                            📅 Schedule
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -184,7 +193,12 @@ export default function AdminDashboard() {
                             </span>
                           </td>
                           <td style={{ textAlign: "right" }}>
-                            <button className="btn-table">Manage</button>
+                            <button
+                              className="btn-table"
+                              onClick={() => navigate(`/admin/showtimes/schedule/${s.id}`)}
+                            >
+                              Manage
+                            </button>
                           </td>
                         </tr>
                       ))}

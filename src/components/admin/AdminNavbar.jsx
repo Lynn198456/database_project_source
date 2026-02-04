@@ -1,7 +1,13 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../../styles/admin/adminNavbar.css";
 
 export default function AdminNavbar() {
+  const navigate = useNavigate();
+
+  function logout() {
+    localStorage.removeItem("cinemaFlow_user");
+    navigate("/login");
+  }
   return (
     <header className="admin-nav">
       <div className="admin-nav-inner">
@@ -57,7 +63,9 @@ export default function AdminNavbar() {
         {/* Actions */}
         <div className="admin-actions">
           <span className="bell">🔔</span>
-          <button className="logout">Logout</button>
+          <button className="logout" onClick={logout}>
+            Logout
+          </button>
         </div>
 
       </div>

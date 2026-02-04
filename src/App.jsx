@@ -33,6 +33,8 @@ import AdminShowtimes from "./pages/admin/AdminShowtimes";
 import AdminTheaters from "./pages/admin/AdminTheaters";
 import AdminTeam from "./pages/admin/AdminTeam";
 import AdminProfile from "./pages/admin/AdminProfile";
+import AdminMovieEdit from "./pages/admin/AdminMovieEdit";
+import AdminSchedule from "./pages/admin/AdminSchedule";
 /*
   localStorage user example:
   key: cinemaFlow_user
@@ -281,6 +283,8 @@ export default function App() {
       <Route path="/admin/theaters" element={<AdminTheaters />} />
       <Route path="/admin/team" element={<AdminTeam />} />
       <Route path="/admin/profile" element={<AdminProfile />} />
+      <Route path="/admin/movies/edit/:id" element={<AdminMovieEdit />} />
+      <Route path="/admin/showtimes/schedule/:id" element={<AdminSchedule />} />
       
         {/* Default / fallback */}
         <Route path="/" element={<Navigate to="/login" replace />} />

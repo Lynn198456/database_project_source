@@ -17,3 +17,46 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
+
+## Backend (Next.js + MongoDB)
+
+This repo includes a separate Next.js backend in `backend/` with API routes and a MongoDB connection.
+
+### Setup
+
+1. Install backend dependencies:
+
+```bash
+cd backend
+npm install
+```
+
+2. Create `backend/.env.local` with your MongoDB connection string:
+
+```bash
+MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/?retryWrites=true&w=majority
+MONGODB_DB=app
+FRONTEND_ORIGIN=http://localhost:5173
+```
+
+3. Run the backend:
+
+```bash
+cd backend
+npm run dev
+```
+
+The backend runs on `http://localhost:4000` by default.
+
+### Endpoints
+
+- `GET /api/health` -> service health check
+- `GET /api/items` -> list items
+- `POST /api/items` -> create item `{ "name": "...", "value": "..." }`
+- `GET /api/items/:id` -> fetch item by id
+- `PUT /api/items/:id` -> update item `{ "name": "...", "value": "..." }`
+- `DELETE /api/items/:id` -> delete item
+
+## Frontend API Config
+
+Set `VITE_API_BASE_URL` in a local `.env` file if your backend is not running on the default `http://localhost:4000`.

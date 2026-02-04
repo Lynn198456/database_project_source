@@ -114,6 +114,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 8px;
   border-radius: 16px;
+  align-items: center;
 }
 
 .toggleBtn {
@@ -131,6 +132,30 @@
   border-color: rgba(255, 255, 255, 0.2);
   color: #fff;
   box-shadow: 0 14px 34px rgba(245, 158, 11, 0.2);
+}
+
+.mapSearchWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mapSearchIcon {
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.mapSearchInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 14px;
+  width: 160px;
 }
 
 /* ================= Filters ================= */
@@ -512,11 +537,23 @@
 .mapInner {
   position: relative;
   height: 520px;
-  background-image:
-    linear-gradient(180deg, rgba(2, 6, 23, 0.35), rgba(2, 6, 23, 0.65)),
-    url("https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=1600&q=80");
-  background-size: cover;
-  background-position: center;
+  background: #0f172a;
+}
+
+.mapLeaflet {
+  height: 100%;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.mapLoading {
+  margin-top: 18px;
+  border-radius: 22px;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(226, 232, 240, 0.8);
 }
 
 .mapTools {
@@ -583,6 +620,123 @@
   background: #60a5fa;
 }
 
+.mapPanel {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  width: min(360px, 88%);
+  background: rgba(10, 15, 28, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 14px;
+  z-index: 4;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.mapPanelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mapPanelTitle {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.mapPanelSub {
+  font-weight: 1000;
+  margin-top: 4px;
+}
+
+.mapStatus {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.mapStatus.active {
+  background: rgba(34, 197, 94, 0.2);
+  color: #a7f3d0;
+}
+.mapStatus.maintenance {
+  background: rgba(249, 115, 22, 0.2);
+  color: #fed7aa;
+}
+.mapStatus.inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fecaca;
+}
+
+.mapPanelBody {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.mapPanelRow {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+}
+
+.mapPanelStats {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mapPanelLabel {
+  font-size: 11px;
+  color: rgba(226, 232, 240, 0.6);
+}
+
+.mapPanelValue {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.mapPanelActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.mapManage {
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+.mapClear {
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 900;
+  color: rgba(226, 232, 240, 0.9);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.mapPanelEmpty {
+  color: rgba(226, 232, 240, 0.7);
+  font-size: 13px;
+}
+
 /* markers */
 .mapMarker {
   position: absolute;
@@ -640,6 +794,11 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.mapMarker.theater.active .pin {
+  box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.2),
+    0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
 @keyframes pulse {
   0% {
     transform: scale(0.85);
@@ -681,6 +840,11 @@
   border: 1px solid rgba(255, 255, 255, 0.12);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+}
+
+.miniCard.active {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
 }
 
 .miniTitle {

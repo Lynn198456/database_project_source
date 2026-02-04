@@ -1,0 +1,103 @@
+.ame-page {
+  min-height: 100vh;
+  background: #0f1115;
+  color: #e9edf2;
+}
+
+.ame-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.ame-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ame-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.ame-header p {
+  margin: 6px 0 0;
+  color: #9aa4b2;
+}
+
+.ame-card {
+  background: #141923;
+  border: 1px solid #1f2a3a;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.ame-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.ame-grid label {
+  display: grid;
+  gap: 6px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.ame-grid input,
+.ame-grid select {
+  background: #0e121a;
+  border: 1px solid #273247;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #e9edf2;
+}
+
+.ame-grid input:focus,
+.ame-grid select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.ame-span {
+  grid-column: span 2;
+}
+
+.ame-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.ame-primary,
+.ame-secondary {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ame-primary {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.ame-secondary {
+  background: #1f2a3a;
+  color: #e9edf2;
+}
+
+@media (max-width: 800px) {
+  .ame-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ame-span {
+    grid-column: span 1;
+  }
+}
