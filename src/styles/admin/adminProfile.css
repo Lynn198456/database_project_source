@@ -659,6 +659,102 @@
   border-radius: 14px;
   cursor: pointer;
 }
+
+/* Edit profile modal */
+.ap-modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.ap-modal {
+  width: min(640px, 92%);
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 18px;
+  color: #e5e7eb;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.ap-modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.ap-modalClose {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.ap-modalBody {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.ap-modalBody label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: rgba(226, 232, 240, 0.85);
+}
+
+.ap-modalBody input {
+  background: rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #e5e7eb;
+}
+
+.ap-modalActions {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.ap-modalPrimary,
+.ap-modalSecondary {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.ap-modalPrimary {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #fff;
+}
+
+.ap-modalSecondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 700px) {
+  .ap-modalBody {
+    grid-template-columns: 1fr;
+  }
+  .ap-modalActions {
+    grid-column: span 1;
+    justify-content: stretch;
+  }
+}
 .ap-cancelBtn:hover {
   background: rgba(255, 255, 255, 0.1);
 }

@@ -257,7 +257,7 @@ export default function ShowtimesTable() {
                   <td>{d.date}</td>
                   <td>{d.time}</td>
                   <td>{d.seats}</td>
-                  <td>${d.price.toFixed(2)}</td>
+                  <td>฿{d.price.toFixed(2)}</td>
                   <td>
                     <span className={`cf-stPill ${pillClass(d.status)}`}>{d.status}</span>
                   </td>

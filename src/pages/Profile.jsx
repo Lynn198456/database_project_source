@@ -469,7 +469,7 @@ export default function Profile() {
                 title="View Spending History"
               >
                 💰 Total Spent
-                <strong>${user.spent}.00</strong>
+                <strong>฿{user.spent}.00</strong>
               </div>
             </div>
 

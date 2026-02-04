@@ -132,15 +132,15 @@ export default function BookingConfirmed() {
                 <div className="cf-h3">Payment Summary</div>
                 <div className="cf-confirmLine">
                   <span>Subtotal</span>
-                  <span>$51.00</span>
+                  <span>฿51.00</span>
                 </div>
                 <div className="cf-confirmLine">
                   <span>Tax (8%)</span>
-                  <span>$4.08</span>
+                  <span>฿4.08</span>
                 </div>
                 <div className="cf-confirmLine cf-confirmTotalLine">
                   <span>Total Paid</span>
-                  <span className="cf-confirmPaid">$55.08</span>
+                  <span className="cf-confirmPaid">฿55.08</span>
                 </div>
                 <div className="cf-muted" style={{ marginTop: 10 }}>
                   Payment Method

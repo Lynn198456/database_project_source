@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import "../../styles/admin/adminMovies.css";
 
 export default function AdminMoviesPage() {
+  const navigate = useNavigate();
   // Demo data (replace with API later)
   const [movies, setMovies] = useState([
     {
@@ -102,11 +104,11 @@ export default function AdminMoviesPage() {
   }, [movies, search, genreFilter, statusFilter]);
 
   function onAddMovie() {
-    alert("Add New Movie (connect to modal/page later)");
+    navigate("/admin/movies/edit/new");
   }
 
   function onEdit(movie) {
-    alert(`Edit: ${movie.title} (connect later)`);
+    navigate(`/admin/movies/edit/${movie.id}`);
   }
 
   function onDelete(movie) {
@@ -217,7 +219,7 @@ export default function AdminMoviesPage() {
                   {/* Optional hover CTA like your screenshot */}
                   <button
                     className="am-hoverCTA"
-                    onClick={() => alert(`View Details: ${m.title}`)}
+                    onClick={() => navigate(`/admin/movies/edit/${m.id}`)}
                   >
                     ▶ View Details
                   </button>

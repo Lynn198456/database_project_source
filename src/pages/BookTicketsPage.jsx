@@ -151,21 +151,21 @@ export default function BookTicketsPage() {
               <div className="cf-bookBill">
                 <div className="cf-bookBillRow">
                   <span>Adult × 2</span>
-                  <span>$30.00</span>
+                  <span>฿30.00</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Subtotal</span>
-                  <span>$30.00</span>
+                  <span>฿30.00</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Tax (8%)</span>
-                  <span>$2.40</span>
+                  <span>฿2.40</span>
                 </div>
               </div>
 
               <div className="cf-bookTotal">
                 <span>Total</span>
-                <span className="cf-price">$32.40</span>
+                <span className="cf-price">฿32.40</span>
               </div>
 
               <button

@@ -186,7 +186,7 @@ export default function BookTime() {
                   <div className="cf-showTime">{s.time}</div>
                   <div className="cf-showSub">{s.screen}</div>
                   <div className="cf-showMeta">
-                    {s.seats} seats • ${s.price.toFixed(2)}
+                    {s.seats} seats • ฿{s.price.toFixed(2)}
                   </div>
                 </button>
               ))}
@@ -232,16 +232,16 @@ export default function BookTime() {
             <div className="cf-summaryCost">
               <div className="cf-summaryRow">
                 <span>Adult × {pricing.qty}</span>
-                <span>${pricing.subtotal.toFixed(2)}</span>
+                <span>฿{pricing.subtotal.toFixed(2)}</span>
               </div>
               <div className="cf-summaryRow">
                 <span>Tax (8%)</span>
-                <span>${pricing.tax.toFixed(2)}</span>
+                <span>฿{pricing.tax.toFixed(2)}</span>
               </div>
               <div className="cf-summaryDivider" />
               <div className="cf-summaryTotal">
                 <span>Total</span>
-                <span>${pricing.total.toFixed(2)}</span>
+                <span>฿{pricing.total.toFixed(2)}</span>
               </div>
             </div>
 

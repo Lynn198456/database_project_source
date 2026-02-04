@@ -110,7 +110,7 @@ export default function UpcomingTickets() {
                 </div>
               </div>
 
-              <div className="cf-ticketPrice">${t.price.toFixed(2)}</div>
+              <div className="cf-ticketPrice">฿{t.price.toFixed(2)}</div>
 
               <button className="cf-blueBtn" type="button">
                 ⬇ Download

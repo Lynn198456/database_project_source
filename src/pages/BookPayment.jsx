@@ -283,21 +283,21 @@ export default function BookPaymentPage() {
               <div className="cf-bookBill">
                 <div className="cf-bookBillRow">
                   <span>Adult × {booking?.qty}</span>
-                  <span>${booking?.price?.toFixed(2)}</span>
+                  <span>฿{booking?.price?.toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Subtotal</span>
-                  <span>${booking?.price?.toFixed(2)}</span>
+                  <span>฿{booking?.price?.toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Tax (8%)</span>
-                  <span>${booking?.tax?.toFixed(2)}</span>
+                  <span>฿{booking?.tax?.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="cf-bookTotal">
                 <span>Total</span>
-                <span className="cf-price">${booking?.total?.toFixed(2)}</span>
+                <span className="cf-price">฿{booking?.total?.toFixed(2)}</span>
               </div>
 
               {/* ✅ FIXED: call completeBooking() */}

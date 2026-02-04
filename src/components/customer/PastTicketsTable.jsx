@@ -67,7 +67,7 @@ export default function PastTicketsTable() {
                 <td className="cf-muted">{r.theater}</td>
                 <td className="cf-muted">{r.datetime}</td>
                 <td className="cf-muted">{r.seats}</td>
-                <td className="cf-strong">${r.price.toFixed(2)}</td>
+                <td className="cf-strong">฿{r.price.toFixed(2)}</td>
                 <td>
                   <Status value={r.status} />
                 </td>

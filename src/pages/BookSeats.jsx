@@ -170,7 +170,7 @@ export default function BookSeats() {
                 <div className="cf-ticketRow">
                   <div>
                     <div className="cf-ticketName">Adult</div>
-                    <div className="cf-muted">${PRICES.adult.toFixed(2)} per ticket</div>
+                    <div className="cf-muted">฿{PRICES.adult.toFixed(2)} per ticket</div>
                   </div>
                   <div className="cf-counter">
                     <button onClick={() => dec(setAdult, adult)} type="button">
@@ -186,7 +186,7 @@ export default function BookSeats() {
                 <div className="cf-ticketRow">
                   <div>
                     <div className="cf-ticketName">Child (3–12 years)</div>
-                    <div className="cf-muted">${PRICES.child.toFixed(2)} per ticket</div>
+                    <div className="cf-muted">฿{PRICES.child.toFixed(2)} per ticket</div>
                   </div>
                   <div className="cf-counter">
                     <button onClick={() => dec(setChild, child)} type="button">
@@ -202,7 +202,7 @@ export default function BookSeats() {
                 <div className="cf-ticketRow">
                   <div>
                     <div className="cf-ticketName">Senior (60+)</div>
-                    <div className="cf-muted">${PRICES.senior.toFixed(2)} per ticket</div>
+                    <div className="cf-muted">฿{PRICES.senior.toFixed(2)} per ticket</div>
                   </div>
                   <div className="cf-counter">
                     <button onClick={() => dec(setSenior, senior)} type="button">
@@ -317,25 +317,25 @@ export default function BookSeats() {
               <div className="cf-bookBill">
                 <div className="cf-bookBillRow">
                   <span>Adult × {adult}</span>
-                  <span>${(adult * PRICES.adult).toFixed(2)}</span>
+                  <span>฿{(adult * PRICES.adult).toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Child × {child}</span>
-                  <span>${(child * PRICES.child).toFixed(2)}</span>
+                  <span>฿{(child * PRICES.child).toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Senior × {senior}</span>
-                  <span>${(senior * PRICES.senior).toFixed(2)}</span>
+                  <span>฿{(senior * PRICES.senior).toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Tax (8%)</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>฿{tax.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="cf-bookTotal">
                 <span>Total</span>
-                <span className="cf-price">${total.toFixed(2)}</span>
+                <span className="cf-price">฿{total.toFixed(2)}</span>
               </div>
 
               <button className="cf-orangeBtn" type="button" onClick={goNext}>

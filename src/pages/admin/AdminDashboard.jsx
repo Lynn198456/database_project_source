@@ -1,15 +1,17 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import QuickBooking from "../../components/admin/QuickBooking";
 import "../../styles/admin/adminDashboard.css"; // ✅ ONLY THIS
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const kpis = useMemo(
     () => [
       { color: "blue", icon: "🎬", label: "Active Movies", value: "12", hint: "+2 this week" },
       { color: "green", icon: "📅", label: "Today's Shows", value: "48", hint: "Across 3 locations" },
       { color: "purple", icon: "🎟️", label: "Total Bookings", value: "856", hint: "+124 today" },
-      { color: "orange", icon: "💲", label: "Revenue", value: "$12,450", hint: "+15% vs yesterday" },
+      { color: "orange", icon: "💲", label: "Revenue", value: "฿12,450", hint: "+15% vs yesterday" },
     ],
     []
   );

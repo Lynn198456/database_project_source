@@ -256,7 +256,7 @@ function ShowCard({ s, onBook }) {
         <div className="st-time">{formatTimeLabel(s.time)}</div>
         <div className="st-badges">
           <span className="st-badge st-badge--purple">{s.type}</span>
-          <span className="st-badge st-badge--gold">${s.price.toFixed(2)}</span>
+          <span className="st-badge st-badge--gold">฿{s.price.toFixed(2)}</span>
         </div>
       </div>
 

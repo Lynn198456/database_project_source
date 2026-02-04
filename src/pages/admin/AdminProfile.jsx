@@ -3,7 +3,7 @@ import "../../styles/admin/adminProfile.css";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 
 export default function AdminProfile() {
-  const profile = useMemo(
+  const initialProfile = useMemo(
     () => ({
       name: "Sarah Johnson",
       title: "Cinema Manager",
@@ -41,6 +41,17 @@ export default function AdminProfile() {
     []
   );
 
+  const [profile, setProfile] = useState(initialProfile);
+  const [editOpen, setEditOpen] = useState(false);
+  const [form, setForm] = useState({
+    name: initialProfile.name,
+    title: initialProfile.title,
+    email: initialProfile.email,
+    phone: initialProfile.phone,
+    org: initialProfile.org,
+    location: initialProfile.location,
+  });
+
   const [notif, setNotif] = useState({
     bookings: true,
     alerts: true,
@@ -50,6 +61,40 @@ export default function AdminProfile() {
   });
 
   const toggle = (key) => setNotif((s) => ({ ...s, [key]: !s[key] }));
+
+  function openEdit() {
+    setForm({
+      name: profile.name,
+      title: profile.title,
+      email: profile.email,
+      phone: profile.phone,
+      org: profile.org,
+      location: profile.location,
+    });
+    setEditOpen(true);
+  }
+
+  function closeEdit() {
+    setEditOpen(false);
+  }
+
+  function updateField(key, value) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function saveProfile(e) {
+    e.preventDefault();
+    setProfile((prev) => ({
+      ...prev,
+      name: form.name.trim(),
+      title: form.title.trim(),
+      email: form.email.trim(),
+      phone: form.phone.trim(),
+      org: form.org.trim(),
+      location: form.location.trim(),
+    }));
+    setEditOpen(false);
+  }
 
   return (
     
@@ -66,7 +111,7 @@ export default function AdminProfile() {
             </div>
           </div>
 
-          <button className="ap-editBtn">
+          <button className="ap-editBtn" onClick={openEdit}>
             <span className="ap-pen">✎</span> Edit Profile
           </button>
         </div>
@@ -273,6 +318,75 @@ export default function AdminProfile() {
 
         <div className="admin-footer">© 2025 CinemaFlow. All rights reserved.</div>
       </div>
+
+      {editOpen ? (
+        <div className="ap-modalOverlay" onClick={closeEdit}>
+          <div className="ap-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="ap-modalHead">
+              <h3>Edit Profile</h3>
+              <button className="ap-modalClose" onClick={closeEdit}>
+                ✕
+              </button>
+            </div>
+
+            <form className="ap-modalBody" onSubmit={saveProfile}>
+              <label>
+                Name
+                <input
+                  value={form.name}
+                  onChange={(e) => updateField("name", e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Title
+                <input
+                  value={form.title}
+                  onChange={(e) => updateField("title", e.target.value)}
+                />
+              </label>
+              <label>
+                Email
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => updateField("email", e.target.value)}
+                />
+              </label>
+              <label>
+                Phone
+                <input
+                  value={form.phone}
+                  onChange={(e) => updateField("phone", e.target.value)}
+                />
+              </label>
+              <label>
+                Organization
+                <input
+                  value={form.org}
+                  onChange={(e) => updateField("org", e.target.value)}
+                />
+              </label>
+              <label>
+                Location
+                <input
+                  value={form.location}
+                  onChange={(e) => updateField("location", e.target.value)}
+                />
+              </label>
+
+              <div className="ap-modalActions">
+                <button className="ap-modalPrimary" type="submit">
+                  Save Changes
+                </button>
+                <button className="ap-modalSecondary" type="button" onClick={closeEdit}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

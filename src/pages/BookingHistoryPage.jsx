@@ -241,7 +241,7 @@ export default function BookingHistoryPage() {
 
                     <div className="bh-box">
                       <div className="bh-boxLabel">💰 Amount</div>
-                      <div className="bh-boxValue">${Number(b.amount).toFixed(2)}</div>
+                      <div className="bh-boxValue">฿{Number(b.amount).toFixed(2)}</div>
                     </div>
                   </div>
 

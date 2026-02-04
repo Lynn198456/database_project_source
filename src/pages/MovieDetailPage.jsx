@@ -163,7 +163,7 @@ export default function MovieDetailPage() {
               <div className="md-left">
                 <div className="md-time">{s.time}</div>
                 <div className="md-pill md-type">{s.type}</div>
-                <div className="md-price">${Number(s.price).toFixed(2)}</div>
+                <div className="md-price">฿{Number(s.price).toFixed(2)}</div>
               </div>
 
               <div className="md-mid">

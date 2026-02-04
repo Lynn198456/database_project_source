@@ -18,7 +18,7 @@ export default function TicketsSummary() {
 
       <div className="cf-statCard cf-orangeBox2">
         <div className="cf-statTitle">Total Spent</div>
-        <div className="cf-statMoney">$150.00</div>
+        <div className="cf-statMoney">฿150.00</div>
       </div>
     </div>
   );

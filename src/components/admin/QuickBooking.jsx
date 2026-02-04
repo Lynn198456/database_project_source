@@ -139,16 +139,16 @@ export default function QuickBooking({ movies = [] }) {
         <div className="qb-totalBox">
           <div className="qb-row">
             <span>Subtotal</span>
-            <strong>${subtotal.toFixed(2)}</strong>
+            <strong>฿{subtotal.toFixed(2)}</strong>
           </div>
           <div className="qb-row">
             <span>Tax (8%)</span>
-            <strong>${tax.toFixed(2)}</strong>
+            <strong>฿{tax.toFixed(2)}</strong>
           </div>
           <div className="qb-divider" />
           <div className="qb-row qb-total">
             <span>Total</span>
-            <strong>${total.toFixed(2)}</strong>
+            <strong>฿{total.toFixed(2)}</strong>
           </div>
         </div>
 
