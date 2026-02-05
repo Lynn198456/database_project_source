@@ -12,7 +12,7 @@ const SEED_WATCHLIST = [
     id: "W1",
     title: "Future World",
     date: "December 2024",
-    img: "/assets/hearts-entwined.jpg",
+    img: "https://m.media-amazon.com/images/I/71TusjqyRZL.jpg",
     status: "Coming Soon",
   },
   {

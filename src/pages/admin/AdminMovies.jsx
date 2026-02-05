@@ -27,7 +27,7 @@ export default function AdminMoviesPage() {
       shows: 6,
       status: "ACTIVE",
       releaseDate: "Nov 28, 2024",
-      img: "/assets/hearts-entwined.jpg",
+      img: "https://m.media-amazon.com/images/I/71TusjqyRZL.jpg",
     },
     {
       id: 3,
