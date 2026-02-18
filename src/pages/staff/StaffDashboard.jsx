@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../../styles/staffDashboard.css";
 import StaffNavbar from "../../components/staff/StaffNavbar";
+import { listStaffTasks, updateStaffTask } from "../../api/staffTasks";
 
 function getStaff() {
   try {
@@ -11,59 +12,123 @@ function getStaff() {
   }
 }
 
+function getAuthUser() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function formatDueTime(timeValue) {
+  if (!timeValue) return "No time";
+  const [hRaw, mRaw] = String(timeValue).split(":");
+  const h = Number.parseInt(hRaw, 10);
+  const m = Number.parseInt(mRaw, 10);
+  if (Number.isNaN(h) || Number.isNaN(m)) return timeValue;
+  const suffix = h >= 12 ? "PM" : "AM";
+  const h12 = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${suffix}`;
+}
+
 const FALLBACK_STAFF = {
-  name: "Michael Chen",
+  name: "Staff User",
   role: "Box Office",
   location: "Downtown",
-  notifications: 3,
+  notifications: 3
 };
 
 export default function StaffDashboard() {
   const staff = useMemo(() => getStaff() || FALLBACK_STAFF, []);
+  const authUser = useMemo(() => getAuthUser(), []);
   const [clockedIn, setClockedIn] = useState(false);
+  const [tasks, setTasks] = useState([]);
+  const [taskLoading, setTaskLoading] = useState(true);
+  const [taskError, setTaskError] = useState("");
 
-  // demo data
+  async function loadTasks() {
+    if (!authUser?.email) {
+      setTaskLoading(false);
+      setTaskError("Please log in as staff to load tasks.");
+      return;
+    }
+
+    try {
+      setTaskLoading(true);
+      setTaskError("");
+      const data = await listStaffTasks({ email: authUser.email, limit: 200 });
+      setTasks(data.tasks || []);
+    } catch (err) {
+      setTasks([]);
+      setTaskError(err.message || "Failed to load tasks.");
+    } finally {
+      setTaskLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  async function toggleTask(task) {
+    const nextStatus = task.status === "COMPLETED" ? "PENDING" : "COMPLETED";
+
+    try {
+      setTaskError("");
+      await updateStaffTask(task.id, {
+        title: task.title,
+        description: task.description,
+        priority: task.priority,
+        dueDate: task.dueDate || null,
+        dueTime: task.dueTime || null,
+        status: nextStatus
+      });
+
+      setTasks((prev) => prev.map((t) => (t.id === task.id ? { ...t, status: nextStatus } : t)));
+    } catch (err) {
+      setTaskError(err.message || "Failed to update task.");
+    }
+  }
+
+  const completedCount = tasks.filter((t) => t.status === "COMPLETED").length;
+  const pendingCount = tasks.filter((t) => t.status !== "COMPLETED").length;
+
   const overview = {
     shiftDuration: "8 hours",
-    tasksCompleted: "1 / 4",
+    tasksCompleted: `${completedCount} / ${tasks.length || 0}`,
     hoursThisWeek: "23.5 hrs",
-    pendingActions: 3,
+    pendingActions: pendingCount
   };
 
   const todayShift = {
     time: "09:00 - 17:00",
     location: staff.location || "Downtown",
     position: staff.role || "Box Office",
-    status: "Current",
+    status: "Current"
   };
 
   const upcomingShifts = [
     { date: "Nov 27", time: "14:00 - 22:00", location: "Downtown", position: "Box Office" },
     { date: "Nov 28", time: "09:00 - 17:00", location: "Mall Location", position: "Floor Staff" },
     { date: "Nov 29", time: "14:00 - 22:00", location: "Downtown", position: "Box Office" },
-    { date: "Nov 30", time: "OFF", location: "-", position: "-" },
+    { date: "Nov 30", time: "OFF", location: "-", position: "-" }
   ];
 
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "Clean Theater 3", priority: "high", due: "10:00 AM", done: false },
-    { id: 2, title: "Restock Concession Stand", priority: "medium", due: "11:30 AM", done: false },
-    { id: 3, title: "Check Projection Equipment", priority: "high", due: "12:00 PM", done: true },
-    { id: 4, title: "Prepare Evening Rush Setup", priority: "medium", due: "04:00 PM", done: false },
-  ]);
-
-  function toggleTask(id) {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
-  }
+  const todayTasks = tasks
+    .filter((t) => {
+      if (!t.dueDate) return true;
+      const today = new Date().toISOString().slice(0, 10);
+      return t.dueDate === today;
+    })
+    .slice(0, 4);
 
   return (
     <div className="staff-page">
-      {/* ✅ Use Navbar from one file */}
       <StaffNavbar />
 
-      {/* MAIN */}
       <main className="staff-container">
         <div className="staff-wrap">
-          {/* TIME CLOCK */}
           <div className="staff-card clock-card">
             <div>
               <h3>🕒 Time Clock</h3>
@@ -83,7 +148,6 @@ export default function StaffDashboard() {
             )}
           </div>
 
-          {/* OVERVIEW */}
           <h3 className="section-title">✨ Today’s Overview</h3>
 
           <div className="overview-grid">
@@ -93,7 +157,7 @@ export default function StaffDashboard() {
             </div>
             <div className="ov green">
               <p>Tasks Completed</p>
-              <h2>{overview.tasksCompleted}</h2>
+              <h2>{taskLoading ? "..." : overview.tasksCompleted}</h2>
             </div>
             <div className="ov purple">
               <p>Hours This Week</p>
@@ -101,13 +165,11 @@ export default function StaffDashboard() {
             </div>
             <div className="ov orange">
               <p>Pending Actions</p>
-              <h2>{overview.pendingActions}</h2>
+              <h2>{taskLoading ? "..." : overview.pendingActions}</h2>
             </div>
           </div>
 
-          {/* GRID LAYOUT */}
           <div className="staff-grid">
-            {/* TODAY SHIFT */}
             <div className="staff-card">
               <h3>🕘 Today’s Shift</h3>
               <div className="shift">
@@ -120,7 +182,6 @@ export default function StaffDashboard() {
               </div>
             </div>
 
-            {/* UPCOMING SHIFTS */}
             <div className="staff-card">
               <h3>📅 Upcoming Shifts</h3>
               {upcomingShifts.map((s) => (
@@ -135,29 +196,32 @@ export default function StaffDashboard() {
               ))}
             </div>
 
-            {/* TASKS */}
             <div className="staff-card">
               <h3>✅ Today’s Tasks</h3>
+
+              {taskError ? <div className="muted">{taskError}</div> : null}
+
               <div className="tasksWrap">
-                {tasks.map((t) => (
-                  <label key={t.id} className={`task ${t.priority} ${t.done ? "done" : ""}`}>
-                    <div className="taskTop">
-                      <input
-                        type="checkbox"
-                        checked={t.done}
-                        onChange={() => toggleTask(t.id)}
-                      />
-                      <strong>{t.title}</strong>
-                    </div>
-                    <span className="taskMeta">
-                      {t.priority.toUpperCase()} • Due: {t.due}
-                    </span>
-                  </label>
-                ))}
+                {taskLoading ? (
+                  <div className="muted">Loading tasks...</div>
+                ) : todayTasks.length === 0 ? (
+                  <div className="muted">No tasks available.</div>
+                ) : (
+                  todayTasks.map((t) => (
+                    <label key={t.id} className={`task ${t.priority} ${t.status === "COMPLETED" ? "done" : ""}`}>
+                      <div className="taskTop">
+                        <input type="checkbox" checked={t.status === "COMPLETED"} onChange={() => toggleTask(t)} />
+                        <strong>{t.title}</strong>
+                      </div>
+                      <span className="taskMeta">
+                        {String(t.priority || "medium").toUpperCase()} • Due: {formatDueTime(t.dueTime)}
+                      </span>
+                    </label>
+                  ))
+                )}
               </div>
             </div>
 
-            {/* ANNOUNCEMENTS */}
             <div className="staff-card">
               <h3>📢 Announcements</h3>
 
