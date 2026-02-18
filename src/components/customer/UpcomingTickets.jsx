@@ -1,31 +1,5 @@
-const UPCOMING = [
-  {
-    id: "TKT-2024-001",
-    title: "The Last Adventure",
-    poster:
-      "/assets/last-adventure.jpg",
-    status: "Confirmed",
-    theater: "Cinema Listic Downtown - Screen 1 - IMAX",
-    date: "Nov 25, 2024",
-    time: "07:45 PM",
-    seats: ["A12", "A13"],
-    price: 30.0,
-    bookedOn: "Nov 20, 2024",
-  },
-  {
-    id: "TKT-2024-002",
-    title: "Hearts Entwined",
-    poster:
-      "/assets/hearts-entwined.jpg",
-    status: "Confirmed",
-    theater: "Cinema Listic Mall Location - Screen 3 - Premium",
-    date: "Nov 28, 2024",
-    time: "02:00 PM",
-    seats: ["B8", "B9"],
-    price: 24.0,
-    bookedOn: "Nov 18, 2024",
-  },
-];
+const FALLBACK_POSTER =
+  "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=60";
 
 function StatusPill({ text }) {
   return (
@@ -36,7 +10,7 @@ function StatusPill({ text }) {
   );
 }
 
-export default function UpcomingTickets() {
+export default function UpcomingTickets({ items = [] }) {
   return (
     <section className="cf-section">
       <div className="cf-section__head">
@@ -47,11 +21,11 @@ export default function UpcomingTickets() {
       </div>
 
       <div className="cf-ticketList">
-        {UPCOMING.map((t) => (
+        {items.map((t) => (
           <article key={t.id} className="cf-ticketCard">
             {/* LEFT poster */}
             <div className="cf-ticketPosterWrap">
-              <img className="cf-ticketPoster" src={t.poster} alt={t.title} />
+              <img className="cf-ticketPoster" src={t.poster || FALLBACK_POSTER} alt={t.title} />
             </div>
 
             {/* CENTER info */}
@@ -89,12 +63,12 @@ export default function UpcomingTickets() {
                 </div>
               </div>
 
-              <div className="cf-ticketMeta">
-                <div>
-                  Booking ID: <span className="cf-linkish">{t.id}</span>
+                <div className="cf-ticketMeta">
+                  <div>
+                  Booking ID: <span className="cf-linkish">TKT-{t.id}</span>
+                  </div>
+                  <div>Booked: {t.bookedOn}</div>
                 </div>
-                <div>Booked: {t.bookedOn}</div>
-              </div>
             </div>
 
             {/* RIGHT QR + actions */}
@@ -124,6 +98,7 @@ export default function UpcomingTickets() {
             </div>
           </article>
         ))}
+        {items.length === 0 ? <div className="cf-empty">No upcoming tickets.</div> : null}
       </div>
     </section>
   );

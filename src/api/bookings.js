@@ -21,3 +21,11 @@ export async function listBookings({ page = 1, limit = 100, userId } = {}) {
   const data = await request(`/api/bookings?${params.toString()}`);
   return data.bookings || [];
 }
+
+export async function getBooking(id) {
+  const data = await request(`/api/bookings/${id}`);
+  return {
+    booking: data.booking,
+    seats: data.seats || []
+  };
+}

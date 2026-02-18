@@ -1,40 +1,10 @@
-const PAST = [
-  {
-    id: "TKT-2024-003",
-    movie: "Laugh Out Loud",
-    theater: "Cinema Listic Downtown",
-    datetime: "Nov 20, 2024 05:00 PM",
-    seats: "B8, B9",
-    price: 24.0,
-    status: "Attended",
-  },
-  {
-    id: "TKT-2024-004",
-    movie: "Midnight Shadows",
-    theater: "Cinema Listic Suburban",
-    datetime: "Nov 15, 2024 09:00 PM",
-    seats: "F12",
-    price: 12.0,
-    status: "Attended",
-  },
-  {
-    id: "TKT-2024-005",
-    movie: "The Last Adventure",
-    theater: "Cinema Listic Downtown",
-    datetime: "Nov 10, 2024 07:45 PM",
-    seats: "C15, C16",
-    price: 30.0,
-    status: "Cancelled",
-  },
-];
-
 function Status({ value }) {
   const cls =
     value === "Cancelled" ? "cf-pill--red" : value === "Attended" ? "cf-pill--green" : "cf-pill--gray";
   return <span className={`cf-pill ${cls}`}>{value}</span>;
 }
 
-export default function PastTicketsTable() {
+export default function PastTicketsTable({ rows = [] }) {
   return (
     <section className="cf-section">
       <div className="cf-section__head">
@@ -60,9 +30,9 @@ export default function PastTicketsTable() {
           </thead>
 
           <tbody>
-            {PAST.map((r) => (
+            {rows.map((r) => (
               <tr key={r.id}>
-                <td className="cf-linkish">{r.id}</td>
+                <td className="cf-linkish">TKT-{r.id}</td>
                 <td className="cf-strong">{r.movie}</td>
                 <td className="cf-muted">{r.theater}</td>
                 <td className="cf-muted">{r.datetime}</td>
@@ -78,6 +48,13 @@ export default function PastTicketsTable() {
                 </td>
               </tr>
             ))}
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="cf-empty">
+                  No past tickets.
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
