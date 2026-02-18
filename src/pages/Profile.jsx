@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
+import { getCurrentUser, updateCurrentUser } from "../api/users";
 
 /* ----------------------------- localStorage helpers ----------------------------- */
 function getUser() {
@@ -85,6 +86,24 @@ const FALLBACK_USER = {
   prefPromo: true,
 };
 
+function splitName(fullName) {
+  const normalized = String(fullName || "").trim().replace(/\s+/g, " ");
+  if (!normalized) return { firstName: "", lastName: "" };
+  const [firstName, ...rest] = normalized.split(" ");
+  return { firstName, lastName: rest.join(" ") || "User" };
+}
+
+function toProfileUser(source = {}) {
+  const firstName = source.firstName || "";
+  const lastName = source.lastName || "";
+  const fullName = `${firstName} ${lastName}`.trim();
+  return {
+    name: fullName || source.name || FALLBACK_USER.name,
+    email: source.email || FALLBACK_USER.email,
+    phone: source.phone || FALLBACK_USER.phone
+  };
+}
+
 export default function Profile() {
   const navigate = useNavigate();
 
@@ -112,6 +131,40 @@ export default function Profile() {
     prefSMS: !!initialUser.prefSMS,
     prefPromo: !!initialUser.prefPromo,
   });
+
+  useEffect(() => {
+    const stored = getUser();
+    if (!stored?.id && !stored?.email) return;
+
+    async function loadDbUser() {
+      try {
+        const dbUser = await getCurrentUser({ id: stored?.id, email: stored?.email });
+        const fromDb = toProfileUser(dbUser);
+
+        setUser((prev) => ({ ...prev, ...fromDb }));
+        setForm((prev) => ({
+          ...prev,
+          name: fromDb.name,
+          email: fromDb.email,
+          phone: fromDb.phone
+        }));
+
+        saveUser({
+          ...(stored || {}),
+          id: dbUser.id,
+          firstName: dbUser.firstName,
+          lastName: dbUser.lastName,
+          email: dbUser.email,
+          phone: dbUser.phone || "",
+          role: dbUser.role,
+          name: fromDb.name
+        });
+      } catch (_error) {
+      }
+    }
+
+    loadDbUser();
+  }, []);
 
   /* ----------------------------- payment cards state ----------------------------- */
   const initialCards = useMemo(() => {
@@ -178,12 +231,12 @@ export default function Profile() {
     setForm((p) => ({ ...p, [name]: value }));
   }
 
-  function saveChanges() {
+  async function saveChanges() {
     if (!form.name.trim()) return alert("Full Name is required.");
     if (!form.email.trim()) return alert("Email is required.");
     if (!form.address.trim()) return alert("Address is required.");
 
-    const updated = {
+    const localUpdated = {
       ...user,
       name: form.name.trim(),
       email: form.email.trim(),
@@ -196,10 +249,33 @@ export default function Profile() {
       prefPromo: prefs.prefPromo,
     };
 
-    saveUser(updated);
-    setUser(updated);
-    setEditOpen(false);
-    setMsg("Profile updated successfully ✅");
+    const stored = getUser();
+    const identity = { id: stored?.id, email: stored?.email || form.email.trim() };
+    const { firstName, lastName } = splitName(form.name);
+
+    try {
+      const dbUser = await updateCurrentUser(identity, {
+        firstName,
+        lastName,
+        phone: form.phone.trim()
+      });
+
+      saveUser({
+        ...(stored || {}),
+        id: dbUser.id,
+        firstName: dbUser.firstName,
+        lastName: dbUser.lastName,
+        email: dbUser.email,
+        phone: dbUser.phone || "",
+        role: dbUser.role,
+        name: `${dbUser.firstName} ${dbUser.lastName}`.trim()
+      });
+      setUser(localUpdated);
+      setEditOpen(false);
+      setMsg("Profile updated successfully ✅");
+    } catch (error) {
+      alert(error.message || "Failed to update profile.");
+    }
   }
 
   function updatePref(key, value) {

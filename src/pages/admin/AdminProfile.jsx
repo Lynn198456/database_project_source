@@ -1,7 +1,24 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/admin/adminProfile.css";
 import AdminNavbar from "../../components/admin/AdminNavbar";
+import { getCurrentUser, updateCurrentUser } from "../../api/users";
+
+function getAuthUser() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function splitName(fullName) {
+  const normalized = String(fullName || "").trim().replace(/\s+/g, " ");
+  if (!normalized) return { firstName: "", lastName: "" };
+  const [firstName, ...rest] = normalized.split(" ");
+  return { firstName, lastName: rest.join(" ") || "User" };
+}
 
 export default function AdminProfile() {
   const navigate = useNavigate();
@@ -68,8 +85,52 @@ export default function AdminProfile() {
     staff: false,
     maintenance: true,
   });
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const toggle = (key) => setNotif((s) => ({ ...s, [key]: !s[key] }));
+
+  useEffect(() => {
+    const authUser = getAuthUser();
+    if (!authUser?.id && !authUser?.email) return;
+
+    async function loadDbUser() {
+      try {
+        const user = await getCurrentUser({ id: authUser?.id, email: authUser?.email });
+        const name = `${user.firstName} ${user.lastName}`.trim();
+        const role = user.role === "ADMIN" ? "Administrator" : user.role;
+
+        setProfile((prev) => ({
+          ...prev,
+          name,
+          email: user.email,
+          phone: user.phone || "",
+          role
+        }));
+        setForm((prev) => ({
+          ...prev,
+          name,
+          email: user.email,
+          phone: user.phone || ""
+        }));
+
+        localStorage.setItem(
+          "cinemaFlow_user",
+          JSON.stringify({
+            ...(authUser || {}),
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone || "",
+            role: user.role
+          })
+        );
+      } catch (_error) {
+      }
+    }
+
+    loadDbUser();
+  }, []);
 
   function openEdit() {
     setForm({
@@ -91,18 +152,50 @@ export default function AdminProfile() {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function saveProfile(e) {
+  async function saveProfile(e) {
     e.preventDefault();
-    setProfile((prev) => ({
-      ...prev,
-      name: form.name.trim(),
-      title: form.title.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim(),
-      org: form.org.trim(),
-      location: form.location.trim(),
-    }));
-    setEditOpen(false);
+    const authUser = getAuthUser();
+    const identity = { id: authUser?.id, email: authUser?.email || form.email.trim() };
+    const { firstName, lastName } = splitName(form.name);
+
+    try {
+      setSaveLoading(true);
+      const user = await updateCurrentUser(identity, {
+        firstName,
+        lastName,
+        phone: form.phone.trim()
+      });
+
+      const syncedName = `${user.firstName} ${user.lastName}`.trim();
+      setProfile((prev) => ({
+        ...prev,
+        name: syncedName,
+        title: form.title.trim(),
+        email: user.email,
+        phone: user.phone || "",
+        org: form.org.trim(),
+        location: form.location.trim(),
+        role: user.role === "ADMIN" ? "Administrator" : user.role
+      }));
+
+      localStorage.setItem(
+        "cinemaFlow_user",
+        JSON.stringify({
+          ...(authUser || {}),
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone || "",
+          role: user.role
+        })
+      );
+      setEditOpen(false);
+    } catch (error) {
+      alert(error.message || "Failed to update profile.");
+    } finally {
+      setSaveLoading(false);
+    }
   }
 
   function openPassword() {
@@ -442,8 +535,8 @@ export default function AdminProfile() {
               </label>
 
               <div className="ap-modalActions">
-                <button className="ap-modalPrimary" type="submit">
-                  Save Changes
+                <button className="ap-modalPrimary" type="submit" disabled={saveLoading}>
+                  {saveLoading ? "Saving..." : "Save Changes"}
                 </button>
                 <button className="ap-modalSecondary" type="button" onClick={closeEdit}>
                   Cancel

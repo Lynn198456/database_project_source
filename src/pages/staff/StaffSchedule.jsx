@@ -1,70 +1,183 @@
 import { useMemo, useState, useEffect } from "react";
 import "../../styles/staff/staffSchedule.css";
 import StaffNavbar from "../../components/staff/StaffNavbar";
+import {
+  createStaffTimeOffRequest,
+  deleteStaffTimeOffRequest,
+  listStaffSchedules,
+  listStaffTimeOffRequests
+} from "../../api/staffSchedule";
+
+const REQUEST_TYPES = [
+  { label: "Vacation", value: "VACATION" },
+  { label: "Sick Leave", value: "SICK" },
+  { label: "Personal", value: "PERSONAL" },
+  { label: "Other", value: "OTHER" }
+];
+
+function getStoredUser() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_user");
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (_error) {
+    return null;
+  }
+}
+
+function toWeekStart(input = new Date()) {
+  const date = new Date(input);
+  const day = date.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  date.setHours(0, 0, 0, 0);
+  date.setDate(date.getDate() + diff);
+  return date;
+}
+
+function toDayLabel(date) {
+  return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
+}
+
+function formatTime(timeValue) {
+  if (!timeValue) return "";
+  const time = String(timeValue).slice(0, 5);
+  const [hRaw, mRaw] = time.split(":");
+  const hour = Number.parseInt(hRaw, 10);
+  const minute = Number.parseInt(mRaw, 10);
+  if (Number.isNaN(hour) || Number.isNaN(minute)) return time;
+
+  const period = hour >= 12 ? "PM" : "AM";
+  const h12 = hour % 12 || 12;
+  return `${String(h12).padStart(2, "0")}:${String(minute).padStart(2, "0")} ${period}`;
+}
+
+function toStatusLabel(status) {
+  const value = String(status || "").trim().toUpperCase();
+  if (!value) return "Pending";
+  return value.charAt(0) + value.slice(1).toLowerCase();
+}
+
+function toHours(startTime, endTime) {
+  if (!startTime || !endTime) return 0;
+  const [sH = 0, sM = 0] = String(startTime).split(":").map(Number);
+  const [eH = 0, eM = 0] = String(endTime).split(":").map(Number);
+  const minutes = eH * 60 + eM - (sH * 60 + sM);
+  return minutes > 0 ? minutes / 60 : 0;
+}
 
 export default function StaffSchedule() {
-  // ---- Fake schedule data (keep yours if you already have) ----
-  const week = useMemo(
-    () => ({
-      label: "Week of Nov 25 - Dec 1, 2025",
-      days: [
-        { day: "Mon", date: 25, time: "09:00 - 17:00", role: "Box Office" },
-        { day: "Tue", date: 26, time: "14:00 - 22:00", role: "Floor Staff" },
-        { day: "Wed", date: 27, time: "09:00 - 17:00", role: "Box Office" },
-        { day: "Thu", date: 28, time: "14:00 - 22:00", role: "Floor Staff" },
-        { day: "Fri", date: 29, time: "09:00 - 17:00", role: "Box Office" },
-        { day: "Sat", date: 30, off: true },
-        { day: "Sun", date: 31, off: true },
-      ],
-    }),
-    []
-  );
-
-  // ---- LocalStorage key ----
-  const LS_KEY = "cinemaFlow_timeOffRequests";
-
-  // ---- Modal state ----
   const [open, setOpen] = useState(false);
-
-  // ---- Request form state ----
   const [form, setForm] = useState({
-    type: "Vacation",
+    type: "VACATION",
     startDate: "",
     endDate: "",
     reason: "",
     partialDay: false,
     startTime: "09:00",
-    endTime: "17:00",
+    endTime: "17:00"
   });
-
-  // ---- Requests list state ----
+  const [schedules, setSchedules] = useState([]);
   const [requests, setRequests] = useState([]);
+  const [teamMemberId, setTeamMemberId] = useState(null);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  // Load saved requests
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(LS_KEY);
-      setRequests(raw ? JSON.parse(raw) : []);
-    } catch (err) {
-      setRequests([]);
-    }
+    const user = getStoredUser();
+    setEmail(user?.email || "");
   }, []);
 
-  // Save requests to localStorage
-  const saveRequests = (next) => {
-    setRequests(next);
-    localStorage.setItem(LS_KEY, JSON.stringify(next));
-  };
+  async function refreshData(identityEmail = email, identityTeamMemberId = teamMemberId) {
+    if (!identityEmail && !identityTeamMemberId) {
+      setLoading(false);
+      setError("Please log in as staff to view your schedule.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    try {
+      const [scheduleData, requestData] = await Promise.all([
+        listStaffSchedules({ email: identityEmail, teamMemberId: identityTeamMemberId }),
+        listStaffTimeOffRequests({ email: identityEmail, teamMemberId: identityTeamMemberId })
+      ]);
+
+      setSchedules(scheduleData.schedules || []);
+      setRequests(requestData.requests || []);
+      setTeamMemberId(scheduleData.teamMemberId || requestData.teamMemberId || null);
+    } catch (err) {
+      setError(err.message || "Failed to load staff schedule.");
+      setSchedules([]);
+      setRequests([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!email) return;
+    refreshData(email, null);
+  }, [email]);
+
+  const week = useMemo(() => {
+    const weekStart = toWeekStart(new Date());
+    const dayMap = new Map();
+
+    for (const item of schedules) {
+      const key = String(item.shiftDate || "").slice(0, 10);
+      if (!key) continue;
+      if (!dayMap.has(key)) dayMap.set(key, []);
+      dayMap.get(key).push(item);
+    }
+
+    const days = Array.from({ length: 7 }, (_, idx) => {
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + idx);
+      const key = date.toISOString().slice(0, 10);
+      const shifts = dayMap.get(key) || [];
+      const primaryShift = shifts[0] || null;
+
+      return {
+        day: toDayLabel(date),
+        date: date.getDate(),
+        off: shifts.length === 0,
+        time: primaryShift ? `${formatTime(primaryShift.startTime)} - ${formatTime(primaryShift.endTime)}` : "",
+        role: primaryShift?.roleOnShift || "Shift",
+        extraShifts: Math.max(shifts.length - 1, 0),
+        totalHours: shifts.reduce((total, shift) => total + toHours(shift.startTime, shift.endTime), 0)
+      };
+    });
+
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+
+    const label = `Week of ${weekStart.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric"
+    })} - ${weekEnd.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`;
+
+    return { label, days };
+  }, [schedules]);
+
+  const stats = useMemo(() => {
+    const totalHours = week.days.reduce((sum, day) => sum + day.totalHours, 0);
+    const shifts = schedules.length;
+    const daysOff = week.days.filter((day) => day.off).length;
+
+    return { totalHours, shifts, daysOff };
+  }, [schedules, week.days]);
 
   const resetForm = () => {
     setForm({
-      type: "Vacation",
+      type: "VACATION",
       startDate: "",
       endDate: "",
       reason: "",
       partialDay: false,
       startTime: "09:00",
-      endTime: "17:00",
+      endTime: "17:00"
     });
   };
 
@@ -75,106 +188,119 @@ export default function StaffSchedule() {
 
   const closeModal = () => setOpen(false);
 
-  const submitRequest = (e) => {
+  async function submitRequest(e) {
     e.preventDefault();
+    if (!form.startDate || !form.endDate || !form.reason.trim()) {
+      setError("Start date, end date, and reason are required.");
+      return;
+    }
+    if (new Date(form.endDate) < new Date(form.startDate)) {
+      setError("End date cannot be before start date.");
+      return;
+    }
 
-    if (!form.startDate) return alert("Please select start date");
-    if (!form.endDate) return alert("Please select end date");
-    if (new Date(form.endDate) < new Date(form.startDate))
-      return alert("End date cannot be before start date");
-    if (!form.reason.trim()) return alert("Please enter a reason");
+    try {
+      setSubmitting(true);
+      setError("");
+      await createStaffTimeOffRequest({
+        email,
+        teamMemberId,
+        type: form.type,
+        startDate: form.startDate,
+        endDate: form.endDate,
+        partialDay: form.partialDay,
+        startTime: form.partialDay ? form.startTime : null,
+        endTime: form.partialDay ? form.endTime : null,
+        reason: form.reason.trim()
+      });
 
-    const newReq = {
-      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()),
-      type: form.type,
-      startDate: form.startDate,
-      endDate: form.endDate,
-      partialDay: form.partialDay,
-      startTime: form.partialDay ? form.startTime : null,
-      endTime: form.partialDay ? form.endTime : null,
-      reason: form.reason.trim(),
-      status: "Pending",
-      createdAt: new Date().toISOString(),
-    };
+      setOpen(false);
+      await refreshData(email, teamMemberId);
+    } catch (err) {
+      setError(err.message || "Failed to submit request.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
-    const next = [newReq, ...requests];
-    saveRequests(next);
-    setOpen(false);
-  };
-
-  const deleteRequest = (id) => {
-    const next = requests.filter((r) => r.id !== id);
-    saveRequests(next);
-  };
-
-  // Example stats
-  const totalHours = 40;
-  const shifts = 5;
-  const daysOff = 2;
+  async function deleteRequest(id) {
+    try {
+      setError("");
+      await deleteStaffTimeOffRequest(id, { email, teamMemberId });
+      await refreshData(email, teamMemberId);
+    } catch (err) {
+      setError(err.message || "Failed to delete request.");
+    }
+  }
 
   return (
     <>
-      {/* ✅ Staff Navbar */}
       <StaffNavbar />
 
       <div className="staff-page">
         <div className="staff-wrap">
-          {/* Header */}
           <div className="section-head">
             <h2>📅 My Schedule</h2>
             <p className="muted">View your upcoming shifts and availability</p>
           </div>
 
-          {/* Week row */}
           <div className="schedule-head">
             <div className="week-title">{week.label}</div>
-            <button className="btn-blue" onClick={openModal}>
+            <button className="btn-blue" onClick={openModal} disabled={!email}>
               Request Time Off
             </button>
           </div>
 
-          {/* ✅ Week Grid */}
-          <div className="card-surface">
-            <div className="week-grid">
-              {week.days.map((d) => (
-                <div key={`${d.day}-${d.date}`} className={`day-card ${d.off ? "off" : ""}`}>
-                  <div className="day-top">
-                    <div className="day-name">{d.day}</div>
-                    <div className="day-date">{d.date}</div>
-                  </div>
-
-                  {d.off ? (
-                    <div className="day-off">OFF</div>
-                  ) : (
-                    <div className="shift-box">
-                      {d.time}
-                      <span>{d.role}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
+          {error ? (
+            <div style={{ marginBottom: 12, color: "#fecaca", background: "rgba(153,27,27,0.35)", border: "1px solid rgba(248,113,113,0.4)", padding: 10, borderRadius: 10 }}>
+              {error}
             </div>
+          ) : null}
+
+          <div className="card-surface">
+            {loading ? (
+              <div className="muted">Loading schedule...</div>
+            ) : (
+              <div className="week-grid">
+                {week.days.map((d) => (
+                  <div key={`${d.day}-${d.date}`} className={`day-card ${d.off ? "off" : ""}`}>
+                    <div className="day-top">
+                      <div className="day-name">{d.day}</div>
+                      <div className="day-date">{d.date}</div>
+                    </div>
+
+                    {d.off ? (
+                      <div className="day-off">OFF</div>
+                    ) : (
+                      <div className="shift-box">
+                        {d.time}
+                        <span>{d.role}</span>
+                        {d.extraShifts > 0 ? <span>+{d.extraShifts} more shift(s)</span> : null}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* ✅ Stats */}
           <div className="stats-row">
             <div className="stat-card stat-blue">
               <div className="label">Total Hours This Week</div>
-              <div className="value">{totalHours} hours</div>
+              <div className="value">{Math.round(stats.totalHours * 10) / 10} hours</div>
             </div>
 
             <div className="stat-card stat-purple">
               <div className="label">Shifts This Week</div>
-              <div className="value">{shifts} shifts</div>
+              <div className="value">{stats.shifts} shifts</div>
             </div>
 
             <div className="stat-card stat-green">
               <div className="label">Days Off</div>
-              <div className="value">{daysOff} days</div>
+              <div className="value">{stats.daysOff} days</div>
             </div>
           </div>
 
-          {/* ✅ Requests list */}
           <div style={{ marginTop: 18 }} className="card-surface">
             <div className="schedule-head" style={{ margin: 0 }}>
               <div className="week-title">📝 Time Off Requests</div>
@@ -182,8 +308,10 @@ export default function StaffSchedule() {
             </div>
 
             <div style={{ marginTop: 12 }}>
-              {requests.length === 0 ? (
-                <div className="muted">No requests yet. Click “Request Time Off”.</div>
+              {loading ? (
+                <div className="muted">Loading requests...</div>
+              ) : requests.length === 0 ? (
+                <div className="muted">No requests yet. Click "Request Time Off".</div>
               ) : (
                 <div style={{ display: "grid", gap: 12 }}>
                   {requests.map((r) => (
@@ -196,29 +324,32 @@ export default function StaffSchedule() {
                         padding: 12,
                         borderRadius: 14,
                         border: "1px solid rgba(255,255,255,0.10)",
-                        background: "rgba(255,255,255,0.04)",
+                        background: "rgba(255,255,255,0.04)"
                       }}
                     >
                       <div>
                         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                          <b>{r.type}</b>
+                          <b>{String(r.type).replace("_", " ")}</b>
                           <span
                             style={{
                               fontSize: 12,
                               padding: "4px 10px",
                               borderRadius: 999,
                               border: "1px solid rgba(255,255,255,0.14)",
-                              background: "rgba(255,255,255,0.06)",
+                              background: "rgba(255,255,255,0.06)"
                             }}
                           >
-                            {r.status}
+                            {toStatusLabel(r.status)}
                           </span>
                         </div>
 
                         <div className="muted" style={{ marginTop: 6 }}>
-                          {r.startDate} → {r.endDate}
+                          {r.startDate} to {r.endDate}
                           {r.partialDay ? (
-                            <span> • Partial: {r.startTime}-{r.endTime}</span>
+                            <span>
+                              {" "}
+                              • Partial: {formatTime(r.startTime)}-{formatTime(r.endTime)}
+                            </span>
                           ) : null}
                         </div>
 
@@ -235,7 +366,7 @@ export default function StaffSchedule() {
                           border: "1px solid rgba(255,255,255,0.12)",
                           background: "rgba(255,255,255,0.06)",
                           color: "white",
-                          cursor: "pointer",
+                          cursor: "pointer"
                         }}
                       >
                         🗑
@@ -252,7 +383,6 @@ export default function StaffSchedule() {
           </div>
         </div>
 
-        {/* ✅ Modal (uses CSS modal classes) */}
         {open ? (
           <div className="modal-overlay" onMouseDown={closeModal}>
             <div className="modal-box" onMouseDown={(e) => e.stopPropagation()}>
@@ -272,10 +402,11 @@ export default function StaffSchedule() {
                       value={form.type}
                       onChange={(e) => setForm((s) => ({ ...s, type: e.target.value }))}
                     >
-                      <option>Vacation</option>
-                      <option>Sick Leave</option>
-                      <option>Personal</option>
-                      <option>Emergency</option>
+                      {REQUEST_TYPES.map((type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
+                        </option>
+                      ))}
                     </select>
                   </label>
 
@@ -340,7 +471,7 @@ export default function StaffSchedule() {
                     <textarea
                       className="form-input"
                       rows={3}
-                      placeholder="Explain your request…"
+                      placeholder="Explain your request..."
                       value={form.reason}
                       onChange={(e) => setForm((s) => ({ ...s, reason: e.target.value }))}
                     />
@@ -351,8 +482,8 @@ export default function StaffSchedule() {
                   <button type="button" className="btn-ghost" onClick={closeModal}>
                     Cancel
                   </button>
-                  <button type="submit" className="btn-purple">
-                    Submit Request
+                  <button type="submit" className="btn-purple" disabled={submitting}>
+                    {submitting ? "Submitting..." : "Submit Request"}
                   </button>
                 </div>
               </form>

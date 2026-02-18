@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "../../styles/staffProfile.css";
 import StaffNavbar from "../../components/staff/StaffNavbar";
+import { getCurrentUser, updateCurrentUser } from "../../api/users";
 
 const FALLBACK_STAFF = {
   name: "Michael Chen",
@@ -29,12 +30,64 @@ function saveStaff(staff) {
   localStorage.setItem("cinemaFlow_staff", JSON.stringify(staff));
 }
 
+function getAuthUser() {
+  try {
+    const raw = localStorage.getItem("cinemaFlow_user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function splitName(fullName) {
+  const normalized = String(fullName || "").trim().replace(/\s+/g, " ");
+  if (!normalized) return { firstName: "", lastName: "" };
+  const [firstName, ...rest] = normalized.split(" ");
+  return { firstName, lastName: rest.join(" ") || "User" };
+}
+
 export default function StaffProfile() {
   const initialStaff = useMemo(() => readStaff() || FALLBACK_STAFF, []);
   const [staff, setStaff] = useState(initialStaff);
 
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(staff);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  useEffect(() => {
+    const authUser = getAuthUser();
+    if (!authUser?.id && !authUser?.email) return;
+
+    async function loadDbUser() {
+      try {
+        const user = await getCurrentUser({ id: authUser?.id, email: authUser?.email });
+        const fromDb = {
+          name: `${user.firstName} ${user.lastName}`.trim(),
+          role: user.role === "ADMIN" ? "Admin" : "Staff",
+          email: user.email,
+          phone: user.phone || ""
+        };
+
+        setStaff((prev) => ({ ...prev, ...fromDb }));
+        setDraft((prev) => ({ ...prev, ...fromDb }));
+        localStorage.setItem(
+          "cinemaFlow_user",
+          JSON.stringify({
+            ...(authUser || {}),
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone || "",
+            role: user.role
+          })
+        );
+      } catch (_error) {
+      }
+    }
+
+    loadDbUser();
+  }, []);
 
   function startEdit() {
     setDraft(staff);
@@ -50,7 +103,7 @@ export default function StaffProfile() {
     setDraft((prev) => ({ ...prev, [field]: value }));
   }
 
-  function onSave() {
+  async function onSave() {
     const cleaned = {
       ...staff,
       ...draft,
@@ -60,10 +113,46 @@ export default function StaffProfile() {
       emergencyName: (draft.emergencyName || "").trim() || staff.emergencyName,
       emergencyPhone: (draft.emergencyPhone || "").trim() || staff.emergencyPhone,
     };
+    const authUser = getAuthUser();
+    const identity = { id: authUser?.id, email: authUser?.email || cleaned.email };
+    const { firstName, lastName } = splitName(cleaned.name);
 
-    setStaff(cleaned);
-    saveStaff(cleaned);
-    setIsEditing(false);
+    try {
+      setSaveLoading(true);
+      const user = await updateCurrentUser(identity, {
+        firstName,
+        lastName,
+        phone: cleaned.phone
+      });
+
+      const synced = {
+        ...cleaned,
+        name: `${user.firstName} ${user.lastName}`.trim(),
+        email: user.email,
+        phone: user.phone || "",
+        role: user.role === "ADMIN" ? "Admin" : "Staff"
+      };
+
+      setStaff(synced);
+      saveStaff(synced);
+      localStorage.setItem(
+        "cinemaFlow_user",
+        JSON.stringify({
+          ...(authUser || {}),
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone || "",
+          role: user.role
+        })
+      );
+      setIsEditing(false);
+    } catch (error) {
+      alert(error.message || "Failed to update profile.");
+    } finally {
+      setSaveLoading(false);
+    }
   }
 
   return (
@@ -87,8 +176,8 @@ export default function StaffProfile() {
               <button className="btn-soft" onClick={cancelEdit}>
                 Cancel
               </button>
-              <button className="btn-blue" onClick={onSave}>
-                Save Changes
+              <button className="btn-blue" onClick={onSave} disabled={saveLoading}>
+                {saveLoading ? "Saving..." : "Save Changes"}
               </button>
             </div>
           )}
