@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
+import { deleteShowtime, listShowtimes } from "../../api/showtimes";
 import "../../styles/admin/adminShowtimes.css";
 
 function formatPrettyDate(dateStr) {
@@ -38,6 +39,9 @@ export default function AdminShowtimes() {
   const [theaterFilter, setTheaterFilter] = useState("all");
   const [screenTypeFilter, setScreenTypeFilter] = useState("all");
   const [timeRangeFilter, setTimeRangeFilter] = useState("all");
+  const [showtimes, setShowtimes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   function clearAllFilters() {
     setMovieFilter("all");
@@ -46,101 +50,72 @@ export default function AdminShowtimes() {
     setTimeRangeFilter("all");
   }
 
-  // Demo data (replace with your real DB later)
+  const normalizeScreenType = (format, screenName) => {
+    const input = `${format || ""} ${screenName || ""}`.toLowerCase();
+    if (input.includes("imax")) return "imax";
+    if (input.includes("premium")) return "premium";
+    if (input.includes("dolby")) return "dolby";
+    return "standard";
+  };
+
+  const toLocalISODate = (d) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+      d.getDate()
+    ).padStart(2, "0")}`;
+
+  const mapShowtime = (row) => {
+    const start = new Date(row.start_time);
+    const totalSeats = Number(row.screen_total_seats || 0);
+    const bookedSeats = 0;
+    return {
+      id: row.id,
+      movieId: row.movie_id,
+      date: toLocalISODate(start),
+      movie: row.movie_title || "-",
+      screen: row.screen_name || "-",
+      screenType: normalizeScreenType(row.format, row.screen_name),
+      theater: row.theater_name || "-",
+      time: start.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+      startHour: start.getHours(),
+      seats: { booked: bookedSeats, total: totalSeats }
+    };
+  };
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadShowtimes() {
+      try {
+        setLoading(true);
+        setError("");
+        const rows = await listShowtimes({ limit: 200 });
+        if (!mounted) return;
+        setShowtimes(rows.map(mapShowtime));
+      } catch (err) {
+        if (mounted) {
+          setError(err.message || "Failed to load showtimes.");
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadShowtimes();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const movies = useMemo(
-    () => ["The Last Adventure", "Hearts Entwined", "Laugh Out Loud", "Midnight Shadows"],
-    []
+    () => [...new Set(showtimes.map((s) => s.movie))].sort((a, b) => a.localeCompare(b)),
+    [showtimes]
   );
 
   const theaters = useMemo(
-    () => ["Cinema Listic Downtown", "Cinema Listic Mall", "Cinema Listic Riverside"],
-    []
-  );
-
-  const showtimes = useMemo(
-    () => [
-      {
-        id: 1,
-        date: selectedDate,
-        movie: "The Last Adventure",
-        screen: "Screen 1 - IMAX",
-        screenType: "imax",
-        theater: "Cinema Listic Downtown",
-        time: "10:00 AM",
-        seats: { booked: 45, total: 120 },
-      },
-      {
-        id: 2,
-        date: selectedDate,
-        movie: "The Last Adventure",
-        screen: "Screen 2 - Standard",
-        screenType: "standard",
-        theater: "Cinema Listic Downtown",
-        time: "01:15 PM",
-        seats: { booked: 102, total: 150 },
-      },
-      {
-        id: 3,
-        date: selectedDate,
-        movie: "Hearts Entwined",
-        screen: "Screen 3 - Premium",
-        screenType: "premium",
-        theater: "Cinema Listic Downtown",
-        time: "02:00 PM",
-        seats: { booked: 12, total: 100 },
-      },
-      {
-        id: 4,
-        date: selectedDate,
-        movie: "Laugh Out Loud",
-        screen: "Screen 1 - IMAX",
-        screenType: "imax",
-        theater: "Cinema Listic Mall",
-        time: "03:30 PM",
-        seats: { booked: 67, total: 120 },
-      },
-      {
-        id: 5,
-        date: selectedDate,
-        movie: "Midnight Shadows",
-        screen: "Screen 4 - Dolby Atmos",
-        screenType: "dolby",
-        theater: "Cinema Listic Downtown",
-        time: "05:00 PM",
-        seats: { booked: 150, total: 150 },
-      },
-      {
-        id: 6,
-        date: selectedDate,
-        movie: "The Last Adventure",
-        screen: "Screen 1 - IMAX",
-        screenType: "imax",
-        theater: "Cinema Listic Downtown",
-        time: "07:45 PM",
-        seats: { booked: 89, total: 120 },
-      },
-      {
-        id: 7,
-        date: selectedDate,
-        movie: "Hearts Entwined",
-        screen: "Screen 2 - Standard",
-        screenType: "standard",
-        theater: "Cinema Listic Mall",
-        time: "08:00 PM",
-        seats: { booked: 67, total: 150 },
-      },
-      {
-        id: 8,
-        date: selectedDate,
-        movie: "Laugh Out Loud",
-        screen: "Screen 3 - Premium",
-        screenType: "premium",
-        theater: "Cinema Listic Mall",
-        time: "09:15 PM",
-        seats: { booked: 43, total: 100 },
-      },
-    ],
-    [selectedDate]
+    () => [...new Set(showtimes.map((s) => s.theater))].sort((a, b) => a.localeCompare(b)),
+    [showtimes]
   );
 
   // Status helpers
@@ -151,32 +126,35 @@ export default function AdminShowtimes() {
     return "available";
   }
 
-  function timeRangeOf(timeStr) {
-    // quick demo categorization
-    // "10:00 AM" => morning, etc.
-    const t = timeStr.toLowerCase();
-    if (t.includes("am")) return "morning";
-    // pm
-    const hour = parseInt(timeStr.split(":")[0], 10);
-    if (hour >= 12 && hour <= 4) return "afternoon";
-    if (hour >= 5 && hour <= 8) return "evening";
+  function timeRangeOf(hour24) {
+    if (hour24 < 12) return "morning";
+    if (hour24 < 17) return "afternoon";
+    if (hour24 < 21) return "evening";
     return "night";
   }
 
   const filtered = useMemo(() => {
     return showtimes.filter((s) => {
+      const okDate = s.date === selectedDate;
       const okMovie = movieFilter === "all" || s.movie === movieFilter;
       const okTheater = theaterFilter === "all" || s.theater === theaterFilter;
+      const okScreen = screenTypeFilter === "all" || s.screenType === screenTypeFilter;
+      const okTime = timeRangeFilter === "all" || timeRangeOf(s.startHour) === timeRangeFilter;
 
-      const okScreen =
-        screenTypeFilter === "all" || s.screenType === screenTypeFilter;
-
-      const okTime =
-        timeRangeFilter === "all" || timeRangeOf(s.time) === timeRangeFilter;
-
-      return okMovie && okTheater && okScreen && okTime;
+      return okDate && okMovie && okTheater && okScreen && okTime;
     });
-  }, [showtimes, movieFilter, theaterFilter, screenTypeFilter, timeRangeFilter]);
+  }, [selectedDate, showtimes, movieFilter, theaterFilter, screenTypeFilter, timeRangeFilter]);
+
+  useEffect(() => {
+    if (showtimes.length === 0) return;
+    const hasSelectedDate = showtimes.some((s) => s.date === selectedDate);
+    if (hasSelectedDate) return;
+    const firstDate = [...new Set(showtimes.map((s) => s.date))]
+      .sort((a, b) => a.localeCompare(b))[0];
+    if (firstDate) {
+      setSelectedDate(firstDate);
+    }
+  }, [selectedDate, showtimes]);
 
   // Stats
   const stats = useMemo(() => {
@@ -206,11 +184,21 @@ export default function AdminShowtimes() {
   }
 
   function onEditRow(id) {
-    alert(`Edit showtime #${id} (connect later)`);
+    const row = showtimes.find((s) => s.id === id);
+    if (!row?.movieId) return;
+    navigate(`/admin/showtimes/schedule/${row.movieId}`);
   }
 
-  function onDeleteRow(id) {
-    alert(`Delete showtime #${id} (connect later)`);
+  async function onDeleteRow(id) {
+    const ok = window.confirm("Delete this showtime?");
+    if (!ok) return;
+
+    try {
+      await deleteShowtime(id);
+      setShowtimes((prev) => prev.filter((s) => s.id !== id));
+    } catch (err) {
+      window.alert(err.message || "Failed to delete showtime.");
+    }
   }
 
   return (
@@ -341,6 +329,9 @@ export default function AdminShowtimes() {
             </div>
           </div>
         </section>
+
+        {error ? <div className="as-empty">{error}</div> : null}
+        {loading ? <div className="as-empty">Loading showtimes...</div> : null}
 
         {/* View controls */}
         <section className="as-viewRow">

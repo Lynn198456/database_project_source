@@ -202,7 +202,8 @@ export default function AdminMoviesPage() {
           <div className="am-grid">
             {filtered.map((m) => (
               <div key={m.id} className="am-card">
-                <div className="am-img" style={{ backgroundImage: `url(${m.img})` }}>
+                <div className="am-img">
+                  <img className="am-posterImg" src={m.img} alt={m.title} />
                   <div className="am-topBadges">
                     <span className="am-pill am-pillRating">{m.rating}</span>
                     <span className={`am-pill am-pillStatus ${m.status}`}>
@@ -248,7 +249,8 @@ export default function AdminMoviesPage() {
           <div className="am-list">
             {filtered.map((m) => (
               <div key={m.id} className="am-rowCard">
-                <div className="am-rowPoster" style={{ backgroundImage: `url(${m.img})` }}>
+                <div className="am-rowPoster">
+                  <img className="am-rowPosterImg" src={m.img} alt={m.title} />
                   <span className="am-rowRating">{m.rating}</span>
                 </div>
 

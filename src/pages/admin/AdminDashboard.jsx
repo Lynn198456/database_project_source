@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import AdminNavbar from "../../components/admin/AdminNavbar";
 import QuickBooking from "../../components/admin/QuickBooking";
 import { listMovies } from "../../api/movies";
+import { listShowtimes } from "../../api/showtimes";
 import "../../styles/admin/adminDashboard.css";
+
+const FALLBACK_POSTER =
+  "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1200&q=60";
 
 function toDuration(minutes) {
   const value = Number(minutes || 0);
@@ -15,6 +19,14 @@ function toDuration(minutes) {
 }
 
 function mapMovie(movie) {
+  const releaseDate = movie.release_date
+    ? new Date(movie.release_date).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      })
+    : "TBA";
+
   return {
     id: movie.id,
     title: movie.title,
@@ -22,7 +34,31 @@ function mapMovie(movie) {
     duration: toDuration(movie.duration_min),
     rating: movie.rating || "NR",
     badge: movie.rating || "PG",
-    releaseDate: movie.release_date || null
+    releaseDate,
+    poster: movie.poster_url || FALLBACK_POSTER
+  };
+}
+
+function statusFromOccupancy(booked, total) {
+  if (total <= 0) return "available";
+  if (booked >= total) return "soldout";
+  const ratio = booked / total;
+  if (ratio >= 0.75) return "filling";
+  return "available";
+}
+
+function mapShowtime(s) {
+  const start = new Date(s.start_time);
+  const totalSeats = Number(s.screen_total_seats || 0);
+  const bookedSeats = 0;
+  return {
+    id: s.id,
+    movieId: s.movie_id,
+    movie: s.movie_title || "-",
+    screen: s.screen_name || "-",
+    time: start.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+    seats: `${bookedSeats}/${totalSeats}`,
+    status: statusFromOccupancy(bookedSeats, totalSeats)
   };
 }
 
@@ -32,6 +68,7 @@ export default function AdminDashboard() {
   const [comingSoonMovies, setComingSoonMovies] = useState([]);
   const [loadingMovies, setLoadingMovies] = useState(true);
   const [moviesError, setMoviesError] = useState("");
+  const [showtimes, setShowtimes] = useState([]);
 
   useEffect(() => {
     let mounted = true;
@@ -41,15 +78,17 @@ export default function AdminDashboard() {
         setLoadingMovies(true);
         setMoviesError("");
 
-        const [nowShowing, comingSoon] = await Promise.all([
+        const [nowShowing, comingSoon, dbShowtimes] = await Promise.all([
           listMovies({ status: "NOW_SHOWING", limit: 50 }),
-          listMovies({ status: "COMING_SOON", limit: 50 })
+          listMovies({ status: "COMING_SOON", limit: 50 }),
+          listShowtimes({ limit: 200 })
         ]);
 
         if (!mounted) return;
 
         setNowShowingMovies(nowShowing.map(mapMovie));
         setComingSoonMovies(comingSoon.map(mapMovie));
+        setShowtimes(dbShowtimes.slice(0, 8).map(mapShowtime));
       } catch (err) {
         if (mounted) {
           setMoviesError(err.message || "Failed to load movies from database.");
@@ -76,18 +115,6 @@ export default function AdminDashboard() {
       { color: "orange", icon: "💲", label: "Revenue", value: "-", hint: "Connect payments data" },
     ],
     [comingSoonMovies.length, nowShowingMovies.length]
-  );
-
-  const showtimes = useMemo(
-    () => [
-      { id: 1, movie: "Movie Title 1", screen: "1", time: "10:00 AM", seats: "45/120", status: "available" },
-      { id: 2, movie: "Movie Title 2", screen: "2", time: "10:30 AM", seats: "89/150", status: "available" },
-      { id: 3, movie: "Movie Title 1", screen: "1", time: "01:15 PM", seats: "102/120", status: "filling" },
-      { id: 4, movie: "Movie Title 3", screen: "3", time: "02:00 PM", seats: "12/100", status: "available" },
-      { id: 5, movie: "Movie Title 4", screen: "2", time: "03:30 PM", seats: "150/150", status: "soldout" },
-      { id: 6, movie: "Movie Title 2", screen: "1", time: "05:00 PM", seats: "67/120", status: "available" },
-    ],
-    []
   );
 
   const [search, setSearch] = useState("");
@@ -173,6 +200,15 @@ export default function AdminDashboard() {
                     {filteredMovies.map((m) => (
                       <div key={m.id} className="movie-card">
                         <div className="movie-poster">
+                          <img
+                            className="movie-posterImg"
+                            src={m.poster}
+                            alt={m.title}
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src = FALLBACK_POSTER;
+                            }}
+                          />
                           <span className="movie-badge">{m.badge}</span>
                         </div>
 
@@ -239,13 +275,26 @@ export default function AdminDashboard() {
                           <td style={{ textAlign: "right" }}>
                             <button
                               className="btn-table"
-                              onClick={() => navigate(`/admin/showtimes/schedule/${s.id}`)}
+                              onClick={() =>
+                                navigate(
+                                  s.movieId
+                                    ? `/admin/showtimes/schedule/${s.movieId}`
+                                    : "/admin/showtimes"
+                                )
+                              }
                             >
                               Manage
                             </button>
                           </td>
                         </tr>
                       ))}
+                      {showtimes.length === 0 && (
+                        <tr>
+                          <td colSpan={6} className="admin-muted" style={{ padding: 16 }}>
+                            No showtimes found in schedules database.
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -264,6 +313,15 @@ export default function AdminDashboard() {
                     {comingSoonMovies.map((c) => (
                       <div key={c.id} className="coming-card">
                         <div className="coming-img">
+                          <img
+                            className="coming-posterImg"
+                            src={c.poster}
+                            alt={c.title}
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src = FALLBACK_POSTER;
+                            }}
+                          />
                           <div className="coming-badge">Coming Soon</div>
                         </div>
                         <div className="coming-body">

@@ -36,6 +36,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminMovies from "./pages/admin/AdminMovies";
 import AdminShowtimes from "./pages/admin/AdminShowtimes";
 import AdminTheaters from "./pages/admin/AdminTheaters";
+import AdminNewTheater from "./pages/admin/AdminNewTheater";
 import AdminTeam from "./pages/admin/AdminTeam";
 import AdminProfile from "./pages/admin/AdminProfile";
 import AdminMovieEdit from "./pages/admin/AdminMovieEdit";
@@ -293,6 +294,7 @@ export default function App() {
       <Route path="/admin/movies" element={<AdminMovies />} />
       <Route path="/admin/showtimes" element={<AdminShowtimes />} />
       <Route path="/admin/theaters" element={<AdminTheaters />} />
+      <Route path="/admin/theaters/new" element={<AdminNewTheater />} />
       <Route path="/admin/team" element={<AdminTeam />} />
       <Route path="/admin/profile" element={<AdminProfile />} />
       <Route path="/admin/api-keys" element={<AdminApiKeys />} />

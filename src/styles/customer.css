@@ -413,13 +413,15 @@ body {
 
 .cf-movieCard__imgWrap {
   position: relative;
-  height: 360px;
+  aspect-ratio: 2 / 3;
+  background: rgba(5, 11, 24, 0.85);
 }
 
 .cf-movieCard__img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
 }
 
 .cf-badge {
@@ -719,9 +721,9 @@ body {
 }
 
 .cf-moviePoster{
-  height: 170px;
+  aspect-ratio: 2 / 3;
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   position: relative;
 }
 

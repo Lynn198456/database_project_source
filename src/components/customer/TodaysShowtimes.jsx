@@ -1,52 +1,99 @@
-const showtimes = [
-  {
-    id: 1,
-    movie: "The Last Adventure",
-    screen: "Screen 1 - IMAX",
-    times: [
-      { time: "10:00 AM", seats: 145 },
-      { time: "01:15 PM", seats: 132 },
-      { time: "04:30 PM", seats: 98 },
-      { time: "07:45 PM", seats: 76 },
-      { time: "10:00 PM", seats: 112 },
-    ],
-  },
-  {
-    id: 2,
-    movie: "Hearts Entwined",
-    screen: "Screen 2 - Standard",
-    times: [
-      { time: "10:30 AM", seats: 89 },
-      { time: "02:00 PM", seats: 67 },
-      { time: "05:00 PM", seats: 45 },
-      { time: "08:00 PM", seats: 34 },
-    ],
-  },
-  {
-    id: 3,
-    movie: "Laugh Out Loud",
-    screen: "Screen 3 - Premium",
-    times: [
-      { time: "11:00 AM", seats: 56 },
-      { time: "02:30 PM", seats: 43 },
-      { time: "06:00 PM", seats: 28 },
-      { time: "09:15 PM", seats: 19 },
-    ],
-  },
-];
+import { useEffect, useMemo, useState } from "react";
+import { listShowtimes } from "../../api/showtimes";
+
+function toISODate(d) {
+  const pad = (x) => String(x).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+function mapShowtimeRow(s) {
+  const start = new Date(s.start_time);
+  return {
+    id: s.id,
+    date: toISODate(start),
+    movie: s.movie_title || "-",
+    screen: s.screen_name || "-",
+    theater: s.theater_name || "-",
+    time: start.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+    seats: Number(s.screen_total_seats || 0)
+  };
+}
 
 export default function TodaysShowtimes() {
+  const [rows, setRows] = useState([]);
+  const [title, setTitle] = useState("Today's Showtimes");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadShowtimes() {
+      try {
+        setError("");
+        const all = await listShowtimes({ limit: 200 });
+        if (!mounted) return;
+
+        const today = toISODate(new Date());
+        const mapped = all.map(mapShowtimeRow);
+        const todaysRows = mapped.filter((s) => s.date === today);
+
+        if (todaysRows.length > 0) {
+          setTitle("Today's Showtimes");
+          setRows(todaysRows);
+          return;
+        }
+
+        const nextDate = [...new Set(mapped.map((s) => s.date))].sort((a, b) => a.localeCompare(b))[0];
+        const upcomingRows = nextDate ? mapped.filter((s) => s.date === nextDate) : [];
+        setTitle(nextDate ? `Next Showtimes (${nextDate})` : "Today's Showtimes");
+        setRows(upcomingRows);
+      } catch (err) {
+        if (mounted) {
+          setError(err.message || "Failed to load today's showtimes.");
+        }
+      }
+    }
+
+    loadShowtimes();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const grouped = useMemo(() => {
+    const map = new Map();
+    for (const item of rows) {
+      const key = `${item.movie}-${item.screen}-${item.theater}`;
+      if (!map.has(key)) {
+        map.set(key, {
+          id: key,
+          movie: item.movie,
+          screen: `${item.screen} • ${item.theater}`,
+          times: []
+        });
+      }
+      map.get(key).times.push({ time: item.time, seats: item.seats });
+    }
+
+    return Array.from(map.values()).map((g) => ({
+      ...g,
+      times: g.times.sort((a, b) => a.time.localeCompare(b.time))
+    }));
+  }, [rows]);
+
   return (
     <section className="cf-section">
       <div className="cf-section__head">
         <div className="cf-section__title">
           <span className="cf-section__icon cf-icon--purple">📈</span>
-          Today&apos;s Showtimes
+          {title}
         </div>
       </div>
 
+      {error ? <div className="cf-empty">{error}</div> : null}
+
       <div className="cf-showtimeList">
-        {showtimes.map((s) => (
+        {grouped.map((s) => (
           <div key={s.id} className="cf-showtimeRow">
             <div className="cf-showtimeRow__left">
               <div className="cf-miniIcon cf-miniIcon--purple">🎬</div>
@@ -58,7 +105,7 @@ export default function TodaysShowtimes() {
 
             <div className="cf-showtimeRow__times">
               {s.times.map((t, idx) => (
-                <button key={idx} className="cf-timeChip" type="button">
+                <button key={`${s.id}-${idx}`} className="cf-timeChip" type="button">
                   <div className="cf-timeChip__time">{t.time}</div>
                   <div className="cf-timeChip__seats">{t.seats} seats</div>
                 </button>
@@ -66,17 +113,7 @@ export default function TodaysShowtimes() {
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="cf-locationCard">
-        <div className="cf-locationLeft">
-          <div className="cf-miniIcon cf-miniIcon--orange">📍</div>
-          <div>
-            <div className="cf-locationTitle">Cinema Listic Downtown</div>
-            <div className="cf-locationSub">123 Main Street, City • Open Now</div>
-          </div>
-        </div>
-        <button className="cf-btn cf-btn--outline">Change Location</button>
+        {grouped.length === 0 && !error ? <div className="cf-empty">No showtimes for today.</div> : null}
       </div>
     </section>
   );

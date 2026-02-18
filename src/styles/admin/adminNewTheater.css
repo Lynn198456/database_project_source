@@ -1,0 +1,146 @@
+.ant-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #07112c 0%, #0c1a3a 100%);
+  color: #e8eefc;
+}
+
+.ant-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 110px 16px 36px;
+}
+
+.ant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ant-header h1 {
+  margin: 0 0 6px;
+}
+
+.ant-header p {
+  margin: 0;
+  color: #9ab0d9;
+}
+
+.ant-back {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8eefc;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.ant-card {
+  background: rgba(11, 26, 56, 0.9);
+  border: 1px solid rgba(120, 148, 196, 0.25);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+}
+
+.ant-card h2 {
+  margin: 0 0 12px;
+}
+
+.ant-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.ant-grid label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: #9ab0d9;
+}
+
+.ant-grid input,
+.ant-screenRow input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(124, 154, 204, 0.32);
+  background: rgba(7, 19, 43, 0.9);
+  color: #e8eefc;
+  padding: 10px 12px;
+}
+
+.ant-screenHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.ant-addScreen {
+  border: 1px solid rgba(64, 140, 255, 0.55);
+  background: rgba(21, 90, 230, 0.22);
+  color: #d5e7ff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.ant-screenList {
+  display: grid;
+  gap: 10px;
+}
+
+.ant-screenRow {
+  display: grid;
+  grid-template-columns: 1fr 150px 100px;
+  gap: 10px;
+}
+
+.ant-remove {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 135, 135, 0.55);
+  background: rgba(180, 40, 40, 0.22);
+  color: #ffd1d1;
+  cursor: pointer;
+}
+
+.ant-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ant-error {
+  margin-top: 10px;
+  color: #ffb9b9;
+}
+
+.ant-actions {
+  margin-top: 18px;
+}
+
+.ant-save {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #1f67ff 0%, #2f86ff 100%);
+  cursor: pointer;
+}
+
+.ant-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  .ant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ant-screenRow {
+    grid-template-columns: 1fr;
+  }
+}

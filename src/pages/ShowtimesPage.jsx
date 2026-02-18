@@ -1,29 +1,30 @@
 import "../styles/customer.css";
 import "../styles/showtimes.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
+import { listShowtimes } from "../api/showtimes";
 
-const SHOWTIMES = [
-  { id: "s1", movieTitle: "The Last Adventure", date: "2026-01-28", time: "10:00", type: "IMAX", price: 15, theater: "Downtown", screen: "Screen 1", seats: 75 },
-  { id: "s2", movieTitle: "Hearts Entwined", date: "2026-01-28", time: "13:15", type: "Standard", price: 12, theater: "Downtown", screen: "Screen 2", seats: 48 },
-  { id: "s3", movieTitle: "Midnight Shadows", date: "2026-01-29", time: "16:30", type: "IMAX", price: 15, theater: "Mall", screen: "Screen 1", seats: 92 },
-  { id: "s4", movieTitle: "Laugh Out Loud", date: "2026-01-29", time: "19:45", type: "Premium", price: 18, theater: "Mall", screen: "Screen 3", seats: 64 },
-  { id: "s5", movieTitle: "The Last Adventure", date: "2026-02-02", time: "20:00", type: "IMAX", price: 15, theater: "Downtown", screen: "Screen 1", seats: 31 },
-];
+function pad2(n) {
+  return String(n).padStart(2, "0");
+}
 
-function pad2(n) { return String(n).padStart(2, "0"); }
-function toISODate(d) { return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+function toISODate(d) {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
 function formatDateLabel(iso) {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
 }
+
 function formatTimeLabel(hhmm) {
   const [h, m] = hhmm.split(":").map(Number);
   const d = new Date();
   d.setHours(h, m, 0, 0);
   return d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
+
 function getMonthGrid(year, monthIndex0) {
   const first = new Date(year, monthIndex0, 1);
   const last = new Date(year, monthIndex0 + 1, 0);
@@ -40,12 +41,51 @@ function getMonthGrid(year, monthIndex0) {
   return weeks;
 }
 
+function mapShowtime(s) {
+  const start = new Date(s.start_time);
+  return {
+    id: s.id,
+    movieTitle: s.movie_title || "-",
+    date: toISODate(start),
+    time: `${pad2(start.getHours())}:${pad2(start.getMinutes())}`,
+    type: s.format || "2D",
+    price: Number(s.price || 0),
+    theater: s.theater_name || "-",
+    screen: s.screen_name || "-",
+    seats: Number(s.screen_total_seats || 0)
+  };
+}
+
 export default function ShowtimesPage() {
   const navigate = useNavigate();
   const today = useMemo(() => new Date(), []);
   const [view, setView] = useState("CALENDAR");
   const [monthCursor, setMonthCursor] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDate, setSelectedDate] = useState(toISODate(today));
+  const [showtimes, setShowtimes] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadShowtimes() {
+      try {
+        setError("");
+        const rows = await listShowtimes({ limit: 200 });
+        if (!mounted) return;
+        setShowtimes(rows.map(mapShowtime));
+      } catch (err) {
+        if (mounted) {
+          setError(err.message || "Failed to load showtimes.");
+        }
+      }
+    }
+
+    loadShowtimes();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const monthLabel = useMemo(
     () => monthCursor.toLocaleDateString(undefined, { month: "long", year: "numeric" }),
@@ -54,13 +94,13 @@ export default function ShowtimesPage() {
 
   const showtimesByDate = useMemo(() => {
     const map = {};
-    for (const s of SHOWTIMES) {
+    for (const s of showtimes) {
       if (!map[s.date]) map[s.date] = [];
       map[s.date].push(s);
     }
     Object.keys(map).forEach((k) => map[k].sort((a, b) => a.time.localeCompare(b.time)));
     return map;
-  }, []);
+  }, [showtimes]);
 
   const calendarWeeks = useMemo(
     () => getMonthGrid(monthCursor.getFullYear(), monthCursor.getMonth()),
@@ -68,7 +108,7 @@ export default function ShowtimesPage() {
   );
 
   const filteredDayShows = useMemo(
-    () => (showtimesByDate[selectedDate] || []),
+    () => showtimesByDate[selectedDate] || [],
     [showtimesByDate, selectedDate]
   );
 
@@ -77,11 +117,23 @@ export default function ShowtimesPage() {
     [showtimesByDate]
   );
 
+  useEffect(() => {
+    if (showtimes.length === 0) return;
+    if (showtimesByDate[selectedDate]?.length) return;
+    const firstDate = timelineDates[0];
+    if (firstDate) {
+      setSelectedDate(firstDate);
+      const firstDay = new Date(firstDate + "T00:00:00");
+      setMonthCursor(new Date(firstDay.getFullYear(), firstDay.getMonth(), 1));
+    }
+  }, [selectedDate, showtimes.length, showtimesByDate, timelineDates]);
+
   const dayHasShows = (iso) => (showtimesByDate[iso]?.length || 0) > 0;
 
   function prevMonth() {
     setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1));
   }
+
   function nextMonth() {
     setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1));
   }
@@ -97,7 +149,7 @@ export default function ShowtimesPage() {
       price: s.price,
       location: s.theater,
       screen: s.screen,
-      seatsAvailable: s.seats,
+      seatsAvailable: s.seats
     };
     localStorage.setItem("cinemaFlow_booking", JSON.stringify(draft));
     navigate("/customer/book");
@@ -109,15 +161,12 @@ export default function ShowtimesPage() {
 
       <main className="cf-mainFull">
         <div className="cf-containerWide">
-          {/* Header */}
           <div className="st-head">
             <div>
               <div className="st-title">
                 <span className="st-titleIcon">🗓️</span> Showtimes
               </div>
-              <div className="st-subtitle">
-                Pick a date and book quickly (Calendar) or browse upcoming shows (Timeline)
-              </div>
+              <div className="st-subtitle">Live from PostgreSQL schedules database</div>
             </div>
 
             <div className="st-toggle">
@@ -138,21 +187,27 @@ export default function ShowtimesPage() {
             </div>
           </div>
 
-          {/* Layout */}
+          {error ? <div className="cf-empty">{error}</div> : null}
+
           <div className="st-layout">
-            {/* Left Panel */}
             <div className="st-panel">
               {view === "CALENDAR" ? (
                 <>
                   <div className="st-calHead">
-                    <button className="st-iconBtn" onClick={prevMonth} type="button" aria-label="Previous month">‹</button>
+                    <button className="st-iconBtn" onClick={prevMonth} type="button" aria-label="Previous month">
+                      ‹
+                    </button>
                     <div className="st-calTitle">{monthLabel}</div>
-                    <button className="st-iconBtn" onClick={nextMonth} type="button" aria-label="Next month">›</button>
+                    <button className="st-iconBtn" onClick={nextMonth} type="button" aria-label="Next month">
+                      ›
+                    </button>
                   </div>
 
                   <div className="st-weekdays">
                     {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-                      <div key={d} className="st-weekday">{d}</div>
+                      <div key={d} className="st-weekday">
+                        {d}
+                      </div>
                     ))}
                   </div>
 
@@ -207,7 +262,6 @@ export default function ShowtimesPage() {
               )}
             </div>
 
-            {/* Right Panel */}
             <div className="st-results">
               {view === "CALENDAR" ? (
                 <>

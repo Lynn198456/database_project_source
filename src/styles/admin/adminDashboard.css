@@ -268,8 +268,17 @@
 /* poster placeholder */
 .movie-poster {
   height: 150px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.65));
+  background: #0a1220;
   position: relative;
+  overflow: hidden;
+}
+
+.movie-posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 
 .movie-badge,
@@ -454,7 +463,16 @@
 .coming-img {
   height: 140px;
   position: relative;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.65));
+  background: #0a1220;
+  overflow: hidden;
+}
+
+.coming-posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 
 .coming-badge,

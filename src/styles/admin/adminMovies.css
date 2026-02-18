@@ -197,10 +197,18 @@
 
 .am-img {
   position: relative;
-  height: 220px;
-  background-size: cover;
-  background-position: center;
+  aspect-ratio: 2 / 3;
   filter: saturate(1.05);
+  overflow: hidden;
+  background: #0a1220;
+}
+
+.am-posterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 .am-img::after {
@@ -467,12 +475,19 @@
 
 /* poster */
 .am-rowPoster {
-  height: 150px;
+  height: 180px;
   border-radius: 16px;
-  background-size: cover;
-  background-position: center;
   position: relative;
   overflow: hidden;
+  background: #0a1220;
+}
+
+.am-rowPosterImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
 }
 
 /* top-left small rating badge (PG-13, PG...) */
