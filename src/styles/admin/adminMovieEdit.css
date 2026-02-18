@@ -35,6 +35,21 @@
   padding: 22px;
 }
 
+.ame-note {
+  color: #9aa4b2;
+  font-size: 14px;
+}
+
+.ame-error {
+  margin-bottom: 12px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fecaca;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
 .ame-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

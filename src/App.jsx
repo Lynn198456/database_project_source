@@ -3,6 +3,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // Pages
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import StaffLoginPage from "./pages/staff/StaffLoginPage";
+import StaffRegisterPage from "./pages/staff/StaffRegisterPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminRegisterPage from "./pages/admin/AdminRegisterPage";
 import CustomerHome from "./pages/CustomerHome";
 import MoviesPage from "./pages/MoviesPage";
 import ShowtimesPage from "./pages/ShowtimesPage";
@@ -83,6 +87,10 @@ export default function App() {
         {/* Public */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/staff/login" element={<StaffLoginPage />} />
+        <Route path="/staff/register" element={<StaffRegisterPage />} />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/register" element={<AdminRegisterPage />} />
 
         {/* CUSTOMER ROUTES */}
         <Route

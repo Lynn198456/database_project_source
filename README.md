@@ -18,31 +18,30 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
-## Backend (Next.js + MongoDB)
+## Backend (Next.js + PostgreSQL)
 
-This repo includes a separate Next.js backend in `backend/` with API routes and a MongoDB connection.
+This repo includes a separate Next.js backend in `../database_project_backend/` with API routes and a PostgreSQL connection.
 
 ### Setup
 
 1. Install backend dependencies:
 
 ```bash
-cd backend
+cd ../database_project_backend
 npm install
 ```
 
-2. Create `backend/.env.local` with your MongoDB connection string:
+2. Create `../database_project_backend/.env.local` with your PostgreSQL connection string:
 
 ```bash
-MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/?retryWrites=true&w=majority
-MONGODB_DB=app
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/database_project
 FRONTEND_ORIGIN=http://localhost:5173
 ```
 
 3. Run the backend:
 
 ```bash
-cd backend
+cd ../database_project_backend
 npm run dev
 ```
 
