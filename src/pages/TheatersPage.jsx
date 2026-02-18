@@ -1,8 +1,10 @@
 import "../styles/customer.css";
 import "../styles/theaters.css";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
+import { listScreens } from "../api/screens";
+import { listTheaters } from "../api/theaters";
 
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -19,36 +21,64 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const THEATERS = [
-  {
-    id: "t1",
-    name: "Cinema Listic Downtown",
-    address: "Sukhumvit Rd, Bangkok",
-    phone: "+66 2 123 4567",
-    screens: 6,
-    lat: 13.736717,
-    lng: 100.523186,
-  },
-  {
-    id: "t2",
-    name: "Cinema Listic Mall",
-    address: "Central Mall, Bangkok",
-    phone: "+66 2 987 6543",
-    screens: 8,
-    lat: 13.746,
-    lng: 100.534,
-  },
-];
+const BASE_LAT = 13.736717;
+const BASE_LNG = 100.523186;
+
+function mapTheaters(theaterRows, screenRows) {
+  return theaterRows.map((t, idx) => {
+    const screens = screenRows.filter((s) => Number(s.theater_id) === Number(t.id));
+    return {
+      id: String(t.id),
+      name: t.name,
+      address: [t.address, t.city].filter(Boolean).join(", ") || t.location || "-",
+      phone: "-",
+      screens: screens.length,
+      lat: BASE_LAT + idx * 0.01,
+      lng: BASE_LNG + idx * 0.01
+    };
+  });
+}
 
 export default function TheatersPage() {
   const navigate = useNavigate();
 
   const [view, setView] = useState("LIST"); // LIST | MAP
-  const [selectedId, setSelectedId] = useState(THEATERS[0]?.id || "");
+  const [theaters, setTheaters] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadData() {
+      try {
+        setError("");
+        const [theaterRows, screenRows] = await Promise.all([
+          listTheaters({ limit: 200 }),
+          listScreens({ limit: 500 })
+        ]);
+        if (!mounted) return;
+        const mapped = mapTheaters(theaterRows, screenRows);
+        setTheaters(mapped);
+        if (mapped.length > 0) {
+          setSelectedId(mapped[0].id);
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(err.message || "Failed to load theaters.");
+        }
+      }
+    }
+
+    loadData();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const selected = useMemo(() => {
-    return THEATERS.find((t) => t.id === selectedId) || THEATERS[0];
-  }, [selectedId]);
+    return theaters.find((t) => t.id === selectedId) || theaters[0];
+  }, [selectedId, theaters]);
 
   const mapCenter = useMemo(() => {
     if (!selected) return [13.736717, 100.523186];
@@ -70,7 +100,7 @@ export default function TheatersPage() {
           <div className="th-head">
             <div>
               <div className="th-title">📍 Theaters</div>
-              <div className="th-sub">Switch between List View and Map View</div>
+              <div className="th-sub">Live from PostgreSQL theaters table</div>
             </div>
 
             <div className="th-toggle">
@@ -91,11 +121,13 @@ export default function TheatersPage() {
             </div>
           </div>
 
+          {error ? <div className="th-sub" style={{ marginBottom: 12 }}>{error}</div> : null}
+
           {/* LIST VIEW */}
           {view === "LIST" ? (
             <div className="th-listView">
               <div className="th-listGrid">
-                {THEATERS.map((t) => (
+                {theaters.map((t) => (
                   <button
                     key={t.id}
                     className={`th-card ${t.id === selectedId ? "th-card--active" : ""}`}
@@ -158,6 +190,11 @@ export default function TheatersPage() {
                   </div>
                 </div>
               )}
+              {!selected && !error ? (
+                <div className="th-detail">
+                  <div className="th-detailTitle">No theaters found</div>
+                </div>
+              ) : null}
             </div>
           ) : (
             /* MAP VIEW */
@@ -190,7 +227,7 @@ export default function TheatersPage() {
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
 
-                {THEATERS.map((t) => (
+                {theaters.map((t) => (
                   <Marker
                     key={t.id}
                     position={[t.lat, t.lng]}

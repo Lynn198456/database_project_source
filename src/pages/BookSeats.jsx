@@ -3,14 +3,17 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const DEFAULT_BOOKING = {
-  movieTitle: "The Last Adventure",
-  genre: "Action, Sci-Fi",
+  movieTitle: "-",
+  genre: "-",
   poster:
     "/assets/last-adventure.jpg",
-  date: "Nov 25, 2024",
-  time: "07:45 PM",
-  theater: "Cinema Listic Downtown",
-  screen: "Screen 1 - IMAX",
+  date: "-",
+  time: "-",
+  theater: "-",
+  screen: "-",
+  showtimeId: null,
+  movieId: null,
+  pricePerTicket: 15,
   taxRate: 0.08,
 };
 
@@ -28,11 +31,15 @@ function saveBooking(partial) {
   localStorage.setItem("cinemaFlow_booking", JSON.stringify({ ...current, ...partial }));
 }
 
-const PRICES = { adult: 15, child: 10.5, senior: 12 };
-
 export default function BookSeats() {
   const navigate = useNavigate();
   const booking = loadBooking();
+  const basePrice = Number(booking.pricePerTicket || 15);
+  const PRICES = {
+    adult: basePrice,
+    child: +(basePrice * 0.7).toFixed(2),
+    senior: +(basePrice * 0.8).toFixed(2)
+  };
 
   // Ticket types
   const [adult, setAdult] = useState(2);
@@ -118,6 +125,7 @@ export default function BookSeats() {
       tax,
       total,
       seats: [...selectedSeats],
+      qty: ticketCount,
     });
 
     // Next step (make this later)

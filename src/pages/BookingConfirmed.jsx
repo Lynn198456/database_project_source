@@ -1,11 +1,17 @@
 import "../styles/customer.css";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function BookingConfirmed() {
   const navigate = useNavigate();
-
-  // (Optional) If you saved booking data in localStorage, read it here
-  // const booking = JSON.parse(localStorage.getItem("cf_booking")) || {};
+  const booking = useMemo(() => {
+    try {
+      const raw = localStorage.getItem("cinemaFlow_lastTicket");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }, []);
 
   return (
     <div className="cf-page cf-confirmPage">
@@ -47,7 +53,7 @@ export default function BookingConfirmed() {
 
               <div className="cf-confirmBookingId">
                 <div className="cf-muted">Booking ID</div>
-                <div className="cf-confirmBookingIdValue">TKT-2024-013036</div>
+                <div className="cf-confirmBookingIdValue">{booking?.id || "TKT-NEW"}</div>
               </div>
             </div>
 
@@ -57,8 +63,8 @@ export default function BookingConfirmed() {
                 <div className="cf-confirmMovieRow">
                   <div className="cf-confirmThumb" />
                   <div>
-                    <div className="cf-confirmMovieTitle">The Last Adventure</div>
-                    <div className="cf-muted">Action, Sci-Fi</div>
+                    <div className="cf-confirmMovieTitle">{booking?.movieTitle || "Movie"}</div>
+                    <div className="cf-muted">{booking?.genre || "-"}</div>
                     <div className="cf-confirmMetaRow">
                       <span>⭐ 4.5/5</span>
                       <span>🕒 2h 15m</span>
@@ -72,7 +78,7 @@ export default function BookingConfirmed() {
                     <div className="cf-confirmInfoIcon blue">📅</div>
                     <div>
                       <div className="cf-muted">Date</div>
-                      <div>Nov 25, 2024</div>
+                      <div>{booking?.date || "-"}</div>
                     </div>
                   </div>
 
@@ -80,7 +86,7 @@ export default function BookingConfirmed() {
                     <div className="cf-confirmInfoIcon purple">🕒</div>
                     <div>
                       <div className="cf-muted">Time</div>
-                      <div>07:45 PM</div>
+                      <div>{booking?.time || "-"}</div>
                     </div>
                   </div>
 
@@ -88,8 +94,8 @@ export default function BookingConfirmed() {
                     <div className="cf-confirmInfoIcon orange">📍</div>
                     <div>
                       <div className="cf-muted">Theater</div>
-                      <div>Cinema Listic Downtown</div>
-                      <div className="cf-muted">Screen 1 - IMAX</div>
+                      <div>{booking?.theater || "-"}</div>
+                      <div className="cf-muted">{booking?.screen || "-"}</div>
                     </div>
                   </div>
 
@@ -97,7 +103,7 @@ export default function BookingConfirmed() {
                     <div className="cf-confirmInfoIcon green">👥</div>
                     <div>
                       <div className="cf-muted">Seats</div>
-                      <div>E12</div>
+                      <div>{booking?.seats?.join(", ") || "-"}</div>
                     </div>
                   </div>
                 </div>
@@ -110,7 +116,7 @@ export default function BookingConfirmed() {
                   {/* simple fake QR look */}
                   <div className="cf-fakeQR" />
                 </div>
-                <div className="cf-muted">TKT-2024-013036</div>
+                <div className="cf-muted">{booking?.id || "TKT-NEW"}</div>
               </div>
             </div>
 
@@ -119,12 +125,8 @@ export default function BookingConfirmed() {
               <div className="cf-card cf-confirmMini">
                 <div className="cf-h3">Ticket Details</div>
                 <div className="cf-confirmLine">
-                  <span>Adult × 2</span>
-                  <span>E12</span>
-                </div>
-                <div className="cf-confirmLine">
-                  <span>Child × 2</span>
-                  <span>-</span>
+                  <span>Tickets × {booking?.qty || 0}</span>
+                  <span>{booking?.seats?.join(", ") || "-"}</span>
                 </div>
               </div>
 
@@ -132,15 +134,15 @@ export default function BookingConfirmed() {
                 <div className="cf-h3">Payment Summary</div>
                 <div className="cf-confirmLine">
                   <span>Subtotal</span>
-                  <span>฿51.00</span>
+                  <span>฿{Number(booking?.subtotal || 0).toFixed(2)}</span>
                 </div>
                 <div className="cf-confirmLine">
                   <span>Tax (8%)</span>
-                  <span>฿4.08</span>
+                  <span>฿{Number(booking?.tax || 0).toFixed(2)}</span>
                 </div>
                 <div className="cf-confirmLine cf-confirmTotalLine">
                   <span>Total Paid</span>
-                  <span className="cf-confirmPaid">฿55.08</span>
+                  <span className="cf-confirmPaid">฿{Number(booking?.total || 0).toFixed(2)}</span>
                 </div>
                 <div className="cf-muted" style={{ marginTop: 10 }}>
                   Payment Method

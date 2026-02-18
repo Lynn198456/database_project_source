@@ -1,6 +1,7 @@
 import "../styles/customer.css";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createBooking } from "../api/bookings";
 
 export default function BookPaymentPage() {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function BookPaymentPage() {
   const [method, setMethod] = useState("qr"); // "qr" | "bank"
   const [email, setEmail] = useState(booking?.email || "john.doe@email.com");
   const [phone, setPhone] = useState(booking?.phone || "+1 (555) 123-4567");
+  const [submitting, setSubmitting] = useState(false);
 
   const refCode = "REF-95673988888";
   const paymentId = "PMT-67398888";
@@ -56,44 +58,89 @@ export default function BookPaymentPage() {
     qrPayload
   )}`;
 
-  function completeBooking() {
+  async function completeBooking() {
     if (!booking) return;
 
-    const newTicket = {
-      id: `TKT-${Date.now()}`,
-      movieTitle: booking.movieTitle,
-      genre: booking.genre,
-      date: booking.date,
-      time: booking.time,
-      theater: booking.theater,
-      screen: booking.screen,
-      seats: booking.seats || [],
-      qty: booking.qty,
-      subtotal: booking.price,
-      tax: booking.tax,
-      total: booking.total,
-      poster: booking.poster,
-      email,
-      phone,
-      method, // qr or bank
-      status: "upcoming",
-      createdAt: new Date().toISOString(),
-    };
+    let user = null;
+    try {
+      const rawUser = localStorage.getItem("cinemaFlow_user");
+      user = rawUser ? JSON.parse(rawUser) : null;
+    } catch {
+      user = null;
+    }
 
-    // ✅ Save into tickets list used by MyTicketsPage
-    const raw = localStorage.getItem("cinemaFlow_tickets");
-    const tickets = raw ? JSON.parse(raw) : [];
-    tickets.unshift(newTicket);
-    localStorage.setItem("cinemaFlow_tickets", JSON.stringify(tickets));
+    if (!user?.id) {
+      alert("Please log in again to complete booking.");
+      navigate("/login");
+      return;
+    }
 
-    // ✅ Save the last confirmed ticket (so confirmed page can show it)
-    localStorage.setItem("cinemaFlow_lastTicket", JSON.stringify(newTicket));
+    if (!booking.showtimeId) {
+      alert("Showtime not selected. Please choose time again.");
+      navigate("/customer/book/time");
+      return;
+    }
 
-    // (optional) clear draft booking
-    // localStorage.removeItem("cinemaFlow_booking");
+    const seats = Array.isArray(booking.seats) ? booking.seats : [];
+    if (seats.length === 0) {
+      alert("Please select seats first.");
+      navigate("/customer/book/seats");
+      return;
+    }
 
-    // ✅ go to confirmed page
-    navigate("/customer/book/confirmed");
+    try {
+      setSubmitting(true);
+      const seatPrice = Number(booking.subtotal || 0) / seats.length;
+      const paymentMethod = method === "bank" ? "ONLINE_BANKING" : "WALLET";
+      const transactionRef = `PAY-${Date.now()}`;
+      const bookingId = await createBooking({
+        userId: user.id,
+        showtimeId: booking.showtimeId,
+        status: "CONFIRMED",
+        totalAmount: Number(booking.total || 0),
+        paymentMethod,
+        paymentStatus: "PAID",
+        transactionRef,
+        seats: seats.map((seatLabel) => ({
+          seatLabel,
+          price: Number.isFinite(seatPrice) ? +seatPrice.toFixed(2) : 0
+        }))
+      });
+
+      const newTicket = {
+        id: `TKT-${bookingId}`,
+        bookingId,
+        movieTitle: booking.movieTitle,
+        genre: booking.genre,
+        date: booking.date,
+        time: booking.time,
+        theater: booking.theater,
+        screen: booking.screen,
+        seats,
+        qty: booking.qty,
+        subtotal: booking.subtotal,
+        tax: booking.tax,
+        total: booking.total,
+        poster: booking.poster,
+        email,
+        phone,
+        method,
+        transactionRef,
+        status: "upcoming",
+        createdAt: new Date().toISOString()
+      };
+
+      const raw = localStorage.getItem("cinemaFlow_tickets");
+      const tickets = raw ? JSON.parse(raw) : [];
+      tickets.unshift(newTicket);
+      localStorage.setItem("cinemaFlow_tickets", JSON.stringify(tickets));
+      localStorage.setItem("cinemaFlow_lastTicket", JSON.stringify(newTicket));
+      navigate("/customer/book/confirmed");
+    } catch (err) {
+      alert(err.message || "Failed to complete booking.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -297,26 +344,26 @@ export default function BookPaymentPage() {
               <div className="cf-bookBill">
                 <div className="cf-bookBillRow">
                   <span>Adult × {booking?.qty}</span>
-                  <span>฿{booking?.price?.toFixed(2)}</span>
+                  <span>฿{Number(booking?.subtotal || 0).toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Subtotal</span>
-                  <span>฿{booking?.price?.toFixed(2)}</span>
+                  <span>฿{Number(booking?.subtotal || 0).toFixed(2)}</span>
                 </div>
                 <div className="cf-bookBillRow">
                   <span>Tax (8%)</span>
-                  <span>฿{booking?.tax?.toFixed(2)}</span>
+                  <span>฿{Number(booking?.tax || 0).toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="cf-bookTotal">
                 <span>Total</span>
-                <span className="cf-price">฿{booking?.total?.toFixed(2)}</span>
+                <span className="cf-price">฿{Number(booking?.total || 0).toFixed(2)}</span>
               </div>
 
               {/* ✅ FIXED: call completeBooking() */}
-              <button className="cf-greenBtn" type="button" onClick={completeBooking}>
-                ✓ Complete Booking
+              <button className="cf-greenBtn" type="button" onClick={completeBooking} disabled={submitting}>
+                {submitting ? "Processing..." : "✓ Complete Booking"}
               </button>
 
               <button

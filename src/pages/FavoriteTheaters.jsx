@@ -1,9 +1,10 @@
 import "../styles/customer.css";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
+import { listTheaters } from "../api/theaters";
 
 function loadFavorites() {
   try {
@@ -43,8 +44,47 @@ export default function FavoriteTheaters() {
   const navigate = useNavigate();
 
   // load from localStorage, else seed
-  const initial = useMemo(() => loadFavorites() || SEED_FAV, []);
-  const [theaters] = useState(initial);
+  const initial = useMemo(() => loadFavorites() || [], []);
+  const [theaters, setTheaters] = useState(initial);
+
+  useEffect(() => {
+    let mounted = true;
+    if (initial.length > 0) return;
+
+    async function loadFromDb() {
+      try {
+        const rows = await listTheaters({ limit: 200 });
+        if (!mounted) return;
+
+        if (!rows.length) {
+          setTheaters(SEED_FAV);
+          return;
+        }
+
+        setTheaters(
+          rows.map((t, idx) => ({
+            id: String(t.id),
+            name: t.name,
+            address: [t.address, t.city].filter(Boolean).join(", ") || t.location || "-",
+            visits: 0,
+            img:
+              idx % 2 === 0
+                ? "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1400&auto=format&fit=crop"
+                : "https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?q=80&w=1400&auto=format&fit=crop"
+          }))
+        );
+      } catch {
+        if (mounted) {
+          setTheaters(SEED_FAV);
+        }
+      }
+    }
+
+    loadFromDb();
+    return () => {
+      mounted = false;
+    };
+  }, [initial.length]);
 
   const empty = theaters.length === 0;
 
