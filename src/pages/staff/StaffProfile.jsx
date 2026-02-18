@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import "../../styles/staffProfile.css";
 import StaffNavbar from "../../components/staff/StaffNavbar";
 import { getCurrentUser, updateCurrentUser } from "../../api/users";
+import { getStaffWorkSummary } from "../../api/staffWorkSummary";
 
 const FALLBACK_STAFF = {
   name: "Michael Chen",
@@ -53,6 +54,16 @@ export default function StaffProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(staff);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [summary, setSummary] = useState({
+    totalHours: 0,
+    shiftsCompleted: 0,
+    tasksCompleted: 0,
+    pendingTimeOffRequests: 0,
+    upcomingShifts: 0,
+    openTasks: 0
+  });
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [summaryError, setSummaryError] = useState("");
 
   useEffect(() => {
     const authUser = getAuthUser();
@@ -87,6 +98,30 @@ export default function StaffProfile() {
     }
 
     loadDbUser();
+  }, []);
+
+  useEffect(() => {
+    const authUser = getAuthUser();
+    if (!authUser?.email) {
+      setSummaryLoading(false);
+      setSummaryError("Please log in as staff to load work summary.");
+      return;
+    }
+
+    async function loadSummary() {
+      try {
+        setSummaryLoading(true);
+        setSummaryError("");
+        const data = await getStaffWorkSummary({ email: authUser.email });
+        setSummary(data.summary);
+      } catch (error) {
+        setSummaryError(error.message || "Failed to load work summary.");
+      } finally {
+        setSummaryLoading(false);
+      }
+    }
+
+    loadSummary();
   }, []);
 
   function startEdit() {
@@ -283,19 +318,24 @@ export default function StaffProfile() {
             {/* WORK SUMMARY */}
             <div className="staff-card">
               <h3 className="card-title">📊 Work Summary</h3>
+              {summaryError ? <div className="muted">{summaryError}</div> : null}
 
               <div className="stat-grid">
                 <div className="stat-card blue">
                   <span>Total Hours</span>
-                  <strong>856 hrs</strong>
+                  <strong>{summaryLoading ? "..." : `${Number(summary.totalHours || 0).toFixed(1)} hrs`}</strong>
                 </div>
                 <div className="stat-card purple">
                   <span>Shifts Completed</span>
-                  <strong>142</strong>
+                  <strong>{summaryLoading ? "..." : summary.shiftsCompleted}</strong>
                 </div>
                 <div className="stat-card green">
                   <span>Tasks Completed</span>
-                  <strong>387</strong>
+                  <strong>{summaryLoading ? "..." : summary.tasksCompleted}</strong>
+                </div>
+                <div className="stat-card orange">
+                  <span>Pending Requests</span>
+                  <strong>{summaryLoading ? "..." : summary.pendingTimeOffRequests}</strong>
                 </div>
               </div>
             </div>

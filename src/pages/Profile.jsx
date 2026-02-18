@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/customer/Navbar";
 import Footer from "../components/customer/Footer";
 import { getCurrentUser, updateCurrentUser } from "../api/users";
+import { getCustomerProfileMetrics } from "../api/customerMetrics";
 
 /* ----------------------------- localStorage helpers ----------------------------- */
 function getUser() {
@@ -20,51 +21,6 @@ function getUser() {
 
 function saveUser(user) {
   localStorage.setItem("cinemaFlow_user", JSON.stringify(user));
-}
-
-function loadCards() {
-  try {
-    const raw = localStorage.getItem("cinemaFlow_cards");
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
-  }
-}
-
-function saveCards(cards) {
-  localStorage.setItem("cinemaFlow_cards", JSON.stringify(cards));
-}
-
-function loadProfilePhoto() {
-  try {
-    return localStorage.getItem("cinemaFlow_profilePhoto") || "";
-  } catch {
-    return "";
-  }
-}
-
-function saveProfilePhoto(dataUrl) {
-  localStorage.setItem("cinemaFlow_profilePhoto", dataUrl || "");
-}
-
-function maskLast4(last4) {
-  return `•••• ${last4}`;
-}
-
-function onlyDigits(val) {
-  return (val || "").replace(/\D/g, "");
-}
-
-function isValidCardNumber(num) {
-  const digits = onlyDigits(num);
-  return /^\d{12,19}$/.test(digits);
-}
-
-function isValidExp(exp) {
-  const v = (exp || "").trim();
-  if (!/^\d{2}\/\d{2}$/.test(v)) return false;
-  const [mm, yy] = v.split("/").map(Number);
-  return mm >= 1 && mm <= 12 && yy >= 0;
 }
 
 /* ----------------------------- fallback demo user ----------------------------- */
@@ -111,8 +67,8 @@ export default function Profile() {
   const initialUser = useMemo(() => getUser() || FALLBACK_USER, []);
   const [user, setUser] = useState(initialUser);
 
-  // profile photo (stored as dataURL in localStorage)
-  const [photo, setPhoto] = useState(() => loadProfilePhoto());
+  // profile photo from database
+  const [photo, setPhoto] = useState("");
 
   // edit profile modal
   const [editOpen, setEditOpen] = useState(false);
@@ -131,6 +87,12 @@ export default function Profile() {
     prefSMS: !!initialUser.prefSMS,
     prefPromo: !!initialUser.prefPromo,
   });
+  const [metrics, setMetrics] = useState({
+    watchlistTotal: 0,
+    bookingTotal: 0,
+    totalSpent: 0
+  });
+  const [metricsLoading, setMetricsLoading] = useState(true);
 
   useEffect(() => {
     const stored = getUser();
@@ -142,6 +104,7 @@ export default function Profile() {
         const fromDb = toProfileUser(dbUser);
 
         setUser((prev) => ({ ...prev, ...fromDb }));
+        setPhoto(dbUser.profilePhoto || "");
         setForm((prev) => ({
           ...prev,
           name: fromDb.name,
@@ -157,7 +120,8 @@ export default function Profile() {
           email: dbUser.email,
           phone: dbUser.phone || "",
           role: dbUser.role,
-          name: fromDb.name
+          name: fromDb.name,
+          profilePhoto: dbUser.profilePhoto || ""
         });
       } catch (_error) {
       }
@@ -166,35 +130,34 @@ export default function Profile() {
     loadDbUser();
   }, []);
 
-  /* ----------------------------- payment cards state ----------------------------- */
-  const initialCards = useMemo(() => {
-    const stored = loadCards();
-    if (stored && Array.isArray(stored) && stored.length > 0) return stored;
-
-    // seed (demo)
-    return [
-      { id: 1, brand: "Visa", last4: "4242", exp: "12/25", isDefault: true },
-      { id: 2, brand: "Mastercard", last4: "8888", exp: "08/26", isDefault: false },
-    ];
-  }, []);
-
-  const [cards, setCards] = useState(initialCards);
-
-  // Add Card modal
-  const [addOpen, setAddOpen] = useState(false);
-  const [cardForm, setCardForm] = useState({
-    brand: "Visa",
-    cardNumber: "",
-    exp: "",
-  });
-
-  // Save seeded cards once (so refresh keeps them)
   useEffect(() => {
-    const existing = loadCards();
-    if (!existing || !Array.isArray(existing) || existing.length === 0) {
-      saveCards(initialCards);
+    const stored = getUser();
+    if (!stored?.id && !stored?.email) {
+      setMetricsLoading(false);
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    async function loadMetrics() {
+      try {
+        setMetricsLoading(true);
+        const data = await getCustomerProfileMetrics({ id: stored?.id, email: stored?.email });
+        setMetrics({
+          watchlistTotal: Number(data.watchlistTotal || 0),
+          bookingTotal: Number(data.bookingTotal || 0),
+          totalSpent: Number(data.totalSpent || 0)
+        });
+      } catch (_error) {
+        setMetrics({
+          watchlistTotal: 0,
+          bookingTotal: 0,
+          totalSpent: 0
+        });
+      } finally {
+        setMetricsLoading(false);
+      }
+    }
+
+    loadMetrics();
   }, []);
 
   /* ----------------------------- ESC closes modals ----------------------------- */
@@ -202,12 +165,11 @@ export default function Profile() {
     function onKeyDown(e) {
       if (e.key === "Escape") {
         setEditOpen(false);
-        setAddOpen(false);
       }
     }
-    if (editOpen || addOpen) window.addEventListener("keydown", onKeyDown);
+    if (editOpen) window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [editOpen, addOpen]);
+  }, [editOpen]);
 
   /* ----------------------------- profile edit handlers ----------------------------- */
   function openEdit() {
@@ -299,11 +261,31 @@ export default function Profile() {
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const dataUrl = String(reader.result || "");
-      setPhoto(dataUrl);
-      saveProfilePhoto(dataUrl);
-      setMsg("Profile photo updated ✅");
+
+      try {
+        const stored = getUser();
+        const dbUser = await updateCurrentUser(
+          { id: stored?.id, email: stored?.email || user.email },
+          { profilePhoto: dataUrl }
+        );
+
+        setPhoto(dbUser.profilePhoto || dataUrl);
+        saveUser({
+          ...(stored || {}),
+          id: dbUser.id,
+          firstName: dbUser.firstName,
+          lastName: dbUser.lastName,
+          email: dbUser.email,
+          phone: dbUser.phone || "",
+          role: dbUser.role,
+          profilePhoto: dbUser.profilePhoto || dataUrl
+        });
+        setMsg("Profile photo updated ✅");
+      } catch (error) {
+        alert(error.message || "Failed to save profile photo.");
+      }
     };
     reader.readAsDataURL(file);
 
@@ -311,78 +293,32 @@ export default function Profile() {
     e.target.value = "";
   }
 
-  function removePhoto() {
+  async function removePhoto() {
     const ok = window.confirm("Remove your profile photo?");
     if (!ok) return;
-    setPhoto("");
-    saveProfilePhoto("");
-    setMsg("Profile photo removed ✅");
-  }
 
-  /* ----------------------------- payment methods handlers ----------------------------- */
-  function persistCards(next) {
-    setCards(next);
-    saveCards(next);
-  }
+    try {
+      const stored = getUser();
+      const dbUser = await updateCurrentUser(
+        { id: stored?.id, email: stored?.email || user.email },
+        { profilePhoto: "" }
+      );
 
-  function openAddCard() {
-    setCardForm({ brand: "Visa", cardNumber: "", exp: "" });
-    setAddOpen(true);
-  }
-
-  function closeAddCard() {
-    setAddOpen(false);
-  }
-
-  function onCardChange(e) {
-    const { name, value } = e.target;
-    setCardForm((p) => ({ ...p, [name]: value }));
-  }
-
-  function setDefaultCard(id) {
-    const next = cards.map((c) => ({ ...c, isDefault: c.id === id }));
-    persistCards(next);
-    setMsg("Default card updated ✅");
-  }
-
-  function removeCard(id) {
-    const ok = window.confirm("Remove this card?");
-    if (!ok) return;
-
-    let next = cards.filter((c) => c.id !== id);
-
-    // If default removed, set first as default
-    if (next.length > 0 && !next.some((c) => c.isDefault)) {
-      next = next.map((c, i) => ({ ...c, isDefault: i === 0 }));
+      setPhoto("");
+      saveUser({
+        ...(stored || {}),
+        id: dbUser.id,
+        firstName: dbUser.firstName,
+        lastName: dbUser.lastName,
+        email: dbUser.email,
+        phone: dbUser.phone || "",
+        role: dbUser.role,
+        profilePhoto: ""
+      });
+      setMsg("Profile photo removed ✅");
+    } catch (error) {
+      alert(error.message || "Failed to remove profile photo.");
     }
-
-    persistCards(next);
-    setMsg("Card removed ✅");
-  }
-
-  function addCard() {
-    const digits = onlyDigits(cardForm.cardNumber);
-    const exp = (cardForm.exp || "").trim();
-
-    if (!isValidCardNumber(digits)) {
-      return alert("Enter a valid card number (12–19 digits).");
-    }
-    if (!isValidExp(exp)) {
-      return alert("Expiry must be MM/YY (example 08/26).");
-    }
-
-    const newCard = {
-      id: Date.now(),
-      brand: cardForm.brand,
-      last4: digits.slice(-4),
-      exp,
-      isDefault: cards.length === 0,
-    };
-
-    const next = [...cards, newCard];
-    persistCards(next);
-    setAddOpen(false);
-    setMsg("Card added ✅");
   }
 
   /* ----------------------------- UI ----------------------------- */
@@ -481,16 +417,6 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <div className="cf-membership">
-                  <div className="cf-membershipHead">
-                    🏅 Membership Tier
-                    <span className="cf-badgeGold">{user.tier}</span>
-                  </div>
-                  <div className="cf-progressBar">
-                    <div style={{ width: "75%" }} />
-                  </div>
-                  <p className="cf-muted">{user.points} / 1000 points to Platinum</p>
-                </div>
               </div>
             </div>
 
@@ -501,12 +427,12 @@ export default function Profile() {
                 role="button"
                 tabIndex={0}
                 style={{ cursor: "pointer" }}
-                onClick={() => navigate("/customer/movies-watched")}
-                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/movies-watched")}
-                title="View Movies Watched"
+                onClick={() => navigate("/customer/watchlist")}
+                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/watchlist")}
+                title="View My Watchlist"
               >
-                🎬 Movies Watched
-                <strong>{user.watched}</strong>
+                ⭐ My Watchlist
+                <strong>{metricsLoading ? "..." : metrics.watchlistTotal}</strong>
               </div>
 
               <div
@@ -519,20 +445,7 @@ export default function Profile() {
                 title="View Booking History"
               >
                 📅 Total Bookings
-                <strong>{user.bookings}</strong>
-              </div>
-
-              <div
-                className="cf-statCard orange"
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate("/customer/loyalty")}
-                onKeyDown={(e) => e.key === "Enter" && navigate("/customer/loyalty")}
-                style={{ cursor: "pointer" }}
-                title="View Loyalty Points"
-              >
-                ⭐ Loyalty Points
-                <strong>{user.points}</strong>
+                <strong>{metricsLoading ? "..." : metrics.bookingTotal}</strong>
               </div>
 
               <div
@@ -545,79 +458,12 @@ export default function Profile() {
                 title="View Spending History"
               >
                 💰 Total Spent
-                <strong>฿{user.spent}.00</strong>
+                <strong>{metricsLoading ? "..." : `฿${metrics.totalSpent.toFixed(2)}`}</strong>
               </div>
             </div>
 
-            {/* PAYMENT + PREFERENCES */}
+            {/* PREFERENCES */}
             <div className="pf-row2">
-              {/* Payment Methods */}
-              <div className="pf-panel">
-                <div className="pf-panelHead">
-                  <div className="pf-panelTitle">
-                    <span className="pf-ico">💳</span> Payment Methods
-                  </div>
-
-                  {/* ✅ real add card feature (no alert) */}
-                  <button className="pf-btnBlue" type="button" onClick={openAddCard}>
-                    Add New
-                  </button>
-                </div>
-
-                {cards.length === 0 ? (
-                  <div className="pf-payCard" style={{ opacity: 0.85 }}>
-                    <div className="pf-payName">No cards yet</div>
-                    <div className="pf-paySub">Click “Add New” to add a card.</div>
-                  </div>
-                ) : (
-                  cards.map((c) => (
-                    <div
-                      key={c.id}
-                      className={`pf-payCard ${c.isDefault ? "pf-payCard--active" : ""}`}
-                    >
-                      <div className="pf-payTop">
-                        <div className="pf-payName">
-                          {c.brand} {maskLast4(c.last4)}
-                        </div>
-                        {c.isDefault && <span className="pf-pillGreen">Default</span>}
-                      </div>
-
-                      <div className="pf-paySub">Expires {c.exp}</div>
-
-                      <div className="pf-payActions">
-                        {!c.isDefault ? (
-                          <button
-                            className="pf-payBtn"
-                            type="button"
-                            onClick={() => setDefaultCard(c.id)}
-                          >
-                            Set Default
-                          </button>
-                        ) : (
-                          <button
-                            className="pf-payBtn"
-                            type="button"
-                            disabled
-                            style={{ opacity: 0.6 }}
-                          >
-                            Default
-                          </button>
-                        )}
-
-                        <button
-                          className="pf-payBtn pf-payBtnDanger"
-                          type="button"
-                          onClick={() => removeCard(c.id)}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Preferences */}
               <div className="pf-panel">
                 <div className="pf-panelHead">
                   <div className="pf-panelTitle">
@@ -669,124 +515,6 @@ export default function Profile() {
                     <span className="pf-slider" />
                   </label>
                 </div>
-              </div>
-            </div>
-
-            {/* FAVORITE THEATERS */}
-            <div className="pf-panel pf-panelFull">
-              <div className="pf-panelHead">
-                <div className="pf-panelTitle">
-                  <span className="pf-ico">📍</span> Favorite Theaters
-                </div>
-<button
-  className="pf-btnGhost"
-  type="button"
-  onClick={() => navigate("/customer/favorite-theaters")}
->
-  Manage
-</button>
-
-              </div>
-
-              <div className="pf-theaterGrid2">
-                <div className="pf-theaterCard2">
-                  <div
-                    className="pf-theaterImg"
-                    style={{
-                      backgroundImage:
-                        "url(https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?q=80&w=1200&auto=format&fit=crop)",
-                    }}
-                  />
-                  <div className="pf-theaterBody">
-                    <div className="pf-theaterName">Cinema Listic Downtown</div>
-                    <div className="pf-theaterAddr">123 Main Street</div>
-                    <div className="pf-theaterVisits">⭐ 8 visits</div>
-                  </div>
-                </div>
-
-                <div className="pf-theaterCard2 pf-theaterCard2--active">
-                  <div
-                    className="pf-theaterImg"
-                    style={{
-                      backgroundImage:
-                        "url(/assets/hearts-entwined.jpg)",
-                    }}
-                  />
-                  <div className="pf-theaterBody">
-                    <div className="pf-theaterName">Cinema Listic Mall Location</div>
-                    <div className="pf-theaterAddr">456 Shopping Ave</div>
-                    <div className="pf-theaterVisits">⭐ 5 visits</div>
-                  </div>
-                </div>
-
-                <div className="pf-theaterCard2">
-                  <div
-                    className="pf-theaterImg"
-                    style={{
-                      backgroundImage:
-                        "url(https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop)",
-                    }}
-                  />
-                  <div className="pf-theaterBody">
-                    <div className="pf-theaterName">Cinema Listic Suburban</div>
-                    <div className="pf-theaterAddr">789 Suburban Blvd</div>
-                    <div className="pf-theaterVisits">⭐ 2 visits</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* WATCHLIST */}
-            <div className="pf-panel pf-panelFull">
-              <div className="pf-panelHead">
-                <div className="pf-panelTitle">
-                  <span className="pf-ico">🎞️</span> My Watchlist
-                </div>
-<div
-  className="pf-link"
-  role="button"
-  tabIndex={0}
-  onClick={() => navigate("/customer/watchlist")}
-  onKeyDown={(e) => e.key === "Enter" && navigate("/customer/watchlist")}
->
-  View All →
-</div>
-
-              </div>
-
-              <div className="pf-watchRow">
-                {[
-                  {
-                    title: "Future World",
-                    date: "December 2024",
-                    img: "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1200&auto=format&fit=crop",
-                  },
-                  {
-                    title: "Love in Paris",
-                    date: "December 2024",
-                    img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop",
-                  },
-                  {
-                    title: "Mystery Island",
-                    date: "December 2024",
-                    img: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop",
-                  },
-                  {
-                    title: "Action Hero",
-                    date: "December 2024",
-                    img: "https://images.unsplash.com/photo-1517602302552-471fe67acf66?q=80&w=1200&auto=format&fit=crop",
-                  },
-                ].map((m) => (
-                  <div key={m.title} className="pf-watchCard">
-                    <div className="pf-watchImg" style={{ backgroundImage: `url(${m.img})` }}>
-                      <div className="pf-coming">Coming Soon</div>
-                    </div>
-                    <div className="pf-watchBody">
-                      <div className="pf-watchTitle">{m.title}</div>
-                      <div className="pf-watchDate">{m.date}</div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
 
@@ -894,70 +622,6 @@ export default function Profile() {
                 </button>
                 <button className="ep-btn ep-btnPrimary" onClick={saveChanges} type="button">
                   💾 Save Changes
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ✅ ADD CARD MODAL */}
-        {addOpen && (
-          <div className="ep-overlay" onMouseDown={closeAddCard}>
-            <div className="ep-card" onMouseDown={(e) => e.stopPropagation()}>
-              <div className="ep-head">
-                <div className="ep-title">
-                  <span className="ep-icon">💳</span>
-                  Add Payment Method
-                </div>
-                <button className="ep-x" onClick={closeAddCard} type="button" aria-label="Close">
-                  ✕
-                </button>
-              </div>
-
-              <div className="ep-form">
-                <div className="ep-field">
-                  <div className="ep-label">Card Brand</div>
-                  <select
-                    className="ep-input"
-                    name="brand"
-                    value={cardForm.brand}
-                    onChange={onCardChange}
-                  >
-                    <option value="Visa">Visa</option>
-                    <option value="Mastercard">Mastercard</option>
-                    <option value="AMEX">AMEX</option>
-                  </select>
-                </div>
-
-                <div className="ep-field">
-                  <div className="ep-label">Card Number</div>
-                  <input
-                    className="ep-input"
-                    name="cardNumber"
-                    value={cardForm.cardNumber}
-                    onChange={onCardChange}
-                    placeholder="1234 5678 9012 3456"
-                  />
-                </div>
-
-                <div className="ep-field">
-                  <div className="ep-label">Expiry (MM/YY)</div>
-                  <input
-                    className="ep-input"
-                    name="exp"
-                    value={cardForm.exp}
-                    onChange={onCardChange}
-                    placeholder="08/26"
-                  />
-                </div>
-              </div>
-
-              <div className="ep-actions">
-                <button className="ep-btn ep-btnGhost" onClick={closeAddCard} type="button">
-                  Cancel
-                </button>
-                <button className="ep-btn ep-btnPrimary" onClick={addCard} type="button">
-                  ✅ Add Card
                 </button>
               </div>
             </div>
